@@ -1,16 +1,19 @@
 TOOLCHAIN_PREFIX=/opt/msp430-gcc
 CC=$(TOOLCHAIN_PREFIX)/bin/msp430-elf-gcc
+OBJDUMP=$(TOOLCHAIN_PREFIX)/bin/msp430-elf-objdump
 
-# regular
 MCU=msp430g2553
-COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0
+ARTIFACT=firmware
+COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0 -fdata-sections -ffunction-sections
 CFLAGS=$(COMMON)
 ASFLAGS=$(COMMON)
 
 LDFLAGS=-L $(TOOLCHAIN_PREFIX)/include -Wl,-Map,firmware.map -nostdlib -nostartfiles -T $(MCU).ld
 
-firmware.elf:	main.o
+$(ARTIFACT).elf:	main.o
 	$(CC) -o $@ $(LDFLAGS) $^
+	$(OBJDUMP) -d $(ARTIFACT).elf > $(ARTIFACT).txt
+  
 
 .c.o:	
 	$(CC) $(CFLAGS) -c $<
@@ -20,22 +23,14 @@ firmware.elf:	main.o
 
 
 .PHONY: all
-all:	firmware.elf
+all:	$(ARTIFACT).elf
 
 .PHONY: clean
 clean:
-	-rm -f *.o *.elf *.map
+	-rm -f *.o *.elf *.map *.txt
 
 .PHONY: upload
-upload: firmware.elf
-	mspdebug rf2500 "prog firmware.elf"
-
-.PHONY: debug
-debug: upload
-	mspdebug rf2500 gdb &
-	ddd --debugger "msp430-gdb -x firmware.gdb"
+upload: $(ARTIFACT).elf
+	mspdebug rf2500 "prog $(ARTIFACT).elf"
 
 
-
-
-# /opt/msp430-gcc/bin/msp430-elf-gcc main.S -D_GNU_ASSEMBLER_ -Wall -Os -g -fdata-sections -ffunction-sections -mmcu=msp430g2553 -T /opt/msp430-gcc/include/msp430g2553.ld -I /opt/msp430-gcc/include/ -L /opt/msp430-gcc/include/ -nostdli
