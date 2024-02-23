@@ -4,7 +4,7 @@ OBJDUMP=$(TOOLCHAIN_PREFIX)/bin/msp430-elf-objdump
 
 MCU=msp430g2553
 ARTIFACT=firmware
-COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0 -fdata-sections -ffunction-sections
+COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0 -fdata-sections -ffunction-sections -ggdb -gdwarf-2
 CFLAGS=$(COMMON)
 ASFLAGS=$(COMMON) -D__ASSEMBLER__
 
@@ -32,5 +32,4 @@ clean:
 .PHONY: upload
 upload: $(ARTIFACT).elf
 	mspdebug rf2500 "prog $(ARTIFACT).elf"
-
 
