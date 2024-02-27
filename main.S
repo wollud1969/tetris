@@ -108,6 +108,8 @@ _start:
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
 
+  ;; ----------------------------------------------
+  ;; load data from template area in rom into ram
   mov.w   #screendata, r7
   mov.w   #screendataend, r8
   mov.w   #screendata_tmpl, r9
@@ -117,6 +119,7 @@ _start_load_next:
   inc.w   r9
   cmp.w   r7, r8
   jnz _start_load_next
+  ;; ----------------------------------------------
 
 init:
   ;; configuration of GPIO Ports
