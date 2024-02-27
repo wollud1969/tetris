@@ -22,6 +22,8 @@
 #define BIT_COUNTER_REGISTER r6
 #define BIT_COUNTER_INIT_VALUE 0x01
 
+
+
 ;; 2.48us
 #define TIMER_COMPLETE 45
 ;; 1.18us
@@ -50,7 +52,7 @@
 
   .section ".data"
 screendata:
-  .rept 5
+  .rept 6
   .byte 0
   .endr
 screendataend:

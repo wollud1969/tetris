@@ -41,14 +41,23 @@ Long pulse: 1.18us
 
 ![](./docs/pulse_long.png)
 
+
+## Load Time
+
 During of loading data into five LEDs: 297us
 
 ![](./docs/five_leds.png)
 
-| # of LEDs | Load Time |
-| --------- | --------- |
-| 5         | 297us     |
-| 10        | 594us     |
-| 100       | 5.9ms     |
-| 200       | 11.8ms    |
+During of loading data into six LEDs: 297us
+
+![](./docs/six_leds.png)
+
+
+| # of LEDs | Load Time measured | calculated |
+| --------- | ------------------ | ---------- |
+| 5         | 297us              |            | 
+| 6         | 354us              | 356.4us    |
+| 10        |                    | 594us      |
+| 100       |                    | 5.9ms      |
+| 200       |                    | 11.8ms     |
 
