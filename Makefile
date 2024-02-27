@@ -10,7 +10,7 @@ ASFLAGS=$(COMMON) -D__ASSEMBLER__
 
 LDFLAGS=-L $(TOOLCHAIN_PREFIX)/include -Wl,-Map,firmware.map -nostdlib -nostartfiles -T $(MCU).ld
 
-$(ARTIFACT).elf:	main.o
+$(ARTIFACT).elf:	colors.o main.o
 	$(CC) -o $@ $(LDFLAGS) $^
 	$(OBJDUMP) -D $(ARTIFACT).elf > $(ARTIFACT).txt
   

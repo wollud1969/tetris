@@ -14,6 +14,8 @@
 #define _springgreen 0x09
 #define _chartreuse 0x0a
 #define _yellow 0x0b
+#define _white 0x0c
+#define _off 0x0d
 
 
 

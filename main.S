@@ -16,78 +16,9 @@ screendata:
 screendataend:
   .byte 0xff
 
-  .section ".rodata","a"
-screendata_tmpl:
-  .byte _blue
-  .byte _red
-  .byte _blue
-screendataend_tmpl:
-  .byte   0xff
-
-;; color definitions according to https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
-red:
-colors1:
-  .byte   0xff  ;; red
-colors2:
-  .byte   0x00  ;; green
-colors3:
-  .byte   0x00  ;; blue
-  .byte   0
-blue:
-  .byte   0x00
-  .byte   0x00
-  .byte   0xff
-  .byte   0
-green:
-  .byte   0x00
-  .byte   0xff
-  .byte   0x00
-  .byte   0
-orange:
-  .byte   0xff
-  .byte   0x80
-  .byte   0x00
-  .byte   0
-rose:
-  .byte   0xff
-  .byte   0x00
-  .byte   0x80
-  .byte   0
-magenta:
-  .byte   0xff
-  .byte   0x00
-  .byte   0xff
-  .byte   0
-violet:
-  .byte   0x80
-  .byte   0x00
-  .byte   0xff
-  .byte   0
-azure:
-  .byte   0x00
-  .byte   0x80
-  .byte   0xff
-  .byte   0
-cyan:
-  .byte   0x00
-  .byte   0xff
-  .byte   0xff
-  .byte   0
-springgreen:
-  .byte   0x00
-  .byte   0xff
-  .byte   0x80
-  .byte   0
-chartreuse:
-  .byte   0x80
-  .byte   0xff
-  .byte   0x00
-  .byte   0
-yellow:
-  .byte   0xff
-  .byte   0xff
-  .byte   0x00
-  .byte   0
+  .section ".rodata"
+  .extern screendata_tmpl
+  .extern colors
 
   ;; .text is the name of the section, it is a hint for the linker to
   ;; allocate the section
@@ -183,7 +114,7 @@ mainloop_wait_for_isr_0:
   bit     #0x01,r4
   jz      mainloop_wait_for_isr_0
   ;; load data
-  mov.b   colors1(r9), r5
+  mov.b   colors(r9), r5
   ;; clear BYTE_DONE
   bic     #0x01, r4
 mainloop_wait_for_isr_1:
@@ -191,7 +122,7 @@ mainloop_wait_for_isr_1:
   bit     #0x01,r4
   jz      mainloop_wait_for_isr_1
   ;; load data
-  mov.b   colors2(r9), r5
+  mov.b   colors+1(r9), r5
   ;; clear BYTE_DONE
   bic     #0x01, r4
 mainloop_wait_for_isr_2:
@@ -199,7 +130,7 @@ mainloop_wait_for_isr_2:
   bit     #0x01,r4
   jz      mainloop_wait_for_isr_2
   ;; load data
-  mov.b   colors3(r9), r5
+  mov.b   colors+2(r9), r5
   ;; clear BYTE_DONE
   bic     #0x01, r4
 
