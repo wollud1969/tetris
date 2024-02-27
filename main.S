@@ -8,12 +8,20 @@
 #define SR r2
 
 
-  .section ".rodata","a"
+  .section ".data"
 screendata:
-  .byte   _violet
-  .byte   _orange
-  .byte   _springgreen
+  .rept 3
+  .byte 0
+  .endr
 screendataend:
+  .byte 0xff
+
+  .section ".rodata","a"
+screendata_tmpl:
+  .byte _blue
+  .byte _red
+  .byte _blue
+screendataend_tmpl:
   .byte   0xff
 
 ;; color definitions according to https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
@@ -99,6 +107,16 @@ _start:
 
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
+
+  mov.w   #screendata, r7
+  mov.w   #screendataend, r8
+  mov.w   #screendata_tmpl, r9
+_start_load_next:
+  mov.b   @r9, @r7
+  inc.w   r7
+  inc.w   r9
+  cmp.w   r7, r8
+  jnz _start_load_next
 
 init:
   ;; configuration of GPIO Ports
