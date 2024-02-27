@@ -8,6 +8,8 @@
 #define SR r2
 
 
+#define SIGNAL_REGISTER r4
+
   .section ".data"
 screendata:
   .rept 3
@@ -76,7 +78,7 @@ init:
   ;; initialize bit-counter for isr
   mov.b   #0x01,r6
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
-  mov.b   #0x01,r4
+  mov.b   #0x01, SIGNAL_REGISTER
 
   ;; screen data start/next into r7
   mov.w   #screendata, r7
@@ -107,39 +109,39 @@ mainloop:
   rla.b   r9
 
   ;; enable isr
-  bis     #0x02, r4
+  bis     #0x02, SIGNAL_REGISTER
 
 mainloop_wait_for_isr_0:
   ;; check bit0 in sync register
-  bit     #0x01,r4
+  bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_0
   ;; load data
   mov.b   colors(r9), r5
   ;; clear BYTE_DONE
-  bic     #0x01, r4
+  bic     #0x01,  SIGNAL_REGISTER
 mainloop_wait_for_isr_1:
   ;; check bit0 in sync register
-  bit     #0x01,r4
+  bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_1
   ;; load data
   mov.b   colors+1(r9), r5
   ;; clear BYTE_DONE
-  bic     #0x01, r4
+  bic     #0x01,  SIGNAL_REGISTER
 mainloop_wait_for_isr_2:
   ;; check bit0 in sync register
-  bit     #0x01,r4
+  bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_2
   ;; load data
   mov.b   colors+2(r9), r5
   ;; clear BYTE_DONE
-  bic     #0x01, r4
+  bic     #0x01,  SIGNAL_REGISTER
 
   ;; continue
   jmp     mainloop
 
 mainloop_data_done:
   ;; signal all data processed, isr finish
-  bis     #0x04, r4
+  bis     #0x04,  SIGNAL_REGISTER
   bis     #BIT2, &P1OUT
   ;; continue
   jmp     mainloop
@@ -151,7 +153,7 @@ mainloop_data_done:
   ;; r6: exclusively used by isr as bit-counter
 timer1_a0_isr:
   ;; check isr enable bit
-  bit     #0x02,r4
+  bit     #0x02, SIGNAL_REGISTER
   jz      timer1_a0_isr_exit
 
   ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
@@ -173,12 +175,13 @@ timer1_a0_isr_end:
   ;; reset bit-counter
   mov.b   #0x01,r6
   ;; signal byte done
-  bis     #0x01,r4
+  bis     #0x01, SIGNAL_REGISTER
 
-  bit     #0x04, r4
+  ;; check whether all data are processed
+  bit     #0x04,  SIGNAL_REGISTER
   jz      timer1_a0_isr_exit
   ;; disable isr
-  bic     #0x02, r4
+  bic     #0x02,  SIGNAL_REGISTER
   ;; disable output
   bic     #BIT1, &P1OUT
 
