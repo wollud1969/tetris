@@ -4,8 +4,8 @@
 screendata_tmpl:
   .global screendata_tmpl
   .byte _red
-  .byte _off
-  .byte _yellow
+  .byte _green
+  .byte _blue
 screendataend_tmpl:
   .byte   0xff
 

@@ -9,6 +9,11 @@
 
 
 #define SIGNAL_REGISTER r4
+#define SIGNAL_OCTET_DONE 0x01
+#define SIGNAL_ISR_ENABLE 0x02
+#define SIGNAL_ALL_DATA_DONE 0x04
+
+
 #define DATA_NEXT_ADDRESS_REGISTER r7
 #define DATA_END_ADDRESS_REGISTER r8
 #define DATA_REGISTER r5
@@ -88,7 +93,7 @@ init:
   ;; initialize bit-counter for isr
   mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
-  mov.b   #0x01, SIGNAL_REGISTER
+  mov.b   #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
 
   ;; screen data start/next into r7
   mov.w   #screendata, DATA_NEXT_ADDRESS_REGISTER
@@ -119,39 +124,39 @@ mainloop:
   rla.b   NEXT_DATA_REGISTER
 
   ;; enable isr
-  bis     #0x02, SIGNAL_REGISTER
+  bis     #SIGNAL_ISR_ENABLE, SIGNAL_REGISTER
 
 mainloop_wait_for_isr_0:
   ;; check bit0 in sync register
-  bit     #0x01, SIGNAL_REGISTER
+  bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_0
   ;; load data
   mov.b   colors(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
-  bic     #0x01,  SIGNAL_REGISTER
+  bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
 mainloop_wait_for_isr_1:
   ;; check bit0 in sync register
-  bit     #0x01, SIGNAL_REGISTER
+  bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_1
   ;; load data
   mov.b   colors+1(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
-  bic     #0x01,  SIGNAL_REGISTER
+  bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
 mainloop_wait_for_isr_2:
   ;; check bit0 in sync register
-  bit     #0x01, SIGNAL_REGISTER
+  bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_2
   ;; load data
   mov.b   colors+2(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
-  bic     #0x01,  SIGNAL_REGISTER
+  bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
 
   ;; continue
   jmp     mainloop
 
 mainloop_data_done:
   ;; signal all data processed, isr finish
-  bis     #0x04,  SIGNAL_REGISTER
+  bis     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
   bis     #BIT2, &P1OUT
   ;; continue
   jmp     mainloop
@@ -163,7 +168,7 @@ mainloop_data_done:
   ;; r6: exclusively used by isr as bit-counter
 timer1_a0_isr:
   ;; check isr enable bit
-  bit     #0x02, SIGNAL_REGISTER
+  bit     #SIGNAL_ISR_ENABLE, SIGNAL_REGISTER
   jz      timer1_a0_isr_exit
 
   ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
@@ -185,13 +190,13 @@ timer1_a0_isr_end:
   ;; reset bit-counter
   mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; signal byte done
-  bis     #0x01, SIGNAL_REGISTER
+  bis     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
 
   ;; check whether all data are processed
-  bit     #0x04,  SIGNAL_REGISTER
+  bit     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
   jz      timer1_a0_isr_exit
   ;; disable isr
-  bic     #0x02,  SIGNAL_REGISTER
+  bic     #SIGNAL_ISR_ENABLE,  SIGNAL_REGISTER
   ;; disable output
   bic     #BIT1, &P1OUT
 
