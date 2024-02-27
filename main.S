@@ -15,6 +15,7 @@
 #define NEXT_DATA_REGISTER r9
 
 #define BIT_COUNTER_REGISTER r6
+#define BIT_COUNTER_INIT_VALUE 0x01
 
 
   .section ".data"
@@ -50,6 +51,8 @@ _start:
 
   ;; ----------------------------------------------
   ;; load data from template area in rom into ram
+  ;; uses arbitrary register before loading registers
+  ;; for later use
   mov.w   #screendata, r7
   mov.w   #screendataend, r8
   mov.w   #screendata_tmpl, r9
@@ -83,7 +86,7 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL2
 
   ;; initialize bit-counter for isr
-  mov.b   #0x01, BIT_COUNTER_REGISTER
+  mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
   mov.b   #0x01, SIGNAL_REGISTER
 
@@ -180,7 +183,7 @@ timer1_a0_isr_end:
   jnc     timer1_a0_isr_exit
 
   ;; reset bit-counter
-  mov.b   #0x01, BIT_COUNTER_REGISTER
+  mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; signal byte done
   bis     #0x01, SIGNAL_REGISTER
 

@@ -3,7 +3,7 @@
   .section ".rodata","a"
 screendata_tmpl:
   .global screendata_tmpl
-  .byte _blue
+  .byte _red
   .byte _off
   .byte _yellow
 screendataend_tmpl:
