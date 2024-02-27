@@ -1,41 +1,84 @@
   .file "main.S"
 
 #include <msp430g2553.h>
-
+#include "colors.h"
 
 #define PC r0
 #define SP r1
 #define SR r2
 
-#define _red 0x00
-#define _blue 0x01
-#define _green 0x02
 
   .section ".rodata","a"
 screendata:
-  .byte   _red
-  .byte   _blue
-  .byte   _green
+  .byte   _violet
+  .byte   _orange
+  .byte   _springgreen
 screendataend:
   .byte   0xff
 
+;; color definitions according to https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
 red:
 colors1:
-  .byte   0b11111111
+  .byte   0xff  ;; red
 colors2:
-  .byte   0b00000000
+  .byte   0x00  ;; green
 colors3:
-  .byte   0b00000000
+  .byte   0x00  ;; blue
   .byte   0
 blue:
-  .byte   0b00000000
-  .byte   0b00000000
-  .byte   0b11111111
+  .byte   0x00
+  .byte   0x00
+  .byte   0xff
   .byte   0
 green:
-  .byte   0b00000000
-  .byte   0b11111111
-  .byte   0b00000000
+  .byte   0x00
+  .byte   0xff
+  .byte   0x00
+  .byte   0
+orange:
+  .byte   0xff
+  .byte   0x80
+  .byte   0x00
+  .byte   0
+rose:
+  .byte   0xff
+  .byte   0x00
+  .byte   0x80
+  .byte   0
+magenta:
+  .byte   0xff
+  .byte   0x00
+  .byte   0xff
+  .byte   0
+violet:
+  .byte   0x80
+  .byte   0x00
+  .byte   0xff
+  .byte   0
+azure:
+  .byte   0x00
+  .byte   0x80
+  .byte   0xff
+  .byte   0
+cyan:
+  .byte   0x00
+  .byte   0xff
+  .byte   0xff
+  .byte   0
+springgreen:
+  .byte   0x00
+  .byte   0xff
+  .byte   0x80
+  .byte   0
+chartreuse:
+  .byte   0x80
+  .byte   0xff
+  .byte   0x00
+  .byte   0
+yellow:
+  .byte   0xff
+  .byte   0xff
+  .byte   0x00
   .byte   0
 
   ;; .text is the name of the section, it is a hint for the linker to
@@ -56,9 +99,6 @@ _start:
 
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
-
-  mov.w   #0xaaaa, r7
-  mov.w   #0x5555, r8
 
 init:
   ;; configuration of GPIO Ports
@@ -113,22 +153,6 @@ mainloop:
   ;; multiple color code by four to get color data
   rla.b   r9
   rla.b   r9
-
-; This code already works
-;mainloop_wait_for_isr:
-;  ;; check bit0 in sync register
-;  bit     #0x01,r4
-;  jz      mainloop_wait_for_isr
-;
-;  ;; load data
-;  mov.b   r9,r5
-;  ;; clear BYTE_DONE
-;  bic     #0x01, r4
-;  ;; enable isr
-;  bis     #0x02, r4
-;
-;  ;; continue
-;  jmp     mainloop
 
   ;; enable isr
   bis     #0x02, r4
