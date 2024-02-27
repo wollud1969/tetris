@@ -12,6 +12,8 @@ Attention: the gdb in the TI toolchain package is broken, use the one from Debia
 
 ## Signals Working Cycler
 
+These signals are related to code under tag `cycler_works_include_output_stage`.
+
 First octets:
 
 ![](./docs/cycler_working_first_octets.png)
