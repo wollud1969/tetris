@@ -3,13 +3,14 @@
   .section ".rodata","a"
 screendata_tmpl:
   .global screendata_tmpl
-  .byte _red
-  .byte _green
-  .byte _blue
+  .byte _off
+  .byte _white
+  .byte _off
 screendataend_tmpl:
   .byte   0xff
 
-;; color definitions according to https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
+;; color definitions according to
+;; https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
 colors:
   .global colors
   ;;      red, green, blue, padding

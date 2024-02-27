@@ -22,6 +22,25 @@
 #define BIT_COUNTER_REGISTER r6
 #define BIT_COUNTER_INIT_VALUE 0x01
 
+;; 2.48us
+#define TIMER_COMPLETE 45
+;; 1.18us
+#define TIMER_LONG 22
+;; 550ns
+#define TIMER_SHORT 10
+
+  .macro set_data_bit
+  bis   #BIT0, &P1OUT
+  .endm
+  .macro clear_data_bit
+  bic   #BIT0, &P1OUT
+  .endm
+  .macro set_output_enable
+  bis   #BIT1, &P1OUT
+  .endm
+  .macro clear_output_enable
+  bic   #BIT1, &P1OUT
+  .endm
 
   .section ".data"
 screendata:
@@ -81,10 +100,10 @@ init:
   ;;  cycle time is 56.25ns
   mov.w   #ID_0|MC_0|TACLR|TASSEL_2,&TA1CTL
   ;;  2.0us 
-  mov.w   #45,&TA1CCR0
+  mov.w   #TIMER_COMPLETE,&TA1CCR0
   ;;  a bit less
-  mov.w   #10,&TA1CCR1
-  mov.w   #22,&TA1CCR2
+  mov.w   #TIMER_SHORT,&TA1CCR1
+  mov.w   #TIMER_LONG,&TA1CCR2
   ;;  configure output mode for TA0.1
   mov.w   #CCIE,&TA1CCTL0
   mov.w   #OUTMOD_7,&TA1CCTL1
@@ -105,11 +124,6 @@ init:
   ;; enable interrupts
   eint
 
-
-
-
-  ;; r4: synchronization between mainloop and isr
-  ;; r5: data byte to be handled by isr
 mainloop:
   ;; prepare next byte to handle by isr
   cmp.w   DATA_NEXT_ADDRESS_REGISTER, DATA_END_ADDRESS_REGISTER
@@ -174,14 +188,14 @@ timer1_a0_isr:
   ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
   rla.b   DATA_REGISTER
   jnc     timer1_a0_isr_false_bit
-  bis     #BIT0,&P1OUT
+  set_data_bit
   jmp     timer1_a0_isr_end
 timer1_a0_isr_false_bit:
-  bic     #BIT0,&P1OUT
+  clear_data_bit
    
 timer1_a0_isr_end:
   ;; enable output
-  bis     #BIT1, &P1OUT
+  set_output_enable
 
   ;; roll bit-counter
   rla.b   BIT_COUNTER_REGISTER
@@ -198,7 +212,7 @@ timer1_a0_isr_end:
   ;; disable isr
   bic     #SIGNAL_ISR_ENABLE,  SIGNAL_REGISTER
   ;; disable output
-  bic     #BIT1, &P1OUT
+  clear_output_enable
 
 timer1_a0_isr_exit:
   reti
