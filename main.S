@@ -10,10 +10,10 @@
 
   .section ".rodata","a"
 screendata:
-  .byte   0x00
   .byte   0x01
-  .byte   0x02
   .byte   0x03
+  .byte   0x07
+  .byte   0x0f
 screendataend:
   .byte   0xff
 red:
@@ -60,6 +60,7 @@ _start:
 init:
   ;; configuration of GPIO Ports
   mov.b   #BIT0|BIT1|BIT2,&P1DIR
+  mov.b   #0,&P1OUT
   mov.b   #BIT1|BIT4,&P2DIR
   mov.b   #BIT1|BIT4,&P2SEL
 
@@ -79,16 +80,13 @@ init:
 
   ;; initialize bit-counter for isr
   mov.b   #0x01,r6
-  ;; initialize isr-sync register
-  mov.b   #0x00,r4
+  ;; initialize isr-sync register, signal BYTE_DONE for the first start
+  mov.b   #0x01,r4
 
   ;; screen data start/next into r7
   mov.w   #screendata, r7
   ;; screen data end into r8
   mov.w   #screendataend, r8
-  ;; load first screen data value into r5
-  mov.b   @r7,r5
-  inc.w   r7
 
   ;; start timer in up mode
   bis.w   #MC0,&TA1CTL
@@ -103,9 +101,9 @@ init:
 mainloop:
   ;; prepare next byte to handle by isr
   cmp.w   r7,r8
-  jnz     mainloop_prepare_next_byte
-  mov.w   &screendata,r7
-mainloop_prepare_next_byte:
+  jz      mainloop_data_done
+
+  ;; load next data byte
   mov.b   @r7,r9
   inc.w   r7
 
@@ -116,11 +114,18 @@ mainloop_wait_for_isr:
 
   ;; load data
   mov.b   r9,r5
-  mov.b   #0x00,r4
-  ;; signal reload
-  bis     #BIT2,&P1OUT
-  bic     #BIT2,&P1OUT
+  ;; clear BYTE_DONE
+  bic     #0x01, r4
+  ;; enable isr
+  bis     #0x02, r4
 
+  ;; continue
+  jmp     mainloop
+
+mainloop_data_done:
+  ;; signal all data processed, isr finish
+  bis     #0x04, r4
+  bis     #BIT2, &P1OUT
   ;; continue
   jmp     mainloop
 
@@ -130,33 +135,39 @@ mainloop_wait_for_isr:
 ; --- timer isr ---
   ;; r6: exclusively used by isr as bit-counter
 timer1_a0_isr:
-  ;; func begin marker
-  bis     #BIT0,&P1OUT
-  ;; check isr idle bit
-  bit     #BIT1,r4
-  jnz     timer1_a0_isr_exit
+  ;; check isr enable bit
+  bit     #0x02,r4
+  jz      timer1_a0_isr_exit
 
-  ;; shift msb of data register r5 into carry flag and set or reset P1.1 accordingly
+  ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
   rla.b   r5
   jnc     timer1_a0_isr_false_bit
-  bis     #BIT1,&P1OUT
+  bis     #BIT0,&P1OUT
   jmp     timer1_a0_isr_end
 timer1_a0_isr_false_bit:
-  bic     #BIT1,&P1OUT
+  bic     #BIT0,&P1OUT
    
-  ;; shift bit-counter, after eight shifts signal byte done and reset bit-counter
 timer1_a0_isr_end:
+  ;; enable output
+  bis     #BIT1, &P1OUT
+
+  ;; roll bit-counter
   rla.b   r6
   jnc     timer1_a0_isr_exit
 
   ;; reset bit-counter
   mov.b   #0x01,r6
   ;; signal byte done
-  mov.b   #0x01,r4
+  bis     #0x01,r4
+
+  bit     #0x04, r4
+  jz      timer1_a0_isr_exit
+  ;; disable isr
+  bic     #0x02, r4
+  ;; disable output
+  bic     #BIT1, &P1OUT
 
 timer1_a0_isr_exit:
-  ;; func end marker
-  bic     #BIT0,&P1OUT
   reti
 
 
