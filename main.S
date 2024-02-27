@@ -41,6 +41,12 @@
   .macro clear_output_enable
   bic   #BIT1, &P1OUT
   .endm
+  .macro set_debug
+  bis   #BIT2, &P1OUT
+  .endm
+  .macro clear_debug
+  bic   #BIT2, &P1OUT
+  .endm
 
   .section ".data"
 screendata:
@@ -171,7 +177,7 @@ mainloop_wait_for_isr_2:
 mainloop_data_done:
   ;; signal all data processed, isr finish
   bis     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
-  bis     #BIT2, &P1OUT
+  set_debug
   ;; continue
   jmp     mainloop
 
