@@ -9,6 +9,8 @@
 
 
 #define SIGNAL_REGISTER r4
+#define DATA_NEXT_REGISTER r7
+#define DATA_END_REGISTER r8
 
   .section ".data"
 screendata:
@@ -81,9 +83,9 @@ init:
   mov.b   #0x01, SIGNAL_REGISTER
 
   ;; screen data start/next into r7
-  mov.w   #screendata, r7
+  mov.w   #screendata, DATA_NEXT_REGISTER
   ;; screen data end into r8
-  mov.w   #screendataend, r8
+  mov.w   #screendataend, DATA_END_REGISTER
 
   ;; start timer in up mode
   bis.w   #MC0,&TA1CTL
@@ -97,12 +99,12 @@ init:
   ;; r5: data byte to be handled by isr
 mainloop:
   ;; prepare next byte to handle by isr
-  cmp.w   r7,r8
+  cmp.w   DATA_NEXT_REGISTER, DATA_END_REGISTER
   jz      mainloop_data_done
 
   ;; load next data byte
-  mov.b   @r7,r9
-  inc.w   r7
+  mov.b   @DATA_NEXT_REGISTER,r9
+  inc.w   DATA_NEXT_REGISTER
 
   ;; multiple color code by four to get color data
   rla.b   r9

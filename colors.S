@@ -3,9 +3,9 @@
   .section ".rodata","a"
 screendata_tmpl:
   .global screendata_tmpl
-  .byte _violet
   .byte _off
   .byte _off
+  .byte _green
 screendataend_tmpl:
   .byte   0xff
 
