@@ -9,8 +9,13 @@
 
 
 #define SIGNAL_REGISTER r4
-#define DATA_NEXT_REGISTER r7
-#define DATA_END_REGISTER r8
+#define DATA_NEXT_ADDRESS_REGISTER r7
+#define DATA_END_ADDRESS_REGISTER r8
+#define DATA_REGISTER r5
+#define NEXT_DATA_REGISTER r9
+
+#define BIT_COUNTER_REGISTER r6
+
 
   .section ".data"
 screendata:
@@ -78,14 +83,14 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL2
 
   ;; initialize bit-counter for isr
-  mov.b   #0x01,r6
+  mov.b   #0x01, BIT_COUNTER_REGISTER
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
   mov.b   #0x01, SIGNAL_REGISTER
 
   ;; screen data start/next into r7
-  mov.w   #screendata, DATA_NEXT_REGISTER
+  mov.w   #screendata, DATA_NEXT_ADDRESS_REGISTER
   ;; screen data end into r8
-  mov.w   #screendataend, DATA_END_REGISTER
+  mov.w   #screendataend, DATA_END_ADDRESS_REGISTER
 
   ;; start timer in up mode
   bis.w   #MC0,&TA1CTL
@@ -99,16 +104,16 @@ init:
   ;; r5: data byte to be handled by isr
 mainloop:
   ;; prepare next byte to handle by isr
-  cmp.w   DATA_NEXT_REGISTER, DATA_END_REGISTER
+  cmp.w   DATA_NEXT_ADDRESS_REGISTER, DATA_END_ADDRESS_REGISTER
   jz      mainloop_data_done
 
   ;; load next data byte
-  mov.b   @DATA_NEXT_REGISTER,r9
-  inc.w   DATA_NEXT_REGISTER
+  mov.b   @DATA_NEXT_ADDRESS_REGISTER, NEXT_DATA_REGISTER
+  inc.w   DATA_NEXT_ADDRESS_REGISTER
 
   ;; multiple color code by four to get color data
-  rla.b   r9
-  rla.b   r9
+  rla.b   NEXT_DATA_REGISTER
+  rla.b   NEXT_DATA_REGISTER
 
   ;; enable isr
   bis     #0x02, SIGNAL_REGISTER
@@ -118,7 +123,7 @@ mainloop_wait_for_isr_0:
   bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_0
   ;; load data
-  mov.b   colors(r9), r5
+  mov.b   colors(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #0x01,  SIGNAL_REGISTER
 mainloop_wait_for_isr_1:
@@ -126,7 +131,7 @@ mainloop_wait_for_isr_1:
   bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_1
   ;; load data
-  mov.b   colors+1(r9), r5
+  mov.b   colors+1(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #0x01,  SIGNAL_REGISTER
 mainloop_wait_for_isr_2:
@@ -134,7 +139,7 @@ mainloop_wait_for_isr_2:
   bit     #0x01, SIGNAL_REGISTER
   jz      mainloop_wait_for_isr_2
   ;; load data
-  mov.b   colors+2(r9), r5
+  mov.b   colors+2(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #0x01,  SIGNAL_REGISTER
 
@@ -159,7 +164,7 @@ timer1_a0_isr:
   jz      timer1_a0_isr_exit
 
   ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
-  rla.b   r5
+  rla.b   DATA_REGISTER
   jnc     timer1_a0_isr_false_bit
   bis     #BIT0,&P1OUT
   jmp     timer1_a0_isr_end
@@ -171,11 +176,11 @@ timer1_a0_isr_end:
   bis     #BIT1, &P1OUT
 
   ;; roll bit-counter
-  rla.b   r6
+  rla.b   BIT_COUNTER_REGISTER
   jnc     timer1_a0_isr_exit
 
   ;; reset bit-counter
-  mov.b   #0x01,r6
+  mov.b   #0x01, BIT_COUNTER_REGISTER
   ;; signal byte done
   bis     #0x01, SIGNAL_REGISTER
 
