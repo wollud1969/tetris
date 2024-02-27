@@ -40,3 +40,15 @@ Short pulse: 550ns
 Long pulse: 1.18us
 
 ![](./docs/pulse_long.png)
+
+During of loading data into five LEDs: 297us
+
+![](./docs/five_leds.png)
+
+| # of LEDs | Load Time |
+| --------- | --------- |
+| 5         | 297us     |
+| 10        | 594us     |
+| 100       | 5.9ms     |
+| 200       | 11.8ms    |
+

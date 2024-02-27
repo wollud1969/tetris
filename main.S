@@ -50,7 +50,7 @@
 
   .section ".data"
 screendata:
-  .rept 3
+  .rept 5
   .byte 0
   .endr
 screendataend:
