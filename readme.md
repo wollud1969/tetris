@@ -29,14 +29,14 @@ Schematics and legend for signals:
 
 ## Timing
 
-Complete cycle:
+Complete cycle: 2.48us
 
 ![](./docs/pulse_complete.png)
 
-Short pulse:
+Short pulse: 550ns
 
 ![](./docs/pulse_short.png)
 
-Long pulse:
+Long pulse: 1.18us
 
 ![](./docs/pulse_long.png)
