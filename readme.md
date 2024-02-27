@@ -21,3 +21,7 @@ First octets:
 Last octets:
 
 ![](./docs/cycler_working_last_octets.png)
+
+Schematics and legend for signals:
+
+![](./docs/schematics.jpeg)
