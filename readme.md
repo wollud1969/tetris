@@ -25,3 +25,18 @@ Last octets:
 Schematics and legend for signals:
 
 ![](./docs/schematics.jpeg)
+
+
+## Timing
+
+Complete cycle:
+
+![](./docs/pulse_complete.png)
+
+Short pulse:
+
+![](./docs/pulse_short.png)
+
+Long pulse:
+
+![](./docs/pulse_long.png)
