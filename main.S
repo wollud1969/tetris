@@ -7,32 +7,35 @@
 #define SP r1
 #define SR r2
 
+#define _red 0x00
+#define _blue 0x01
+#define _green 0x02
 
   .section ".rodata","a"
 screendata:
-  .byte   0x01
-  .byte   0x03
-  .byte   0x07
-  .byte   0x0f
+  .byte   _red
+  .byte   _blue
+  .byte   _green
 screendataend:
   .byte   0xff
+
 red:
 colors1:
-  .byte   0b01001111
+  .byte   0b11111111
 colors2:
-  .byte   0b01000111
+  .byte   0b00000000
 colors3:
-  .byte   0b01000011
+  .byte   0b00000000
   .byte   0
 blue:
-  .byte   0b11001111
-  .byte   0b11000111
-  .byte   0b11000011
+  .byte   0b00000000
+  .byte   0b00000000
+  .byte   0b11111111
   .byte   0
 green:
-  .byte   0b10001111
-  .byte   0b10000111
-  .byte   0b10000011
+  .byte   0b00000000
+  .byte   0b11111111
+  .byte   0b00000000
   .byte   0
 
   ;; .text is the name of the section, it is a hint for the linker to
@@ -107,17 +110,53 @@ mainloop:
   mov.b   @r7,r9
   inc.w   r7
 
-mainloop_wait_for_isr:
-  ;; check bit0 in sync register
-  bit     #0x01,r4
-  jz      mainloop_wait_for_isr
+  ;; multiple color code by four to get color data
+  rla.b   r9
+  rla.b   r9
 
-  ;; load data
-  mov.b   r9,r5
-  ;; clear BYTE_DONE
-  bic     #0x01, r4
+; This code already works
+;mainloop_wait_for_isr:
+;  ;; check bit0 in sync register
+;  bit     #0x01,r4
+;  jz      mainloop_wait_for_isr
+;
+;  ;; load data
+;  mov.b   r9,r5
+;  ;; clear BYTE_DONE
+;  bic     #0x01, r4
+;  ;; enable isr
+;  bis     #0x02, r4
+;
+;  ;; continue
+;  jmp     mainloop
+
   ;; enable isr
   bis     #0x02, r4
+
+mainloop_wait_for_isr_0:
+  ;; check bit0 in sync register
+  bit     #0x01,r4
+  jz      mainloop_wait_for_isr_0
+  ;; load data
+  mov.b   colors1(r9), r5
+  ;; clear BYTE_DONE
+  bic     #0x01, r4
+mainloop_wait_for_isr_1:
+  ;; check bit0 in sync register
+  bit     #0x01,r4
+  jz      mainloop_wait_for_isr_1
+  ;; load data
+  mov.b   colors2(r9), r5
+  ;; clear BYTE_DONE
+  bic     #0x01, r4
+mainloop_wait_for_isr_2:
+  ;; check bit0 in sync register
+  bit     #0x01,r4
+  jz      mainloop_wait_for_isr_2
+  ;; load data
+  mov.b   colors3(r9), r5
+  ;; clear BYTE_DONE
+  bic     #0x01, r4
 
   ;; continue
   jmp     mainloop
