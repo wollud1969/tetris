@@ -96,8 +96,13 @@ _start_load_next:
 
 init:
   ;; configuration of GPIO Ports
+  ;; BIT0: data bit
+  ;; BIT1: output enable
+  ;; BIT2: debug
   mov.b   #BIT0|BIT1|BIT2,&P1DIR
   mov.b   #0,&P1OUT
+  ;; BIT4: long pulse
+  ;; BIT1: short pulse
   mov.b   #BIT1|BIT4,&P2DIR
   mov.b   #BIT1|BIT4,&P2SEL
 
