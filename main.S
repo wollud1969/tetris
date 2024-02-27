@@ -172,12 +172,6 @@ timer1_a0_isr_exit:
 
 
 
-;timer0_a1_isr:
-;  reti
-
-; --- interrupt vectors ---
-;  .section "__interrupt_vector_9","ax",@progbits
-;  .word   timer0_a1_isr
   .section "__interrupt_vector_14","ax",@progbits
   .word   timer1_a0_isr
 
