@@ -58,9 +58,6 @@ screendata:
 screendataend:
   .byte 0xff
 
-  .section ".rodata"
-  .extern screendata_tmpl
-  .extern colors
 
   ;; .text is the name of the section, it is a hint for the linker to
   ;; allocate the section
@@ -240,3 +237,6 @@ timer1_a0_isr_exit:
   .word   _start
 
   .end
+
+
+
