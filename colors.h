@@ -2,7 +2,7 @@
 #define _COLORS_H_
 
 
-#define _red 0x00
+#define _off 0x00
 #define _blue 0x01
 #define _green 0x02
 #define _orange 0x03
@@ -15,7 +15,7 @@
 #define _chartreuse 0x0a
 #define _yellow 0x0b
 #define _white 0x0c
-#define _off 0x0d
+#define _red 0x0d
 
 
 
