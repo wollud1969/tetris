@@ -1,5 +1,3 @@
-  .file "main.S"
-
 #include <msp430g2553.h>
 #include "colors.h"
 
@@ -52,7 +50,7 @@
 
   .section ".data"
 screendata:
-  .rept 6
+  .rept 60
   .byte 0
   .endr
 screendataend:
@@ -181,9 +179,11 @@ mainloop_wait_for_isr_2:
 mainloop_data_done:
   ;; signal all data processed, isr finish
   bis     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
-  set_debug
-  ;; continue
-  jmp     mainloop
+
+
+  jmp     mainloop_data_done
+
+
 
 
 

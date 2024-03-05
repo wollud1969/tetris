@@ -3,12 +3,66 @@
   .section ".rodata","a"
 screendata_tmpl:
   .global screendata_tmpl
-  .byte _red
-  .byte _magenta
-  .byte _blue
-  .byte _cyan
   .byte _green
-  .byte _yellow
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
+  .byte _green
 screendataend_tmpl:
   .byte   0xff
 
