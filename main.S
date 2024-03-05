@@ -6,19 +6,25 @@
 #define SR r2
 
 
+;; ----------------------------------------------------
+;; --- r4, r5 and r6 must not be used for any other ---
+;; --- purpose                                      ---
+;; required for communication between drawscreen and isr
 #define SIGNAL_REGISTER r4
 #define SIGNAL_OCTET_DONE 0x01
 #define SIGNAL_ISR_ENABLE 0x02
 #define SIGNAL_ALL_DATA_DONE 0x04
+#define SIGNAL_INIT_VALUE SIGNAL_OCTET_DONE
 
-
-#define DATA_NEXT_ADDRESS_REGISTER r7
-#define DATA_END_ADDRESS_REGISTER r8
+;; required for handover of data between drawscreen and isr
 #define DATA_REGISTER r5
-#define NEXT_DATA_REGISTER r9
 
+;; required for sequencing of isr
 #define BIT_COUNTER_REGISTER r6
 #define BIT_COUNTER_INIT_VALUE 0x01
+;; ----------------------------------------------------
+
+
 
 
 
@@ -55,6 +61,8 @@ screendata:
   .endr
 screendataend:
   .byte 0xff
+data_forward_pointer:
+  .word 0
 
 
   ;; .text is the name of the section, it is a hint for the linker to
@@ -76,20 +84,6 @@ _start:
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
 
-;  ;; ----------------------------------------------
-;  ;; load data from template area in rom into ram
-;  ;; uses arbitrary register before loading registers
-;  ;; for later use
-;  mov.w   #screendata, r7
-;  mov.w   #screendataend, r8
-;  mov.w   #screendata_tmpl, r9
-;_start_load_next:
-;  mov.b   @r9, @r7
-;  inc.w   r7
-;  inc.w   r9
-;  cmp.w   r7, r8
-;  jnz _start_load_next
-;  ;; ----------------------------------------------
 
 
 init:
@@ -119,10 +113,8 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL2
 
 
-  ;; initialize bit-counter for isr
-  mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
-  ;; initialize isr-sync register, signal BYTE_DONE for the first start
-  mov.b   #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
+  ;; make sure the isr will not immediately start
+  mov.b   #SIGNAL_INIT_VALUE, SIGNAL_REGISTER
 
   ;; start timer in up mode
   bis.w   #MC0,&TA1CTL
@@ -130,13 +122,63 @@ init:
   eint
 
 mainloop:
+  call    #forwardscreen_init
   call    #resetscreen
+
+mainloop_draw:
   call    #drawscreen
+  call    #forwardscreen
 
-  jmp     mainloop
+  call    #wait
 
+  jmp     mainloop_draw
+
+
+wait:
+  push    r11
+  push    r12
+
+  mov.w   #0x0040, r11
+wait_continue_1:
+  mov.w   #0xffff, r12
+wait_continue_2:
+  dec.w   r12
+  jnz     wait_continue_2
+  dec.w   r11
+  jnz     wait_continue_1
+
+  pop     r12
+  pop     r11
+  ret
+
+forwardscreen_init:
+  mov.w   #screendata, &data_forward_pointer
+  ret
+
+forwardscreen:
+  push    r8
+  push    r10
+
+  mov.w   #screendataend, r8
+  mov.w   data_forward_pointer, r10
+  mov.b   #_off, @r10
+  inc.w   r10
+  mov.b   #_red, @r10
+  cmp.w   r10, r8
+  jnz     forwardscreen_done
+  mov.w   #screendata, r10
+forwardscreen_done:
+  mov.w   r10, data_forward_pointer
+
+  pop     r10
+  pop     r8
+  ret
+  
 
 resetscreen:
+  push    r7
+  push    r8
+
   ;; reset screen data
   mov.w   #screendata, r7
   mov.w   #screendataend, r8
@@ -145,11 +187,21 @@ resetscreen_continue:
   inc.w   r7
   cmp.w   r7, r8
   jnz resetscreen_continue
+
+  pop     r8
+  pop     r7
   ret
 
 
-
 drawscreen:
+  push    r7
+  push    r8
+  push    r9
+
+#define DATA_NEXT_ADDRESS_REGISTER r7
+#define DATA_END_ADDRESS_REGISTER r8
+#define NEXT_DATA_REGISTER r9
+
   ;; initialize bit-counter for isr
   mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
@@ -208,6 +260,9 @@ drawscreen_data_done:
   ;; signal all data processed, isr finish
   bis     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
 
+  pop     r9
+  pop     r8
+  pop     r7
   ret
 
 
