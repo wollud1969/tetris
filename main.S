@@ -25,9 +25,6 @@
 ;; ----------------------------------------------------
 
 
-
-
-
 ;; 2.48us
 #define TIMER_COMPLETE 45
 ;; 1.18us
@@ -71,6 +68,7 @@ data_forward_pointer:
   ;; @progbits is a hint for the linker to allocate this section into
   ;; program memory (flash)
   .section ".text","ax",@progbits
+;; ----------------------------------------------------
 _start:
   ;; disable watchdog
   mov.w   #WDTPW|WDTHOLD,&WDTCTL
@@ -83,8 +81,6 @@ _start:
 
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
-
-
 
 init:
   ;; configuration of GPIO Ports
@@ -112,7 +108,6 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL1
   mov.w   #OUTMOD_7,&TA1CCTL2
 
-
   ;; make sure the isr will not immediately start
   mov.b   #SIGNAL_INIT_VALUE, SIGNAL_REGISTER
 
@@ -121,6 +116,8 @@ init:
   ;; enable interrupts
   eint
 
+
+;; ----------------------------------------------------
 mainloop:
   call    #forwardscreen_init
   call    #resetscreen
@@ -134,6 +131,7 @@ mainloop_draw:
   jmp     mainloop_draw
 
 
+;; ----------------------------------------------------
 wait:
   push    r11
   push    r12
@@ -151,10 +149,13 @@ wait_continue_2:
   pop     r11
   ret
 
+
+;; ----------------------------------------------------
 forwardscreen_init:
   mov.w   #screendata, &data_forward_pointer
   ret
 
+;; ----------------------------------------------------
 forwardscreen:
   push    r8
   push    r10
@@ -163,7 +164,7 @@ forwardscreen:
   mov.w   data_forward_pointer, r10
   mov.b   #_off, @r10
   inc.w   r10
-  mov.b   #_red, @r10
+  mov.b   #_green, @r10
   cmp.w   r10, r8
   jnz     forwardscreen_done
   mov.w   #screendata, r10
@@ -175,6 +176,7 @@ forwardscreen_done:
   ret
   
 
+;; ----------------------------------------------------
 resetscreen:
   push    r7
   push    r8
@@ -193,6 +195,7 @@ resetscreen_continue:
   ret
 
 
+;; ----------------------------------------------------
 drawscreen:
   push    r7
   push    r8
@@ -266,8 +269,7 @@ drawscreen_data_done:
   ret
 
 
-
-
+;; ----------------------------------------------------
 ; --- timer isr ---
   ;; r6: exclusively used by isr as bit-counter
 timer1_a0_isr:
@@ -308,7 +310,7 @@ timer1_a0_isr_exit:
   reti
 
 
-
+;; ----------------------------------------------------
   .section "__interrupt_vector_14","ax",@progbits
   .word   timer1_a0_isr
 
