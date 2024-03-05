@@ -76,20 +76,21 @@ _start:
   ;; initialize stack pointer with value from linker
   mov.w   #__stack, SP
 
-  ;; ----------------------------------------------
-  ;; load data from template area in rom into ram
-  ;; uses arbitrary register before loading registers
-  ;; for later use
-  mov.w   #screendata, r7
-  mov.w   #screendataend, r8
-  mov.w   #screendata_tmpl, r9
-_start_load_next:
-  mov.b   @r9, @r7
-  inc.w   r7
-  inc.w   r9
-  cmp.w   r7, r8
-  jnz _start_load_next
-  ;; ----------------------------------------------
+;  ;; ----------------------------------------------
+;  ;; load data from template area in rom into ram
+;  ;; uses arbitrary register before loading registers
+;  ;; for later use
+;  mov.w   #screendata, r7
+;  mov.w   #screendataend, r8
+;  mov.w   #screendata_tmpl, r9
+;_start_load_next:
+;  mov.b   @r9, @r7
+;  inc.w   r7
+;  inc.w   r9
+;  cmp.w   r7, r8
+;  jnz _start_load_next
+;  ;; ----------------------------------------------
+
 
 init:
   ;; configuration of GPIO Ports
@@ -117,6 +118,38 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL1
   mov.w   #OUTMOD_7,&TA1CCTL2
 
+
+  ;; initialize bit-counter for isr
+  mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
+  ;; initialize isr-sync register, signal BYTE_DONE for the first start
+  mov.b   #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
+
+  ;; start timer in up mode
+  bis.w   #MC0,&TA1CTL
+  ;; enable interrupts
+  eint
+
+mainloop:
+  call    #resetscreen
+  call    #drawscreen
+
+  jmp     mainloop
+
+
+resetscreen:
+  ;; reset screen data
+  mov.w   #screendata, r7
+  mov.w   #screendataend, r8
+resetscreen_continue:
+  mov.b   #_off, @r7
+  inc.w   r7
+  cmp.w   r7, r8
+  jnz resetscreen_continue
+  ret
+
+
+
+drawscreen:
   ;; initialize bit-counter for isr
   mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
   ;; initialize isr-sync register, signal BYTE_DONE for the first start
@@ -127,15 +160,10 @@ init:
   ;; screen data end into r8
   mov.w   #screendataend, DATA_END_ADDRESS_REGISTER
 
-  ;; start timer in up mode
-  bis.w   #MC0,&TA1CTL
-  ;; enable interrupts
-  eint
-
-mainloop:
+drawscreen_continue:
   ;; prepare next byte to handle by isr
   cmp.w   DATA_NEXT_ADDRESS_REGISTER, DATA_END_ADDRESS_REGISTER
-  jz      mainloop_data_done
+  jz      drawscreen_data_done
 
   ;; load next data byte
   mov.b   @DATA_NEXT_ADDRESS_REGISTER, NEXT_DATA_REGISTER
@@ -148,42 +176,39 @@ mainloop:
   ;; enable isr
   bis     #SIGNAL_ISR_ENABLE, SIGNAL_REGISTER
 
-mainloop_wait_for_isr_0:
+drawscreen_wait_for_isr_0:
   ;; check bit0 in sync register
   bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
-  jz      mainloop_wait_for_isr_0
+  jz      drawscreen_wait_for_isr_0
   ;; load data
   mov.b   colors(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
-mainloop_wait_for_isr_1:
+drawscreen_wait_for_isr_1:
   ;; check bit0 in sync register
   bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
-  jz      mainloop_wait_for_isr_1
+  jz      drawscreen_wait_for_isr_1
   ;; load data
   mov.b   colors+1(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
-mainloop_wait_for_isr_2:
+drawscreen_wait_for_isr_2:
   ;; check bit0 in sync register
   bit     #SIGNAL_OCTET_DONE, SIGNAL_REGISTER
-  jz      mainloop_wait_for_isr_2
+  jz      drawscreen_wait_for_isr_2
   ;; load data
   mov.b   colors+2(NEXT_DATA_REGISTER), DATA_REGISTER
   ;; clear BYTE_DONE
   bic     #SIGNAL_OCTET_DONE,  SIGNAL_REGISTER
 
   ;; continue
-  jmp     mainloop
+  jmp     drawscreen_continue
 
-mainloop_data_done:
+drawscreen_data_done:
   ;; signal all data processed, isr finish
   bis     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
 
-
-  jmp     mainloop_data_done
-
-
+  ret
 
 
 
