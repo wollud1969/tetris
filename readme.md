@@ -93,5 +93,5 @@ Trigger voltage (purple):
 RC constant:
 
 ```math
-\tau = 82k\Omega \{} 100nF = 8.2ms
+\tau = 82k\Omega \cdot 100nF = 8.2ms
 ```
