@@ -76,21 +76,21 @@ The circuit generates the following signals:
 
 ![](./docs/reset-signal.png)
 
-Reference voltage (green):
+#### Reference voltage (green):
 
 ```math
-3.3V \frac{22k\Omega}{22k\Omega + 10k\Omega} = 2.2V
+U_ref = 3.3V \frac{22k\Omega}{22k\Omega + 10k\Omega} = 2.2V
 ```  
   
 
-Trigger voltage (purple):
+#### Trigger voltage (purple):
 
 ```math
-3.3V \frac{330k\Omega}{330k\Omega + 82k\Omega} = 2.64V
+U_trigg = 3.3V \frac{330k\Omega}{330k\Omega + 82k\Omega} = 2.64V
 ```  
   
 
-RC constant:
+#### RC constant:
 
 ```math
 \tau = 82k\Omega \cdot 100nF = 8.2ms
