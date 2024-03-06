@@ -76,6 +76,6 @@ The circuit generates the following signals:
 
 ![](./docs/reset-signal.png)
 
-````math
+```math
 3.3V 22k / 22k + 10k = 2.2V
 ```
