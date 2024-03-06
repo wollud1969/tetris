@@ -61,3 +61,23 @@ During of loading data into six LEDs: 297us
 | 100       |                    | 5.9ms      |
 | 200       |                    | 11.8ms     |
 
+
+## Reset Circuitry
+
+It appears that the output voltage of the power supply raises that slow, that the MCU
+will not handle the reset correctly.
+
+The following circuitry should generate a valid reset signal far enough from the raise 
+of the supply voltage:
+
+![](./docs/reset-circuit.jpeg)
+
+The circuit generates the following signals:
+
+![](./docs/reset-signal.png)
+
+Yellow is the supply voltage, green is the voltage at the inverting input of the opamp
+(reference voltage), purple is the voltage at the non-inverting input of the opamp at the RC element
+and blue finally is the reset signal. Lets hope that the small peak when switching on power
+won't hurt.
+
