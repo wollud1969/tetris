@@ -76,8 +76,4 @@ The circuit generates the following signals:
 
 ![](./docs/reset-signal.png)
 
-Yellow is the supply voltage, green is the voltage at the inverting input of the opamp
-(reference voltage), purple is the voltage at the non-inverting input of the opamp at the RC element
-and blue finally is the reset signal. Lets hope that the small peak when switching on power
-won't hurt.
 
