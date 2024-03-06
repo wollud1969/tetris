@@ -76,6 +76,20 @@ The circuit generates the following signals:
 
 ![](./docs/reset-signal.png)
 
+Reference voltage (green):
+
 ```math
-3.3V \frac{22k\Omega}{22k + 10k} = 2.2V
+3.3V \frac{22k\Omega}{22k\Omega + 10k\Omega} = 2.2V
+```
+
+Trigger voltage (purple):
+
+```math
+3.3V \frac{330k\Omega}{330k\Omega + 82k\Omega} = 2.64V
+```
+
+RC constant:
+
+```math
+\tau = 82k\Omega 100nF = 8.2ms
 ```
