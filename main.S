@@ -164,7 +164,7 @@ forwardscreen:
   mov.w   data_forward_pointer, r10
   mov.b   #_off, @r10
   inc.w   r10
-  mov.b   #_green, @r10
+  mov.b   #_violet, @r10
   cmp.w   r10, r8
   jnz     forwardscreen_done
   mov.w   #screendata, r10
