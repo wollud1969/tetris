@@ -145,8 +145,9 @@ mainloop_draw:
   ;; signal waiting for data
   set_signal_waiting_for_data
 
-  call    #forwardscreen
-  call    #wait
+  ;call    #forwardscreen
+  ;call    #wait
+  call    #receivedata
 
   ;; data has been received, clear signal
   clear_signal_waiting_for_data
@@ -215,6 +216,47 @@ resetscreen_continue:
 
   pop     r8
   pop     r7
+  ret
+
+
+;; ----------------------------------------------------
+receivedata:
+  push    r9
+  push    r10
+
+  ;; wait for first octet
+receivedata_wait_for_first_octet:
+  bit     #UCB0RXIFG, &UC0IFG
+  jz      receivedata_wait_for_first_octet
+
+  ;; get data from buffer register
+  mov.b   UCB0RXBUF, r9
+  ;; check whether value == 0xff (wait for the whole
+  ;; set of data to fill the screendata)
+  cmp.b   #0xff, r9
+  ;; receive all data
+  jz      receivedata_wait_for_all_data
+
+  ;; if it is not 0xff, it is the octet number which is the
+  ;; relative address within screendata
+receivedata_wait_for_octet:
+  bit     #UCB0RXIFG, &UC0IFG
+  jz      receivedata_wait_for_octet
+
+  ;; get octet from buffer register
+  mov.b   UCB0RXBUF, r10
+  ;; move it to the destination
+  mov.b   r10, screendata(r9)
+  ;; done
+  jmp     receivedata_end
+
+receivedata_wait_for_all_data:
+  ;; this is a bit dangerous, if the application controller
+  ;; sends too few data, we are in a dead lock
+
+receivedata_end:
+  pop     r10
+  pop     r9
   ret
 
 
