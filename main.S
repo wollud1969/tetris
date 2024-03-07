@@ -50,6 +50,12 @@
   .macro clear_debug
   bic   #BIT2, &P1OUT
   .endm
+  .macro set_signal_waiting_for_data
+  bis   #BIT3, &P1OUT
+  .endm
+  .macro clear_signal_waiting_for_data
+  bic   #BIT3, &P1OUT
+  .endm
 
   .section ".data"
 screendata:
@@ -87,8 +93,14 @@ init:
   ;; BIT0: data bit
   ;; BIT1: output enable
   ;; BIT2: debug
-  mov.b   #BIT0|BIT1|BIT2,&P1DIR
+  ;; BIT3: Signal waiting for data
+  mov.b   #BIT0|BIT1|BIT2|BIT3, &P1DIR
   mov.b   #0,&P1OUT
+  ;; BIT5: spi, UCB0CLK
+  ;; BIT6: spi, UCB0SOMI
+  ;; BIT7: spi, UCB0SIMO
+  mov.b   #BIT5|BIT6|BIT7, &P1SEL
+  mov.b   #BIT5|BIT6|BIT7, &P1SEL2
   ;; BIT4: long pulse
   ;; BIT1: short pulse
   mov.b   #BIT1|BIT4,&P2DIR
@@ -108,6 +120,11 @@ init:
   mov.w   #OUTMOD_7,&TA1CCTL1
   mov.w   #OUTMOD_7,&TA1CCTL2
 
+  ;; spi configuration
+  ;;  USCI B to slave mode
+  mov.b   #UCSYNC, &UCB0CTL0
+  mov.b   #0x00, &UCB0CTL1
+
   ;; make sure the isr will not immediately start
   mov.b   #SIGNAL_INIT_VALUE, SIGNAL_REGISTER
 
@@ -124,9 +141,15 @@ mainloop:
 
 mainloop_draw:
   call    #drawscreen
-  call    #forwardscreen
 
+  ;; signal waiting for data
+  set_signal_waiting_for_data
+
+  call    #forwardscreen
   call    #wait
+
+  ;; data has been received, clear signal
+  clear_signal_waiting_for_data
 
   jmp     mainloop_draw
 
@@ -164,7 +187,7 @@ forwardscreen:
   mov.w   data_forward_pointer, r10
   mov.b   #_off, @r10
   inc.w   r10
-  mov.b   #_violet, @r10
+  mov.b   #_blue, @r10
   cmp.w   r10, r8
   jnz     forwardscreen_done
   mov.w   #screendata, r10
