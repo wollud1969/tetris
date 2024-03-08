@@ -21,7 +21,7 @@ void ledBlueOff() {
 }
 
 void ledExec(void *args) {
-  static int i = 0;
+  static uint16_t i = 0;
 
   if (i == 0) {
     ledGreenOff();
@@ -41,7 +41,7 @@ void ledInit() {
     ledBlueOff();
 
 
-//    schAdd(ledExec, NULL, 0, 50);
+    schAdd(ledExec, NULL, 0, 500);
 }
 
 

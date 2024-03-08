@@ -29,7 +29,7 @@ int main() {
     ledInit();
     displayDriverInit();
     canvasInit();
-    displayTestInit();
+     displayTestInit();
 
 
     __enable_interrupt();

@@ -7,6 +7,7 @@
 
 
 #include <stdlib.h>
+#include <msp430g2553.h>
 
 
 #include "PontCoopScheduler.h"
@@ -15,7 +16,7 @@ tTask tasks[MAX_NUM_OF_TASKS];
 
 
 void schInit() {
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     tasks[i].delay = 0;
     tasks[i].period = 0;
     tasks[i].run = 0;
@@ -25,7 +26,7 @@ void schInit() {
 }
 
 void schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period) {
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if (tasks[i].exec == NULL) {
       tasks[i].delay = delay;
       tasks[i].period = period;
@@ -41,23 +42,34 @@ void schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period)
   }
 }
 
+/*
 void schDel(void (*exec)(void *), void *handle) {
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if ((tasks[i].exec == exec) && (tasks[i].handle == handle)) {
       tasks[i].exec = NULL;
       break;
     }
   }
 }
+*/
 
 void schExec() {
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+    // synchronize access to tasks[].run
+    __disable_interrupt(); 
     if (tasks[i].exec != NULL && tasks[i].run > 0) {
       tasks[i].run--;
+      // synchronize access to tasks[].run
+      // reenable interrupts before actually executing task
+      __enable_interrupt();
       tasks[i].exec(tasks[i].handle);
       if (tasks[i].period == 0) {
         tasks[i].exec = NULL;
       }
+    } else {
+      // synchronize access to tasks[].run
+      // reenable interrupts in case task is not yet executable
+      __enable_interrupt();
     }
   }
 }
@@ -65,7 +77,7 @@ void schExec() {
 
 
 void schUpdate() {
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if (tasks[i].exec != NULL) {
       if (tasks[i].delay == 0) {
         tasks[i].delay = tasks[i].period;
@@ -75,14 +87,4 @@ void schUpdate() {
       }
     }
   }
-}
-
-uint8_t schTaskCnt() {
-  uint8_t cnt = 0;
-  for (uint8_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
-    if (tasks[i].exec != NULL){
-      cnt++;
-    } 
-  }
-  return cnt;
 }
