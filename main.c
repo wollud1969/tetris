@@ -5,9 +5,10 @@
 
 #include "time.h"
 #include "PontCoopScheduler.h"
-
 #include "led.h"
-#include "spi.h"
+#include "displayDriver.h"
+#include "canvas.h"
+#include "displayTest.h"
 
 
 int main() {
@@ -26,7 +27,10 @@ int main() {
     schInit();
 
     ledInit();
-    spiInit();
+    displayDriverInit();
+    canvasInit();
+    displayTestInit();
+
 
     __enable_interrupt();
 

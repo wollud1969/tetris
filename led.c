@@ -20,16 +20,14 @@ void ledBlueOff() {
   P1OUT &= ~BIT1;
 }
 
-void ledExec() {
+void ledExec(void *args) {
   static int i = 0;
 
   if (i == 0) {
     ledGreenOff();
-    ledBlueOn();
     i = 1;
   } else {
     ledGreenOn();
-    ledBlueOff();
     i = 0;
   }
 }
@@ -38,9 +36,12 @@ void ledInit() {
     // BIT0: green
     // BIT1: blue
     P1DIR |= BIT0|BIT1;
-    P1OUT |= BIT0|BIT1;
 
-    schAdd(ledExec, NULL, 0, 50);
+    ledGreenOff();
+    ledBlueOff();
+
+
+//    schAdd(ledExec, NULL, 0, 50);
 }
 
 
