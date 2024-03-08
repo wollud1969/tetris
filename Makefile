@@ -24,7 +24,7 @@ all:	$(ARTIFACT).elf
 
 .PHONY: clean
 clean:
-	-rm -f *.o *.elf
+	-rm -f *.o $(ARTIFACT).elf $(ARTIFACT).txt
 
 .PHONY: upload
 upload: $(ARTIFACT).elf
