@@ -28,4 +28,6 @@ void canvasShow() {
   displayDriverTransferCanvas();
 }
 
-
+void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color) {
+  *((canvas.canvas) + (row * canvas.width + column)) = (color + 0x80);
+}
