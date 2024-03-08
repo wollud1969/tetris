@@ -225,30 +225,33 @@ receivedata:
   push    r10
 
   ;; wait for first octet
-receivedata_wait_for_first_octet:
+receivedata_wait_for_control_octet:
   bit     #UCB0RXIFG, &UC0IFG
-  jz      receivedata_wait_for_first_octet
+  jz      receivedata_wait_for_control_octet
 
-  ;; get data from buffer register
+  ;; get control or address octet from buffer register
   mov.b   UCB0RXBUF, r9
   ;; check whether value == 0xff (wait for the whole
   ;; set of data to fill the screendata)
   cmp.b   #0xff, r9
   ;; receive all data
   jz      receivedata_wait_for_all_data
+  ;; check whether value == 0xfe (no more data)
+  cmp.b   #0xfe, r9
+  ;; no more data
+  jz      receivedata_end
 
-  ;; if it is not 0xff, it is the octet number which is the
-  ;; relative address within screendata
+  ;; it is an address octet
 receivedata_wait_for_octet:
   bit     #UCB0RXIFG, &UC0IFG
   jz      receivedata_wait_for_octet
 
-  ;; get octet from buffer register
+  ;; get data octet from buffer register
   mov.b   UCB0RXBUF, r10
   ;; move it to the destination
   mov.b   r10, screendata(r9)
-  ;; done
-  jmp     receivedata_end
+  ;; next address/control octet
+  jmp     receivedata_wait_for_control_octet
 
 receivedata_wait_for_all_data:
   ;; this is a bit dangerous, if the application controller
