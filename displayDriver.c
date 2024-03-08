@@ -34,7 +34,7 @@ void displayDriverInit() {
   UCB0CTL0 = UCMST;
   // SPI timing config
   UCB0CTL1 = UCSSEL_3;
-  UCB0BR0 = 8;
+  UCB0BR0 = 4; // 2 would be too fast and ends up with errors
   UCB0BR1 = 0;
 
   // BIT5: UCB0CLK

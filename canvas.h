@@ -17,6 +17,7 @@ typedef struct {
 void canvasInit();
 canvas_t *canvasGet();
 void canvasShow();
+void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color);
 
 
 
