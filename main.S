@@ -340,26 +340,26 @@ drawscreen_data_done:
 ;; ----------------------------------------------------
 ; --- timer isr ---
   ;; r6: exclusively used by isr as bit-counter
-timer1_a0_isr:
+shifter_isr:
   ;; check isr enable bit
   bit     #SIGNAL_ISR_ENABLE, SIGNAL_REGISTER
-  jz      timer1_a0_isr_exit
+  jz      shifter_isr_exit
 
   ;; shift msb of data register r5 into carry flag and set or reset P1.0 accordingly
   rla.b   DATA_REGISTER
-  jnc     timer1_a0_isr_false_bit
+  jnc     shifter_isr_false_bit
   set_data_bit
-  jmp     timer1_a0_isr_end
-timer1_a0_isr_false_bit:
+  jmp     shifter_isr_end
+shifter_isr_false_bit:
   clear_data_bit
    
-timer1_a0_isr_end:
+shifter_isr_end:
   ;; enable output
   set_output_enable
 
   ;; roll bit-counter
   rla.b   BIT_COUNTER_REGISTER
-  jnc     timer1_a0_isr_exit
+  jnc     shifter_isr_exit
 
   ;; reset bit-counter
   mov.b   #BIT_COUNTER_INIT_VALUE, BIT_COUNTER_REGISTER
@@ -368,19 +368,19 @@ timer1_a0_isr_end:
 
   ;; check whether all data are processed
   bit     #SIGNAL_ALL_DATA_DONE,  SIGNAL_REGISTER
-  jz      timer1_a0_isr_exit
+  jz      shifter_isr_exit
   ;; disable isr
   bic     #SIGNAL_ISR_ENABLE,  SIGNAL_REGISTER
   ;; disable output
   clear_output_enable
 
-timer1_a0_isr_exit:
+shifter_isr_exit:
   reti
 
 
 ;; ----------------------------------------------------
   .section "__interrupt_vector_14","ax",@progbits
-  .word   timer1_a0_isr
+  .word   shifter_isr
 
   ;; .resetvec comes from linker
   .section ".resetvec","ax",@progbits
