@@ -12,12 +12,20 @@ void ledGreenOff() {
   P1OUT &= ~BIT0;
 }
 
+void ledGreenToggle() {
+  P1OUT ^= BIT0;
+}
+
 void ledBlueOn() {
   P1OUT |= BIT1;
 }
 
 void ledBlueOff() {
   P1OUT &= ~BIT1;
+}
+
+void ledBlueToggle() {
+  P1OUT ^= BIT1;
 }
 
 void ledExec(void *args) {
@@ -41,7 +49,7 @@ void ledInit() {
     ledBlueOff();
 
 
-    schAdd(ledExec, NULL, 0, 500);
+//    schAdd(ledExec, NULL, 0, 500);
 }
 
 

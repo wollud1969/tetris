@@ -15,6 +15,8 @@ typedef struct {
 } canvas_t;
 
 void canvasInit();
+void canvasClear();
+void canvasSetAll(uint8_t color);
 canvas_t *canvasGet();
 void canvasShow();
 void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color);

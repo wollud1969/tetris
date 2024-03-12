@@ -20,6 +20,14 @@ void canvasInit() {
   displayDriverTransferCanvas();
 }
 
+void canvasClear() {
+  memset(canvas.canvas, 0x80, canvas.size);
+}
+
+void canvasSetAll(uint8_t color) {
+  memset(canvas.canvas, color + 0x80, canvas.size);
+}
+
 canvas_t *canvasGet() {
   return &canvas;
 }

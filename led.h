@@ -4,8 +4,10 @@
 
 void ledBlueOff();
 void ledBlueOn();
+void ledBlueToggle();
 void ledGreenOff();
 void ledGreenOn();
+void ledGreenToggle();
 
 void ledInit();
 void ledExec();
