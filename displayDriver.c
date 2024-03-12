@@ -18,12 +18,11 @@ void displayDriverTransferCanvas() {
   // wait for signal waiting for data
   while ((P1IN & BIT3) == 0);
 
-  canvas_t *canvas = canvasGet();
-  for (uint8_t i = 0; i < canvas->size; i++) {
-    if ((*((canvas->canvas)+i) & 0x80) != 0) {
-      *((canvas->canvas)+i) &= ~0x80;
+  for (uint8_t i = 0; i < canvas.size; i++) {
+    if ((*((canvas.canvas)+i) & 0x80) != 0) {
+      *((canvas.canvas)+i) &= ~0x80;
       spiSendOctet(i);
-      spiSendOctet(*((canvas->canvas)+i));
+      spiSendOctet(*((canvas.canvas)+i));
     }
   }
   spiSendOctet(0xfe);

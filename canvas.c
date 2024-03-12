@@ -5,18 +5,16 @@
 #include "displayDriver.h"
 
 
-static canvas_t canvas;
 static uint8_t canvasStorage[CANVAS_WIDTH * CANVAS_HEIGHT];
+const canvas_t canvas = { 
+  .height = CANVAS_HEIGHT,
+  .width = CANVAS_WIDTH,
+  .size = CANVAS_WIDTH * CANVAS_HEIGHT,
+  .canvas = canvasStorage
+};
 
 void canvasInit() {
-  canvas.height = CANVAS_HEIGHT;
-  canvas.width = CANVAS_WIDTH;
-  canvas.size = CANVAS_HEIGHT * CANVAS_WIDTH;
-  canvas.canvas = canvasStorage;
-
-  // Bit7 signals need to be transfered for octet
-  memset(canvasStorage, 0x80, canvas.size);
-
+  canvasClear();
   displayDriverTransferCanvas();
 }
 
@@ -26,10 +24,6 @@ void canvasClear() {
 
 void canvasSetAll(uint8_t color) {
   memset(canvas.canvas, color + 0x80, canvas.size);
-}
-
-canvas_t *canvasGet() {
-  return &canvas;
 }
 
 void canvasShow() {
