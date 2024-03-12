@@ -59,7 +59,7 @@
 
   .section ".data"
 screendata:
-  .rept 60 ;; number of leds in hardward
+  .rept 110 ;; number of leds in hardward
   .byte 0
   .endr
 screendataend:
