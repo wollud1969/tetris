@@ -5,7 +5,7 @@
 
 
 #define CANVAS_WIDTH 10
-#define CANVAS_HEIGHT 6
+#define CANVAS_HEIGHT 11 
 
 typedef struct {
   uint8_t width;
