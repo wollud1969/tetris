@@ -18,7 +18,8 @@ void canvasInit();
 canvas_t *canvasGet();
 void canvasShow();
 void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color);
-
+void canvasWipeRow(uint8_t row);
+uint8_t canvasIsRowFilled(uint8_t row);
 
 
 #endif // _CANVAS_H_

@@ -9,6 +9,9 @@
 #include "displayDriver.h"
 #include "canvas.h"
 #include "displayTest.h"
+#include "displayTest2.h"
+#include "displayTest3.h"
+#include "displayTest4.h"
 
 
 int main() {
@@ -29,7 +32,7 @@ int main() {
     ledInit();
     displayDriverInit();
     canvasInit();
-     displayTestInit();
+    displayTest3Init();
 
 
     __enable_interrupt();
