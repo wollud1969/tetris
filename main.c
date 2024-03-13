@@ -8,7 +8,7 @@
 #include "led.h"
 #include "displayDriver.h"
 #include "canvas.h"
-#include "shapes.h"
+#include "game.h"
 
 
 int main() {
@@ -29,7 +29,7 @@ int main() {
     displayDriverInit();
     canvasInit();
 
-    shapesInit();
+    gameInit();
 
     __enable_interrupt();
 

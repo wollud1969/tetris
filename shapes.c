@@ -11,15 +11,6 @@
 #include "shape_j.h"
 
 
-typedef enum { e_I=0, e_O, e_T, e_Z, e_S, e_L, e_J, e_ShapeEnd } shape_t;
-typedef enum { e_0, e_90, e_180, e_270 } orientation_t;
-
-typedef struct {
-  shape_t shape;
-  orientation_t orientation;
-  uint8_t x; // column
-  uint8_t y; // row
-} stone_t;
 
 typedef struct {
   uint8_t (* draw)();
@@ -42,37 +33,38 @@ const stoneOperations_t stoneOperations[] = {
 
 stone_t stone;
 
-uint8_t draw() {
+void stoneCreate() {
+  stone.shape = e_I;
+  stone.orientation = e_0;
+  stone.x = 5;
+  stone.y = 0;
+}
+
+// all of them return 1 in case of success and 0 in case of error
+uint8_t stoneDraw() {
   return stoneOperations[stone.shape].draw();
 }
 
-uint8_t moveDown() {
+uint8_t stoneMoveDown() {
   return stoneOperations[stone.shape].moveDown();
 }
 
-uint8_t moveLeft() {
+uint8_t stoneMoveLeft() {
   return stoneOperations[stone.shape].moveLeft();
 }
 
-uint8_t moveRight() {
+uint8_t stoneMoveRight() {
   return stoneOperations[stone.shape].moveRight();
 }
 
-uint8_t rotateLeft() {
+uint8_t stoneRotateLeft() {
   return stoneOperations[stone.shape].rotateLeft();
 }
 
-uint8_t rotateRight() {
+uint8_t stoneRotateRight() {
   return stoneOperations[stone.shape].rotateRight();
 }
 
-void shapesExec(void *handle) {
-  draw();
-}
-
-void shapesInit() {
-  shapesExec(NULL);
-}
 
 
 
