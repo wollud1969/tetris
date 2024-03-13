@@ -20,22 +20,22 @@ void displayTest3Exec(void *args) {
       break;
 
     case e_delay:
-      canvasClear();
       state = e_start;
       break;
 
     case e_start:
+      canvasClear();
       state = e_fillArea;
       break;
 
     case e_fillArea:
-      memset((canvas.canvas)+(canvas.width*7), 0x84, canvas.width);
-      memset((canvas.canvas)+(canvas.width*8), 0x8d, canvas.width);
-      memset((canvas.canvas)+(canvas.width*9), 0x82, canvas.width);
-      memset((canvas.canvas)+(canvas.width*10), 0x88, canvas.width);
+      memset((canvas.canvas)+(canvas.width*7), 0x82, canvas.width);
+      memset((canvas.canvas)+(canvas.width*8), 0x83, canvas.width);
+      memset((canvas.canvas)+(canvas.width*9), 0x84, canvas.width);
+      memset((canvas.canvas)+(canvas.width*10), 0x85, canvas.width);
       for (uint8_t i = 0; i < canvas.width; i++) {
         if (i != 4 && i != 5) {
-          canvasSetPixel(i, 6, 0x05);
+          canvasSetPixel(i, 6, 0x01);
         }
       }
       state = e_placeObject;

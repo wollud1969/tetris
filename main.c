@@ -8,9 +8,7 @@
 #include "led.h"
 #include "displayDriver.h"
 #include "canvas.h"
-#include "displayTest.h"
-#include "displayTest2.h"
-#include "displayTest3.h"
+#include "shapes.h"
 
 
 int main() {
@@ -24,15 +22,14 @@ int main() {
     BCSCTL2 = 0;
     BCSCTL3 = 0;
 
-
     timeInit();
     schInit();
 
     ledInit();
     displayDriverInit();
     canvasInit();
-    displayTest3Init();
 
+    shapesInit();
 
     __enable_interrupt();
 
