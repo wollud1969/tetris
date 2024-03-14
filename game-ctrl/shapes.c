@@ -33,6 +33,10 @@ const stoneOperations_t stoneOperations[] = {
 
 stone_t stone;
 
+void shapesInit() {
+  stone.shape = e_ShapeInvalid;
+}
+
 void stoneCreate() {
   stone.shape = e_I;
   stone.orientation = e_0;

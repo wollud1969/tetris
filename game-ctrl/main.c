@@ -9,6 +9,8 @@
 #include "displayDriver.h"
 #include "canvas.h"
 #include "game.h"
+#include "buttons.h"
+#include "shapes.h"
 
 
 int main() {
@@ -29,7 +31,9 @@ int main() {
     displayDriverInit();
     canvasInit();
 
+    shapesInit();
     gameInit();
+    buttonsInit();
 
     __enable_interrupt();
 

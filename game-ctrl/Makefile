@@ -11,7 +11,7 @@ CFLAGS=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -O1 -g0
 
 LDFLAGS=-mmcu=$(MCU) -L $(TOOLCHAIN_PREFIX)/include
 
-$(ARTIFACT).elf:	main.o led.o time.o PontCoopScheduler.o displayDriver.o canvas.o shapes.o shape_i.o shape_j.o shape_l.o shape_o.o shape_s.o shape_t.o shape_z.o game.o
+$(ARTIFACT).elf:	main.o led.o time.o PontCoopScheduler.o displayDriver.o canvas.o shapes.o shape_i.o shape_j.o shape_l.o shape_o.o shape_s.o shape_t.o shape_z.o game.o buttons.o
 	$(CC) -o $@ $(LDFLAGS) $^
 	$(OBJDUMP) -D $(ARTIFACT).elf > $(ARTIFACT).txt
 

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+void shapesInit();
 void stoneCreate();
 uint8_t stoneDraw();
 uint8_t stoneMoveDown();
@@ -12,7 +13,7 @@ uint8_t stoneRotateLeft();
 uint8_t stoneRotateRight();
 
 
-typedef enum { e_I=0, e_O, e_T, e_Z, e_S, e_L, e_J, e_ShapeEnd } shape_t;
+typedef enum { e_I=0, e_O, e_T, e_Z, e_S, e_L, e_J, e_ShapeInvalid } shape_t;
 typedef enum { e_0, e_90, e_180, e_270 } orientation_t;
 
 typedef struct {

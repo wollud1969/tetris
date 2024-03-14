@@ -53,3 +53,9 @@ uint8_t canvasIsRowFilled(uint8_t row) {
   return res;
 }
 
+uint8_t canvasIsPixelFree(uint8_t column, uint8_t row) {
+  return (*((canvas.canvas) + (row * canvas.width + column)) == 0) &&
+         (column < canvas.width) &&
+         (row < canvas.height);
+}
+
