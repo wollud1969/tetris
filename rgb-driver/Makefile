@@ -4,7 +4,8 @@ OBJDUMP=$(TOOLCHAIN_PREFIX)/bin/msp430-elf-objdump
 
 MCU=msp430g2553
 ARTIFACT=firmware
-COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0 -fdata-sections -ffunction-sections -ggdb -gdwarf-2
+COMMON=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -Os -g0 -fdata-sections -ffunction-sections
+#COMMON+= -ggdb -gdwarf-2 # debug
 CFLAGS=$(COMMON)
 ASFLAGS=$(COMMON) -D__ASSEMBLER__
 
