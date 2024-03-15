@@ -15,7 +15,7 @@ uint16_t counter;
 static uint8_t buttonsMoveLeftPressed() {
   // -----------------------
   // TEST CODE
-  //if (counter == 25) {
+  //if (counter == 95) {
   //  ledGreenToggle();
   //  return 1;
   //}
@@ -24,13 +24,9 @@ static uint8_t buttonsMoveLeftPressed() {
 }
 
 static uint8_t buttonsMoveRightPressed() {
-  return 0;
-}
-
-static uint8_t buttonsRotateLeftPressed() {
   // -----------------------
   // TEST CODE
-  if (counter == 35) {
+  if (counter == 95) {
     ledGreenToggle();
     return 1;
   }
@@ -38,7 +34,25 @@ static uint8_t buttonsRotateLeftPressed() {
   return 0;
 }
 
+static uint8_t buttonsRotateLeftPressed() {
+  return 0;
+}
+
 static uint8_t buttonsRotateRightPressed() {
+  // -----------------------
+  // TEST CODE
+  if (counter == 35) {
+    ledGreenToggle();
+    return 1;
+  }
+  // -----------------------
+  // -----------------------
+  // TEST CODE
+  if (counter == 45) {
+    ledGreenToggle();
+    return 1;
+  }
+  // -----------------------
   return 0;
 }
 

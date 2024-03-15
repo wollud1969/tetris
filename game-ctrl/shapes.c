@@ -37,13 +37,15 @@ typedef struct {
 
 typedef struct {
   uint8_t color;
+  uint8_t nullRotation;
   pixel_t draw[4];
   motion_t motion[5][4];
 } motionTable_t;
 
-const motionTable_t motions[1] = {
-  { // i
+const motionTable_t motions[2] = { // 2 = number of implemented stones
+  { // I
     .color = _cyan,
+    .nullRotation = 0,
     .draw = { { 0, 0}, { 0, 1}, { 0, 2}, { 0, 3} },
     .motion = {
       {
@@ -56,9 +58,9 @@ const motionTable_t motions[1] = {
       {
         // move left
         { .set = { {-1, 0}, {-1, 1}, {-1, 2}, {-1, 3} }, .reset = { { 0, 0}, { 0, 1}, { 0, 2}, { 0, 3} }, .offset = {-1, 0} }, // 0
-        { .set = { {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} }, .reset = { { 3, 0}, { 3, 0}, { 3, 0}, { 3, 0} }, .offset = { 0, 1} }, // 90
+        { .set = { {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} }, .reset = { { 3, 0}, { 3, 0}, { 3, 0}, { 3, 0} }, .offset = {-1, 0} }, // 90
         { .set = { {-1, 0}, {-1, 1}, {-1, 2}, {-1, 3} }, .reset = { { 0, 0}, { 0, 1}, { 0, 2}, { 0, 3} }, .offset = {-1, 0} }, // 180
-        { .set = { {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} }, .reset = { { 3, 0}, { 3, 0}, { 3, 0}, { 3, 0} }, .offset = { 0, 1} }, // 270
+        { .set = { {-1, 0}, {-1, 0}, {-1, 0}, {-1, 0} }, .reset = { { 3, 0}, { 3, 0}, { 3, 0}, { 3, 0} }, .offset = {-1, 0} }, // 270
       },
       {
         // move right
@@ -77,9 +79,51 @@ const motionTable_t motions[1] = {
       {
         // rotate right
         { .set = { {-2, 1}, {-1, 1}, { 1, 1}, { 1, 1} }, .reset = { { 0, 0}, { 0, 2}, { 0, 3}, { 0, 3} }, .offset = {-2, 1} }, // 0
-        { .set = { { 2,-2}, { 2,-1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 1, 0}, { 3, 0}, { 3, 0} }, .offset = { 2,-2} }, // 90
+        { .set = { { 1,-1}, { 1, 1}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 2, 0}, { 3, 0}, { 3, 0} }, .offset = { 1,-1} }, // 90
         { .set = { {-2, 1}, {-1, 1}, { 1, 1}, { 1, 1} }, .reset = { { 0, 0}, { 0, 2}, { 0, 3}, { 0, 3} }, .offset = {-2, 1} }, // 180
-        { .set = { { 2,-2}, { 2,-1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 1, 0}, { 3, 0}, { 3, 0} }, .offset = { 2,-2} }, // 270
+        { .set = { { 1,-1}, { 1, 1}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 2, 0}, { 3, 0}, { 3, 0} }, .offset = { 1,-1} }, // 270
+      },
+    }
+  },
+  { // O
+    .color = _yellow,
+    .nullRotation = 1,
+    .draw = { { 0, 0}, { 0, 1}, { 1, 0}, { 1, 1} },
+    .motion = {
+      {
+        // move down
+        { .set = { { 0, 2}, { 1, 2}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 1, 0}, { 1, 0}, { 1, 0} }, .offset = { 0, 1} }, // 0
+        { .set = { { 0, 2}, { 1, 2}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 1, 0}, { 1, 0}, { 1, 0} }, .offset = { 0, 1} }, // 90
+        { .set = { { 0, 2}, { 1, 2}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 1, 0}, { 1, 0}, { 1, 0} }, .offset = { 0, 1} }, // 180
+        { .set = { { 0, 2}, { 1, 2}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 1, 0}, { 1, 0}, { 1, 0} }, .offset = { 0, 1} }, // 270
+      },
+      {
+        // move left
+        { .set = { {-1, 0}, {-1, 1}, {-1, 1}, {-1, 1} }, .reset = { { 1, 0}, { 1, 1}, { 1, 1}, { 1, 1} }, .offset = {-1, 0} }, // 0
+        { .set = { {-1, 0}, {-1, 1}, {-1, 1}, {-1, 1} }, .reset = { { 1, 0}, { 1, 1}, { 1, 1}, { 1, 1} }, .offset = {-1, 0} }, // 90
+        { .set = { {-1, 0}, {-1, 1}, {-1, 1}, {-1, 1} }, .reset = { { 1, 0}, { 1, 1}, { 1, 1}, { 1, 1} }, .offset = {-1, 0} }, // 180
+        { .set = { {-1, 0}, {-1, 1}, {-1, 1}, {-1, 1} }, .reset = { { 1, 0}, { 1, 1}, { 1, 1}, { 1, 1} }, .offset = {-1, 0} }, // 270
+      },
+      {
+        // move right
+        { .set = { { 2, 0}, { 2, 1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 0, 1}, { 0, 1}, { 0, 1} }, .offset = { 1, 0} }, // 0
+        { .set = { { 2, 0}, { 2, 1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 0, 1}, { 0, 1}, { 0, 1} }, .offset = { 1, 0} }, // 90
+        { .set = { { 2, 0}, { 2, 1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 0, 1}, { 0, 1}, { 0, 1} }, .offset = { 1, 0} }, // 180
+        { .set = { { 2, 0}, { 2, 1}, { 2, 1}, { 2, 1} }, .reset = { { 0, 0}, { 0, 1}, { 0, 1}, { 0, 1} }, .offset = { 1, 0} }, // 270
+      },
+      {
+        // rotate left
+        { .set = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .reset = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .offset = { 0, 0} }, // 0
+        { .set = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .reset = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .offset = { 0, 0} }, // 90
+        { .set = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .reset = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .offset = { 0, 0} }, // 180
+        { .set = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .reset = { { 0, 0}, { 0, 0}, { 0, 0}, { 0, 0} }, .offset = { 0, 0} }, // 270
+      },
+      {
+        // rotate right
+        { .set = { {-2, 1}, {-1, 1}, { 1, 1}, { 1, 1} }, .reset = { { 0, 0}, { 0, 2}, { 0, 3}, { 0, 3} }, .offset = {-2, 1} }, // 0
+        { .set = { { 1,-1}, { 1, 1}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 2, 0}, { 3, 0}, { 3, 0} }, .offset = { 1,-1} }, // 90
+        { .set = { {-2, 1}, {-1, 1}, { 1, 1}, { 1, 1} }, .reset = { { 0, 0}, { 0, 2}, { 0, 3}, { 0, 3} }, .offset = {-2, 1} }, // 180
+        { .set = { { 1,-1}, { 1, 1}, { 1, 2}, { 1, 2} }, .reset = { { 0, 0}, { 2, 0}, { 3, 0}, { 3, 0} }, .offset = { 1,-1} }, // 270
       },
     }
   }
@@ -100,7 +144,12 @@ void shapesInit() {
 }
 
 void stoneCreate() {
-  stone.shape = e_I;
+  static uint8_t cnt = 0;
+  stone.shape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[cnt];
+  cnt++;
+  if (cnt > 1) {
+    cnt = 0;
+  }
   stone.orientation = e_0;
   stone.x = 5;
   stone.y = 0;
@@ -112,7 +161,9 @@ uint8_t stoneIsValid() {
 
 // all of them return 1 in case of success and 0 in case of error
 static uint8_t move(direction_t direction) {
-  uint8_t res = 0;
+  if (motions[stone.shape].nullRotation && (direction == e_RotateLeft || direction == e_RotateRight)) {
+    return 1;
+  }
   if (canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y) &&
       canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[1].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[1].y) &&
       canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[2].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[2].y) &&
@@ -128,9 +179,9 @@ static uint8_t move(direction_t direction) {
     stone.x += motions[stone.shape].motion[direction][stone.orientation].offset.x;
     stone.y += motions[stone.shape].motion[direction][stone.orientation].offset.y;
     stone.orientation = (nextOrientation[direction][stone.orientation] == e_Keep) ? stone.orientation : nextOrientation[direction][stone.orientation];
-    res = 1;
+    return 1;
   }
-  return res;
+  return 0;
 }
 
 uint8_t stoneDraw() {
