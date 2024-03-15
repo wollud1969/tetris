@@ -43,7 +43,7 @@ static uint8_t buttonsRotateRightPressed() {
 }
 
 void buttonsExec(void *handle) {
-  if (stone.shape == e_ShapeInvalid) {
+  if (! stoneIsValid()) {
     // don't do anything, the stone has not been initialized
     return;
   }
