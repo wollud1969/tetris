@@ -23,7 +23,7 @@ inline static void spiSendOctet(uint8_t v) {
 
 void canvasShow() {
   // wait for signal waiting for data
-  while ((P1IN & BIT3) == 0);
+  while (!(P1IN & BIT3));
 
   for (uint8_t i = 0; i < (CANVAS_WIDTH*CANVAS_HEIGHT); i++) {
     if ((*((canvas.canvas)+i) & 0x80) != 0) {
