@@ -64,8 +64,6 @@ screendata:
   .endr
 screendataend:
   .byte 0xff
-data_forward_pointer:
-  .word 0
 
 
   ;; .text is the name of the section, it is a hint for the linker to
@@ -136,69 +134,19 @@ init:
 
 ;; ----------------------------------------------------
 mainloop:
-  call    #forwardscreen_init
   call    #resetscreen
 
 mainloop_draw:
   call    #drawscreen
 
-  ;; signal waiting for data
   set_signal_waiting_for_data
 
-  ;call    #forwardscreen
-  ;call    #wait
   call    #receivedata
 
-  ;; data has been received, clear signal
   clear_signal_waiting_for_data
 
   jmp     mainloop_draw
 
-
-;; ----------------------------------------------------
-wait:
-  push    r11
-  push    r12
-
-  mov.w   #0x0040, r11
-wait_continue_1:
-  mov.w   #0xffff, r12
-wait_continue_2:
-  dec.w   r12
-  jnz     wait_continue_2
-  dec.w   r11
-  jnz     wait_continue_1
-
-  pop     r12
-  pop     r11
-  ret
-
-
-;; ----------------------------------------------------
-forwardscreen_init:
-  mov.w   #screendata, &data_forward_pointer
-  ret
-
-;; ----------------------------------------------------
-forwardscreen:
-  push    r8
-  push    r10
-
-  mov.w   #screendataend, r8
-  mov.w   data_forward_pointer, r10
-  mov.b   #_off, @r10
-  inc.w   r10
-  mov.b   #_blue, @r10
-  cmp.w   r10, r8
-  jnz     forwardscreen_done
-  mov.w   #screendata, r10
-forwardscreen_done:
-  mov.w   r10, data_forward_pointer
-
-  pop     r10
-  pop     r8
-  ret
-  
 
 ;; ----------------------------------------------------
 resetscreen:
@@ -231,11 +179,6 @@ receivedata_wait_for_control_octet:
 
   ;; get control or address octet from buffer register
   mov.b   UCB0RXBUF, r9
-  ;; check whether value == 0xff (wait for the whole
-  ;; set of data to fill the screendata)
-  cmp.b   #0xff, r9
-  ;; receive all data
-  jz      receivedata_wait_for_all_data
   ;; check whether value == 0xfe (no more data)
   cmp.b   #0xfe, r9
   ;; no more data
@@ -252,10 +195,6 @@ receivedata_wait_for_octet:
   mov.b   r10, screendata(r9)
   ;; next address/control octet
   jmp     receivedata_wait_for_control_octet
-
-receivedata_wait_for_all_data:
-  ;; this is a bit dangerous, if the application controller
-  ;; sends too few data, we are in a dead lock
 
 receivedata_end:
   pop     r10
