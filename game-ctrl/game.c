@@ -2,7 +2,7 @@
 #include "stdint.h"
 
 #include "game.h"
-#include "PontCoopScheduler.h"
+#include "scheduler.h"
 #include "shapes.h"
 #include "canvas.h"
 

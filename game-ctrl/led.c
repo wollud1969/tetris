@@ -1,6 +1,6 @@
 #include "led.h"
 #include <msp430g2553.h>
-#include "PontCoopScheduler.h"
+#include "scheduler.h"
 #include <stdlib.h>
 
 

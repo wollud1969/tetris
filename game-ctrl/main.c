@@ -4,9 +4,8 @@
 #include <stdbool.h>
 
 #include "time.h"
-#include "PontCoopScheduler.h"
+#include "scheduler.h"
 #include "led.h"
-#include "displayDriver.h"
 #include "canvas.h"
 #include "game.h"
 #include "buttons.h"
@@ -24,11 +23,9 @@ int main() {
     BCSCTL2 = 0;
     BCSCTL3 = 0;
 
-    timeInit();
     schInit();
 
     ledInit();
-    displayDriverInit();
     canvasInit();
 
     shapesInit();

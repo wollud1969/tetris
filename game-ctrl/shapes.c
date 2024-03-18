@@ -203,24 +203,53 @@ uint8_t stoneIsValid() {
 
 // all of them return 1 in case of success and 0 in case of error
 static uint8_t move(direction_t direction) {
+  // if this is a rotation and the shape is marked with nullRotation (just the O), do nothing
+  // and return success
   if (motions[stone.shape].nullRotation && (direction == e_RotateLeft || direction == e_RotateRight)) {
     return 1;
   }
-  if (canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[1].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[1].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[2].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[2].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[3].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[3].y)) {
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[0].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[0].y, _off);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[1].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[1].y, _off);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[2].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[2].y, _off);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[3].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[3].y, _off);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[1].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[1].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[2].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[2].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[3].x, stone.y + motions[stone.shape].motion[direction][stone.orientation].set[3].y, motions[stone.shape].color);
+  // check whether the pixels to move to are free
+  if (canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, 
+                        stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[1].x, 
+                        stone.y + motions[stone.shape].motion[direction][stone.orientation].set[1].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[2].x, 
+                        stone.y + motions[stone.shape].motion[direction][stone.orientation].set[2].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[3].x, 
+                        stone.y + motions[stone.shape].motion[direction][stone.orientation].set[3].y)) {
+    // if so, reset the pixels the shape moves away from
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[0].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[0].y, 
+                   _off);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[1].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[1].y, 
+                   _off);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[2].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[2].y, 
+                   _off);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].reset[3].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].reset[3].y, 
+                   _off);
+    // and set the pixels the shape moves to to the shape's color
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[1].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].set[1].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[2].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].set[2].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[3].x, 
+                   stone.y + motions[stone.shape].motion[direction][stone.orientation].set[3].y, 
+                   motions[stone.shape].color);
+    // set the new origin of the shape
     stone.x += motions[stone.shape].motion[direction][stone.orientation].offset.x;
     stone.y += motions[stone.shape].motion[direction][stone.orientation].offset.y;
-    stone.orientation = (nextOrientation[direction][stone.orientation] == e_Keep) ? stone.orientation : nextOrientation[direction][stone.orientation];
+    // set the new orientation of the shape, if required
+    stone.orientation = (nextOrientation[direction][stone.orientation] == e_Keep) ? 
+                        stone.orientation : 
+                        nextOrientation[direction][stone.orientation];
     return 1;
   }
   return 0;
@@ -228,14 +257,28 @@ static uint8_t move(direction_t direction) {
 
 uint8_t stoneDraw() {
   uint8_t res = 0;
-  if (canvasIsPixelFree(stone.x + motions[stone.shape].draw[0].x, stone.y + motions[stone.shape].draw[0].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].draw[1].x, stone.y + motions[stone.shape].draw[1].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].draw[2].x, stone.y + motions[stone.shape].draw[2].y) &&
-      canvasIsPixelFree(stone.x + motions[stone.shape].draw[3].x, stone.y + motions[stone.shape].draw[3].y)) {
-    canvasSetPixel(stone.x + motions[stone.shape].draw[0].x, stone.y + motions[stone.shape].draw[0].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[1].x, stone.y + motions[stone.shape].draw[1].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[2].x, stone.y + motions[stone.shape].draw[2].y, motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[3].x, stone.y + motions[stone.shape].draw[3].y, motions[stone.shape].color);
+  // check if the pixels the shape should be drawn at are free
+  if (canvasIsPixelFree(stone.x + motions[stone.shape].draw[0].x, 
+                        stone.y + motions[stone.shape].draw[0].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].draw[1].x, 
+                        stone.y + motions[stone.shape].draw[1].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].draw[2].x, 
+                        stone.y + motions[stone.shape].draw[2].y) &&
+      canvasIsPixelFree(stone.x + motions[stone.shape].draw[3].x, 
+                        stone.y + motions[stone.shape].draw[3].y)) {
+    // if so, draw the shape
+    canvasSetPixel(stone.x + motions[stone.shape].draw[0].x, 
+                   stone.y + motions[stone.shape].draw[0].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].draw[1].x, 
+                   stone.y + motions[stone.shape].draw[1].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].draw[2].x, 
+                   stone.y + motions[stone.shape].draw[2].y, 
+                   motions[stone.shape].color);
+    canvasSetPixel(stone.x + motions[stone.shape].draw[3].x, 
+                   stone.y + motions[stone.shape].draw[3].y, 
+                   motions[stone.shape].color);
     res = 1;
   }
   return res;

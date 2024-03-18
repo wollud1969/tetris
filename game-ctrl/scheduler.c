@@ -1,27 +1,42 @@
 /*
  * PontCoopScheduler.c
  *
- *  Created on: 29.08.2016
+ *  Originally created on: 29.08.2016
  *      Author: wn
  */
 
 
 #include <stdlib.h>
 #include <msp430g2553.h>
-
-
-#include "PontCoopScheduler.h"
+#include "scheduler.h"
 
 tTask tasks[MAX_NUM_OF_TASKS];
 
 
 void schInit() {
+  TACCR0 = 32;
+  TACCTL0 = CCIE;
+  TACTL = MC_1 | ID_0 | TASSEL_1 | TACLR;
+
   for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     tasks[i].delay = 0;
     tasks[i].period = 0;
     tasks[i].run = 0;
     tasks[i].exec = NULL;
     tasks[i].handle = NULL;
+  }
+}
+
+void __attribute__ ((interrupt (TIMER0_A0_VECTOR))) schUpdate() {
+  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
+    if (tasks[i].exec != NULL) {
+      if (tasks[i].delay == 0) {
+        tasks[i].delay = tasks[i].period;
+        tasks[i].run++;
+      } else {
+        tasks[i].delay--;
+      }
+    }
   }
 }
 
@@ -75,16 +90,3 @@ void schExec() {
 }
 
 
-
-void schUpdate() {
-  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
-    if (tasks[i].exec != NULL) {
-      if (tasks[i].delay == 0) {
-        tasks[i].delay = tasks[i].period;
-        tasks[i].run++;
-      } else {
-        tasks[i].delay--;
-      }
-    }
-  }
-}
