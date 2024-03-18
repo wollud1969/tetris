@@ -1,5 +1,7 @@
 #include <msp430g2553.h>
 #include "colors.h"
+#include "canvasSize.h"
+
 
 #define PC r0
 #define SP r1
@@ -59,7 +61,7 @@
 
   .section ".data"
 screendata:
-  .rept 110 ;; number of leds in hardward
+  .rept CANVAS_HEIGHT*CANVAS_WIDTH ;; number of leds in hardward
   .byte 0
   .endr
 screendataend:

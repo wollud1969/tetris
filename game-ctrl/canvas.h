@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
+// Definition of CANVAS_WIDTH and CANVAS_HEIGHT
+// imported from rgb-driver
+#include "../rgb-driver/canvasSize.h"
 
-#define CANVAS_WIDTH 10
-#define CANVAS_HEIGHT 11 
 
 typedef struct {
   const uint8_t width;
@@ -22,7 +23,5 @@ void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color);
 uint8_t canvasIsPixelFree(uint8_t column, uint8_t row);
 void canvasWipeRow(uint8_t row);
 uint8_t canvasIsRowFilled(uint8_t row);
-
-extern const canvas_t canvas;
 
 #endif // _CANVAS_H_

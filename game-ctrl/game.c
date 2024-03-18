@@ -38,13 +38,13 @@ void gameExec(void *handle) {
       break;
 
     case e_gameOver:
-      for (uint8_t c = 0; c < canvas.width; c++) {
+      for (uint8_t c = 0; c < CANVAS_WIDTH; c++) {
         canvasSetPixel(c, 0, 0x0d);
-        canvasSetPixel(c, canvas.height-1, 0x0d);
+        canvasSetPixel(c, CANVAS_HEIGHT - 1, 0x0d);
       }
-      for (uint8_t r = 0; r < canvas.height; r++) {
+      for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
         canvasSetPixel(0, r, 0x0d);
-        canvasSetPixel(canvas.width-1, r, 0x0d);
+        canvasSetPixel(CANVAS_WIDTH - 1, r, 0x0d);
       }
       delay = 10;
       state = e_delay;
