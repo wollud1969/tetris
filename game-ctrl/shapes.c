@@ -142,9 +142,9 @@ const motionTable_t motions[3] = { // size = number of implemented stones
       {
         // move left
         { .set = { {-1, 0}, { 0, 1}, { 0, 1}, { 0, 1} }, .reset = { { 1, 1}, { 2, 0}, { 2, 0}, { 2, 0} }, .offset = {-1, 0} }, // 0
-        { .set = { {-1, 0}, {-1, 1}, {-1, 2}, {-1, 2} }, .reset = { { 0, 0}, { 0, 2}, { 0, 2}, { 0, 2} }, .offset = {-1, 0} }, // 90
+        { .set = { { 0, 0}, {-1, 1}, { 0, 2}, { 0, 2} }, .reset = { { 1, 0}, { 1, 1}, { 1, 2}, { 1, 2} }, .offset = {-1, 0} }, // 90
         { .set = { {-1, 1}, { 0, 0}, { 0, 0}, { 0, 0} }, .reset = { { 1, 0}, { 2, 1}, { 2, 1}, { 2, 1} }, .offset = {-1, 0} }, // 180
-        { .set = { {-1, 0}, {-1, 2}, {-2, 1}, {-2, 1} }, .reset = { { 0, 0}, { 0, 1}, { 0, 2}, { 0, 2} }, .offset = {-1, 0} }, // 270
+        { .set = { {-1, 0}, {-1, 1}, {-1, 2}, {-1, 2} }, .reset = { { 0, 0}, { 0, 2}, { 1, 1}, { 1, 1} }, .offset = {-1, 0} }, // 270
       },
       {
         // move right
@@ -186,13 +186,16 @@ void shapesInit() {
 }
 
 void stoneCreate() {
-//  static uint8_t cnt = 0;
-//  stone.shape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[cnt];
-//  cnt++;
-//  if (cnt > 2) {
-//    cnt = 0;
-//  }
+#if 0
+  static uint8_t cnt = 0;
+  stone.shape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[cnt];
+  cnt++;
+  if (cnt > 2) {
+    cnt = 0;
+  }
+#else
   stone.shape = e_T;
+#endif
   stone.orientation = e_0;
   stone.x = 5;
   stone.y = 0;

@@ -62,6 +62,6 @@ void gameExec(void *handle) {
 }
 
 void gameInit() {
-  schAdd(gameExec, NULL, 0, 10000);
+  schAdd(gameExec, NULL, 0, 5000);
 }
 
