@@ -43,11 +43,7 @@ static uint8_t buttonsRotateRightPressed() {
 }
 
 static uint8_t buttonsMoveDownPressed() {
-  static uint8_t last = 0;
-  uint8_t current = (P2IN & BIT2);
-  uint8_t res = (current != 0) && (current != last);
-  last = current;
-  return res;
+  return P2IN & BIT2;
 }
 
 void buttonsExec(void *handle) {
@@ -87,6 +83,6 @@ void buttonsExec(void *handle) {
 void buttonsInit() {
   P2DIR &= ~(BIT0|BIT1|BIT2|BIT3|BIT4);
 
-  schAdd(buttonsExec, NULL, 0, 100);
+  schAdd(buttonsExec, NULL, 0, 25);
 }
 
