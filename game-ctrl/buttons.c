@@ -1,5 +1,6 @@
-#include "stddef.h"
-#include "stdint.h"
+#include <stddef.h>
+#include <stdint.h>
+#include <msp430g2553.h>
 
 #include "buttons.h"
 #include "scheduler.h"
@@ -8,52 +9,45 @@
 #include "led.h"
 
 
-// TEST CODE
-uint16_t counter;
-
 
 static uint8_t buttonsMoveLeftPressed() {
-  // -----------------------
-  // TEST CODE
-  //if (counter == 95) {
-  //  ledGreenToggle();
-  //  return 1;
-  //}
-  // -----------------------
-  return 0;
+  static uint8_t last = 0;
+  uint8_t current = (P2IN & BIT4);
+  uint8_t res = (current != 0) && (current != last);
+  last = current;
+  return res;
 }
 
 static uint8_t buttonsMoveRightPressed() {
-  // -----------------------
-  // TEST CODE
-  if (counter == 95) {
-    ledGreenToggle();
-    return 1;
-  }
-  // -----------------------
-  return 0;
+  static uint8_t last = 0;
+  uint8_t current = (P2IN & BIT0);
+  uint8_t res = (current != 0) && (current != last);
+  last = current;
+  return res;
 }
 
 static uint8_t buttonsRotateLeftPressed() {
-  return 0;
+  static uint8_t last = 0;
+  uint8_t current = (P2IN & BIT3);
+  uint8_t res = (current != 0) && (current != last);
+  last = current;
+  return res;
 }
 
 static uint8_t buttonsRotateRightPressed() {
-  // -----------------------
-  // TEST CODE
-  if (counter == 35) {
-    ledGreenToggle();
-    return 1;
-  }
-  // -----------------------
-  // -----------------------
-  // TEST CODE
-  if (counter == 45) {
-    ledGreenToggle();
-    return 1;
-  }
-  // -----------------------
-  return 0;
+  static uint8_t last = 0;
+  uint8_t current = (P2IN & BIT1);
+  uint8_t res = (current != 0) && (current != last);
+  last = current;
+  return res;
+}
+
+static uint8_t buttonsMoveDownPressed() {
+  static uint8_t last = 0;
+  uint8_t current = (P2IN & BIT2);
+  uint8_t res = (current != 0) && (current != last);
+  last = current;
+  return res;
 }
 
 void buttonsExec(void *handle) {
@@ -61,9 +55,6 @@ void buttonsExec(void *handle) {
     // don't do anything, the stone has not been initialized
     return;
   }
-
-  // TEST CODE
-  counter++;
 
   uint8_t buttonPressed = 0;
 
@@ -83,6 +74,10 @@ void buttonsExec(void *handle) {
     stoneRotateRight();
     buttonPressed = 1;
   }
+  if (buttonsMoveDownPressed()) {
+    stoneMoveDown();
+    buttonPressed = 1;
+  }
 
   if (buttonPressed == 1) {
     canvasShow();
@@ -90,8 +85,7 @@ void buttonsExec(void *handle) {
 }
 
 void buttonsInit() {
-  // TEST CODE
-  counter = 0;
+  P2DIR &= ~(BIT0|BIT1|BIT2|BIT3|BIT4);
 
   schAdd(buttonsExec, NULL, 0, 100);
 }

@@ -1,3 +1,5 @@
 *.o
-firmware.*
+firmware.txt
+firmware.elf
+firmware.map
 
