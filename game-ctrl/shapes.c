@@ -356,14 +356,9 @@ void shapesInit() {
 }
 
 void stoneCreate() {
-//  static uint8_t cnt = 0;
-  uint8_t r = myRandGet();
-  uint8_t cnt = r % e_ShapeInvalid;
-  stone.shape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[cnt];
-//  cnt++;
-//  if (cnt >= e_ShapeInvalid) {
-//    cnt = 0;
-//  }
+  uint16_t n = myRandGet();
+  uint8_t m = n % 7;
+  stone.shape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[m];
   stone.orientation = e_0;
   stone.x = 5;
   stone.y = 0;

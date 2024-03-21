@@ -10,6 +10,7 @@
 #include "game.h"
 #include "buttons.h"
 #include "shapes.h"
+#include "myrand.h"
 
 
 int main() {
@@ -26,6 +27,7 @@ int main() {
     schInit();
 
     ledInit();
+    myRandInit();
     canvasInit();
 
     shapesInit();

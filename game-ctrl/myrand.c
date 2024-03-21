@@ -4,21 +4,23 @@
 #include "myrand.h"
 
 void myRandInit() {
-  ADC10CTL0 = SREF_1 | ADC10SHT_1 | ADC10SR | REFON | ADC10ON;
   ADC10CTL1 = INCH_10;
+  ADC10CTL0 = SREF_1 | ADC10SHT_1 | REFON | ADC10ON;
 }
 
-uint8_t myRandGet() {
-  ADC10CTL0 |= ENC | ADC10SC;
+uint16_t myRandGet() {
+  uint16_t res = 0;
 
-  while ((ADC10CTL0 & ADC10IFG) == 0);
+  for (uint8_t i = 0; i < 16; i++) {
+    ADC10CTL0 |= ENC | ADC10SC;
+
+    while ((ADC10CTL1 & ADC10BUSY));
   
-  uint16_t n = ADC10MEM;
-  uint8_t r = n & 0x00ff;
+    res <<= 1;
+    res |= ADC10MEM & 0x0001;
+  }
 
-  ADC10CTL0 &= ~(ADC10IFG | ENC);
-
-  return r;
+  return res;
 }
 
   
