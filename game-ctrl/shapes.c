@@ -361,7 +361,7 @@ void stoneCreate() {
   stone.shape = nextShape;
   nextShape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[myRandGet() % e_ShapeInvalid];
   stone.orientation = e_0;
-  stone.x = 5;
+  stone.x = 4;
   stone.y = 0;
 }
 
