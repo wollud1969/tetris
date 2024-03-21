@@ -17,9 +17,11 @@ typedef struct {
 
 void canvasInit();
 void canvasClear();
-void canvasSetAll(uint8_t color);
+void miniCanvasClear();
+//void canvasSetAll(uint8_t color);
 void canvasShow();
 void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color);
+void miniCanvasSetPixel(uint8_t column, uint8_t row, uint8_t color);
 uint8_t canvasIsPixelFree(uint8_t column, uint8_t row);
 void canvasWipeRow(uint8_t row);
 uint8_t canvasIsRowFilled(uint8_t row);

@@ -4,4 +4,7 @@
 #define CANVAS_WIDTH 10
 #define CANVAS_HEIGHT 20
 
+#define MINI_CANVAS_WIDTH 3
+#define MINI_CANVAS_HEIGHT 4
+
 #endif // _CANVAS_SIZE_H_

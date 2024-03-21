@@ -61,7 +61,7 @@
 
   .section ".data"
 screendata:
-  .rept CANVAS_HEIGHT*CANVAS_WIDTH ;; number of leds in hardward
+  .rept (CANVAS_HEIGHT*CANVAS_WIDTH) + (MINI_CANVAS_HEIGHT*MINI_CANVAS_WIDTH) ;; number of leds in hardward
   .byte 0
   .endr
 screendataend:

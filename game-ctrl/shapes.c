@@ -423,7 +423,25 @@ static uint8_t move(direction_t direction) {
   return 0;
 }
 
-uint8_t stoneDraw() {
+void nextStoneDraw() {
+  miniCanvasClear();
+  miniCanvasSetPixel(motions[nextShape].draw[0].x, 
+                     motions[nextShape].draw[0].y, 
+                     motions[nextShape].color);
+  miniCanvasSetPixel(motions[nextShape].draw[1].x, 
+                     motions[nextShape].draw[1].y, 
+                     motions[nextShape].color);
+  miniCanvasSetPixel(motions[nextShape].draw[2].x, 
+                     motions[nextShape].draw[2].y, 
+                     motions[nextShape].color);
+  miniCanvasSetPixel(motions[nextShape].draw[3].x, 
+                     motions[nextShape].draw[3].y, 
+                     motions[nextShape].color);
+}
+
+uint8_t stoneDraw() { 
+  nextStoneDraw();
+
   uint8_t res = 0;
   // check if the pixels the shape should be drawn at are free
   if (canvasIsPixelFree(stone.x + motions[stone.shape].draw[0].x, 

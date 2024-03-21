@@ -13,6 +13,12 @@ const canvas_t canvas = {
   .canvas = canvasStorage
 };
 
+static uint8_t miniCanvasStorage[MINI_CANVAS_WIDTH * MINI_CANVAS_HEIGHT];
+const canvas_t miniCanvas = { 
+  .height = MINI_CANVAS_HEIGHT,
+  .width = MINI_CANVAS_WIDTH,
+  .canvas = miniCanvasStorage
+};
 
 inline static void spiSendOctet(uint8_t v) {
   // wait for TX buffer empty
@@ -30,6 +36,13 @@ void canvasShow() {
       *((canvas.canvas)+i) &= ~0x80;
       spiSendOctet(i);
       spiSendOctet(*((canvas.canvas)+i));
+    }
+  }
+  for (uint8_t i = 0; i < (MINI_CANVAS_WIDTH*MINI_CANVAS_HEIGHT); i++) {
+    if ((*((miniCanvas.canvas)+i) & 0x80) != 0) {
+      *((miniCanvas.canvas)+i) &= ~0x80;
+      spiSendOctet(i + (CANVAS_HEIGHT*CANVAS_WIDTH));
+      spiSendOctet(*((miniCanvas.canvas)+i));
     }
   }
   spiSendOctet(0xfe);
@@ -63,6 +76,7 @@ void canvasInit() {
 
 
   canvasClear();
+  miniCanvasClear();
   canvasShow();
 }
 
@@ -70,12 +84,20 @@ void canvasClear() {
   memset(canvas.canvas, 0x80, CANVAS_WIDTH*CANVAS_HEIGHT);
 }
 
-void canvasSetAll(uint8_t color) {
-  memset(canvas.canvas, color + 0x80, CANVAS_WIDTH*CANVAS_HEIGHT);
+void miniCanvasClear() {
+  memset(miniCanvas.canvas, 0x80, MINI_CANVAS_WIDTH*MINI_CANVAS_HEIGHT);
 }
+
+//void canvasSetAll(uint8_t color) {
+//  memset(canvas.canvas, color + 0x80, CANVAS_WIDTH*CANVAS_HEIGHT);
+//}
 
 void canvasSetPixel(uint8_t column, uint8_t row, uint8_t color) {
   *((canvas.canvas) + (row * canvas.width + column)) = (color + 0x80);
+}
+
+void miniCanvasSetPixel(uint8_t column, uint8_t row, uint8_t color) {
+  *((miniCanvas.canvas) + (row * miniCanvas.width + column)) = (color + 0x80);
 }
 
 void canvasWipeRow(uint8_t row) {
