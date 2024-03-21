@@ -59,6 +59,12 @@ void gameExec(void *handle) {
   }
 
   canvasShow();
+  for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
+    if (canvasIsRowFilled(r)) {
+      canvasWipeRow(r);
+      canvasShow();
+    }
+  }
 }
 
 void gameInit() {

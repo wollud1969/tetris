@@ -44,7 +44,8 @@ void canvasInit() {
   // between the both MCUs.
   // With 8 the transfer of a complete 110 pixel canvas takes
   // about 720us.
-  UCB0BR0 = 8; 
+  // 8 was still too fast and caused problems.
+  UCB0BR0 = 16; 
   UCB0BR1 = 0;
 
   // BIT5: UCB0CLK
