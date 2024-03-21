@@ -96,11 +96,12 @@ init:
   ;; BIT3: Signal waiting for data
   mov.b   #BIT0|BIT1|BIT2|BIT3, &P1DIR
   mov.b   #0,&P1OUT
+  ;; BIT4: spi, UCB0STE
   ;; BIT5: spi, UCB0CLK
   ;; BIT6: spi, UCB0SOMI
   ;; BIT7: spi, UCB0SIMO
-  mov.b   #BIT5|BIT6|BIT7, &P1SEL
-  mov.b   #BIT5|BIT6|BIT7, &P1SEL2
+  mov.b   #BIT4|BIT5|BIT6|BIT7, &P1SEL
+  mov.b   #BIT4|BIT5|BIT6|BIT7, &P1SEL2
   ;; BIT4: long pulse
   ;; BIT1: short pulse
   mov.b   #BIT1|BIT4,&P2DIR
@@ -122,7 +123,7 @@ init:
 
   ;; spi configuration
   ;;  USCI B to slave mode
-  mov.b   #UCSYNC, &UCB0CTL0
+  mov.b   #UCSYNC|UCMODE_2, &UCB0CTL0
   mov.b   #0x00, &UCB0CTL1
 
   ;; make sure the isr will not immediately start

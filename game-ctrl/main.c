@@ -5,12 +5,12 @@
 
 #include "time.h"
 #include "scheduler.h"
-#include "led.h"
 #include "canvas.h"
 #include "game.h"
 #include "buttons.h"
 #include "shapes.h"
 #include "myrand.h"
+#include "spi.h"
 
 
 int main() {
@@ -26,7 +26,7 @@ int main() {
 
     schInit();
 
-    ledInit();
+    spiInit();
     myRandInit();
     canvasInit();
 

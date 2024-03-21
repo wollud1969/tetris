@@ -4,6 +4,7 @@
 #include <msp430g2553.h>
 
 #include "canvas.h"
+#include "spi.h"
 
 
 static uint8_t canvasStorage[CANVAS_WIDTH * CANVAS_HEIGHT];
@@ -20,16 +21,11 @@ const canvas_t miniCanvas = {
   .canvas = miniCanvasStorage
 };
 
-inline static void spiSendOctet(uint8_t v) {
-  // wait for TX buffer empty
-  while (!(UC0IFG & UCB0TXIFG));
-  // load octet into TX buffer
-  UCB0TXBUF = v;
-}
-
 void canvasShow() {
   // wait for signal waiting for data
   while (!(P1IN & BIT3));
+
+  spiSendBegin(e_SPI_CANVAS);
 
   for (uint8_t i = 0; i < (CANVAS_WIDTH*CANVAS_HEIGHT); i++) {
     if ((*((canvas.canvas)+i) & 0x80) != 0) {
@@ -46,34 +42,13 @@ void canvasShow() {
     }
   }
   spiSendOctet(0xfe);
+
+  spiSendEnd(e_SPI_CANVAS);
 }
 
 void canvasInit() {
-  // SPI in master mode
-  UCB0CTL0 = UCMST;
-  // SPI timing config
-  UCB0CTL1 = UCSSEL_3;
-  // Faster than 8 ends up in strange communication errors
-  // between the both MCUs.
-  // With 8 the transfer of a complete 110 pixel canvas takes
-  // about 720us.
-  // 8 was still too fast and caused problems.
-  UCB0BR0 = 16; 
-  UCB0BR1 = 0;
-
-  // BIT5: UCB0CLK
-  // BIT6: UCB0SOMI
-  // BIT7: UCB0SIMO
-  P1SEL |= BIT5 | BIT6 | BIT7;
-  P1SEL2 |= BIT5 | BIT6 | BIT7;
-  P1DIR |= BIT5 | BIT7;
-
   // P1.3 is signal line
   P1DIR &= ~BIT3;
-
-  // enable SPI module
-  UCB0CTL1 &= ~UCSWRST;
-
 
   canvasClear();
   miniCanvasClear();

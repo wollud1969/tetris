@@ -6,8 +6,6 @@
 #include "scheduler.h"
 #include "shapes.h"
 #include "canvas.h"
-#include "led.h"
-
 
 
 static uint8_t buttonsMoveLeftPressed() {
