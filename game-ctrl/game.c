@@ -5,69 +5,119 @@
 #include "scheduler.h"
 #include "shapes.h"
 #include "canvas.h"
+#include "../rgb-driver/colors.h"
 
 
-typedef enum { e_idle, e_start, e_newStone, e_down, e_gameOver, e_delay } state_t;
+#define GAME_CYCLE_TIME 100
+#define GAMEOVER_DELAY 10
+
+
+static uint8_t delayFactor(uint8_t level) {
+  return 11 - level;
+}
+
+typedef enum {
+  e_Phase_Game, e_Phase_GameOver 
+} phase_t;
+
+typedef enum { 
+  e_Start, e_NewStone, e_Down, e_DownDelay, e_ClearRows,
+  e_GameOver, e_GameOverFill, e_GameOverWipe, e_GameOverDelay 
+} state_t;
 
 void gameExec(void *handle) {
-  static state_t state = e_start;
-  static uint8_t delay;
+  static phase_t phase;
+  static state_t state = e_Start;
+  static uint8_t gameOverDelay;
+  static uint8_t rowIndex;
+  static uint8_t proceedDelay;
+  static uint8_t level;
 
+// --- engine begin -------------------------------------------------------
   switch (state) {
-    case e_idle:
-      break;
-
-    case e_start:
+// --- game ---------------------------------------------------------------
+    case e_Start:
       canvasClear();
-      state = e_newStone;
+      level = 1;
+      phase = e_Phase_Game;
+      state = e_NewStone;
       break;
 
-    case e_newStone:
+    case e_NewStone:
       stoneCreate();
       if (stoneDraw()) {
-        state = e_down;
+        proceedDelay = delayFactor(level);
+        state = e_DownDelay;
       } else {
-        state = e_gameOver;
+        state = e_GameOver;
       }
+      break;
+
+    case e_DownDelay:
+      proceedDelay--;
+      if (proceedDelay == 0) {
+        rowIndex = 0;
+        state = e_ClearRows;
+      }
+      break;
+
+    case e_ClearRows:
+      state = e_Down;
       break;
       
-    case e_down:
+    case e_Down:
       if (! stoneMoveDown()) {
-        state = e_newStone;
+        state = e_NewStone;
+      } else {
+        proceedDelay = delayFactor(level);
+        state = e_DownDelay;
       }
       break;
 
-    case e_gameOver:
-      for (uint8_t c = 0; c < CANVAS_WIDTH; c++) {
-        canvasSetPixel(c, 0, 0x0d);
-        canvasSetPixel(c, CANVAS_HEIGHT - 1, 0x0d);
-      }
-      for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
-        canvasSetPixel(0, r, 0x0d);
-        canvasSetPixel(CANVAS_WIDTH - 1, r, 0x0d);
-      }
-      delay = 10;
-      state = e_delay;
+// --- game over ----------------------------------------------------------
+    case e_GameOver:
+      rowIndex = CANVAS_HEIGHT;
+      phase = e_Phase_GameOver;
+      state = e_GameOverFill;
       break;
 
-    case e_delay:
-      delay--;
-      if (delay == 0) {
-        state = e_start;
+    case e_GameOverFill:
+      rowIndex--;
+      canvasFillRow(rowIndex, _red);
+      if (rowIndex == 0) {
+        state = e_GameOverWipe;
+      }
+      break;
+
+    case e_GameOverWipe:
+      canvasWipeRow(rowIndex);
+      rowIndex++;
+      if (rowIndex == CANVAS_HEIGHT) {
+        gameOverDelay = GAMEOVER_DELAY;
+        state = e_GameOverDelay;
+      }
+      break;
+
+    case e_GameOverDelay:
+      gameOverDelay--;
+      if (gameOverDelay == 0) {
+        state = e_Start;
       }
       break;
   }
+// --- engine end ---------------------------------------------------------
 
   canvasShow();
-  for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
-    if (canvasIsRowFilled(r)) {
-      canvasWipeRow(r);
-      canvasShow();
+  if (phase == e_Phase_Game) {
+    for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
+      if (canvasIsRowFilled(r)) {
+        canvasWipeRow(r);
+        canvasShow();
+      }
     }
   }
 }
 
 void gameInit() {
-  schAdd(gameExec, NULL, 0, 1000);
+  schAdd(gameExec, NULL, 0, GAME_CYCLE_TIME);
 }
-

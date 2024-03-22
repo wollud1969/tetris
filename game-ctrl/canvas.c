@@ -83,6 +83,13 @@ void canvasWipeRow(uint8_t row) {
   memset(canvas.canvas, 0x80, canvas.width);
 }
 
+void canvasFillRow(uint8_t row, uint8_t color) {
+  for (uint8_t c = 0; c < canvas.width; c++) {
+    canvasSetPixel(c, row, color);
+  }
+}
+
+
 uint8_t canvasIsRowFilled(uint8_t row) {
   uint8_t res = 1;
   for (uint8_t column = 0; column < canvas.width; column++) {
