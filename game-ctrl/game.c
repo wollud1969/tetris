@@ -42,6 +42,7 @@ void gameExec(void *handle) {
       canvasClear();
       level = 1;
       score = 0;
+      displaySetValue(score);
       phase = e_Phase_Game;
       state = e_NewStone;
       break;
