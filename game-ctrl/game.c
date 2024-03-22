@@ -35,7 +35,7 @@ void gameExec(void *handle) {
 
 // --- engine begin -------------------------------------------------------
   switch (state) {
-// --- game ---------------------------------------------------------------
+// --- phase: game --------------------------------------------------------
     case e_Start:
       canvasClear();
       level = 1;
@@ -74,7 +74,7 @@ void gameExec(void *handle) {
       }
       break;
 
-// --- game over ----------------------------------------------------------
+// --- phase: game over ---------------------------------------------------
     case e_GameOver:
       rowIndex = CANVAS_HEIGHT;
       phase = e_Phase_GameOver;
