@@ -6,6 +6,7 @@
 #include "shapes.h"
 #include "canvas.h"
 #include "../rgb-driver/colors.h"
+#include "display.h"
 
 
 #define GAME_CYCLE_TIME 100
@@ -116,6 +117,8 @@ void gameExec(void *handle) {
       }
     }
   }
+
+  displaySetScore(7);
 }
 
 void gameInit() {

@@ -2,8 +2,8 @@
 #include "spi.h"
 
 void spiInit() {
-  // SPI in master mode
-  UCB0CTL0 = UCMST;
+  // SPI in master mode, most significant bit first
+  UCB0CTL0 = UCMST | UCMSB;
   // SPI timing config
   UCB0CTL1 = UCSSEL_3;
   // Faster than 8 ends up in strange communication errors

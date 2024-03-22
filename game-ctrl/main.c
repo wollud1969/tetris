@@ -11,6 +11,7 @@
 #include "shapes.h"
 #include "myrand.h"
 #include "spi.h"
+#include "display.h"
 
 
 int main() {
@@ -27,6 +28,7 @@ int main() {
     schInit();
 
     spiInit();
+    displayInit();
     myRandInit();
     canvasInit();
 
