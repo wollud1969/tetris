@@ -33,6 +33,7 @@ void gameExec(void *handle) {
   static uint8_t rowIndex;
   static uint8_t proceedDelay;
   static uint8_t level;
+  static uint16_t score;
 
 // --- engine begin -------------------------------------------------------
   switch (state) {
@@ -40,6 +41,7 @@ void gameExec(void *handle) {
     case e_Start:
       canvasClear();
       level = 1;
+      score = 0;
       phase = e_Phase_Game;
       state = e_NewStone;
       break;
@@ -112,13 +114,13 @@ void gameExec(void *handle) {
   if (phase == e_Phase_Game) {
     for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
       if (canvasIsRowFilled(r)) {
+        score += level;
+        displaySetValue(score);
         canvasWipeRow(r);
         canvasShow();
       }
     }
   }
-
-  displaySetScore(7);
 }
 
 void gameInit() {

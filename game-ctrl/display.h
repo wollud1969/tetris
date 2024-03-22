@@ -5,7 +5,7 @@
 
 
 void displayInit();
-void displaySetScore(uint16_t v);
+void displaySetValue(uint16_t v);
 
 
 
