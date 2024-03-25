@@ -68,38 +68,33 @@ static void writePSG(uint8_t address, uint8_t data) {
   // put bus into inactive state
   BUS_OP_NACT();
 
-  delay();
-
   // put address on bus
   ADDR_DATA_REG = address;
-
-  delay();
 
   // address latch mode
   BUS_OP_INTAK();
 
-  delay();
-
   // latch address
   BUS_OP_NACT();
-
-  delay();
 
   // put data on bus
   ADDR_DATA_REG = data;
   
-  delay();
-
   // set write to psg
   BUS_OP_DWS();
-
-  delay();
 
   // set inactive again
   BUS_OP_NACT();
 
   // deselect chip
   //BUS_OP_DISABLE_CS();
+}
+
+static void writeFrequency(uint8_t channel, uint16_t frequencyCode) {
+  uint8_t fine = frequencyCode & 0x00ff;
+  uint8_t coarse = (frequencyCode >> 8) & 0x000f;
+  writePSG(R0 + (channel * 2), fine);
+  writePSG(R1 + (channel * 2), coarse);
 }
 
 int main() {
@@ -161,11 +156,51 @@ int main() {
   __enable_interrupt();
 
 
+
   BUS_OP_ENABLE_CS();
+
+  /*
+  // single tone
   writePSG(R0, 0376);
   writePSG(R1, 0);
   writePSG(R7, 076);
   writePSG(R10, 03);
+  */
+
+  /*
+  // gun shot
+  writePSG(R6, 017);
+  writePSG(R7, 007);
+  writePSG(R10, 020);
+  writePSG(R11, 020);
+  writePSG(R12, 020);
+  writePSG(R14, 020);
+  writePSG(R15, 0);
+  */
+
+  /*
+  // explosion
+  writePSG(R6, 0);
+  writePSG(R7, 007);
+  writePSG(R10, 020);
+  writePSG(R11, 020);
+  writePSG(R12, 020);
+  writePSG(R14, 070);
+  writePSG(R15, 0);
+  */
+
+  /*
+  // Akkord
+  writeFrequency(0, 01527);
+  writeFrequency(1, 01247);
+  writeFrequency(2, 01073);
+  writePSG(R7, 0b11111000);
+  writePSG(R10, 03);
+  writePSG(R11, 03);
+  writePSG(R12, 03);
+  */
+
+
   BUS_OP_DISABLE_CS();
 
 
