@@ -22,10 +22,16 @@ typedef struct {
   bool legato; 
 } t_tone;
 
+typedef enum { 
+  e_PlayTone, 
+  e_HoldTone, 
+  e_SeparateTone 
+} t_sequencerState;
+
 typedef struct {
   uint16_t idx;
   uint8_t lengthCnt;
-  uint8_t state;
+  t_sequencerState state;
   uint8_t channel;
   const t_tone *tones;
 } t_melody;
