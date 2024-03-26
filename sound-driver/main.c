@@ -96,12 +96,12 @@ void playSomething(void *handle) {
       // no break;
     
     case 1:
-      writeFrequency(0, C5);
+      writeFrequency(0, frequencyCodes[e_O_5][e_C]);
       state = 2;
       break;
 
     case 2:
-      writeFrequency(0, E5);
+      writeFrequency(0, frequencyCodes[e_O_5][e_E]);
       state = 1;
       break;
   }
