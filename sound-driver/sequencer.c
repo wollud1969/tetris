@@ -11,6 +11,10 @@ void sequencerExec(void *handle) {
   t_melody *melody = (t_melody*) handle;
 
   switch (melody->state) {
+    case e_Init:
+      psgAmplitude(melody->channel, melody->amplitude);
+      melody->state = e_PlayTone;
+      break;
     case e_PlayTone:
       if (melody->tones[melody->idx].length == e_L_EndMark) {
         melody->idx = 0;
@@ -51,7 +55,6 @@ uint16_t sequencerPlayMelody(t_melody *melody) {
   melody->lengthCnt = 0;
   melody->state = e_PlayTone;
 
-  psgAmplitude(melody->channel, melody->amplitude);
   return schAdd(sequencerExec, (void*) melody, 0, melody->pace);
 }
 

@@ -25,6 +25,7 @@ typedef struct {
 } t_tone;
 
 typedef enum { 
+  e_Init,
   e_PlayTone, 
   e_HoldTone, 
   e_StaccatoBreak,
