@@ -27,14 +27,6 @@ typedef enum {
   e_Ais,
   e_H
 } t_note;
-
-typedef enum {
-  e_L_1 = 80,
-  e_L_1_2 = 40,
-  e_L_1_4 = 20,
-  e_L_1_8 = 10,
-  e_L_1_16 = 5
-} t_noteLength;
     
 
 void psgInit();

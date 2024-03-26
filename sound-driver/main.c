@@ -4,6 +4,7 @@
 
 #include "psg.h"
 #include "scheduler.h"
+#include "sequencer.h"
 
 void __attribute__ ((interrupt (USCIAB0RX_VECTOR))) receive() {
   if (UC0IFG & UCB0RXIFG) {
@@ -40,6 +41,7 @@ int main() {
   schInit();
 
   psgInit();
+  sequencerInit();
 
   __enable_interrupt();
 
