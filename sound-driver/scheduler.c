@@ -34,7 +34,8 @@ void __attribute__ ((interrupt (TIMER0_A0_VECTOR))) schUpdate() {
   }
 }
 
-void schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period) {
+uint16_t schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period) {
+  uint16_t taskId = 0xffff;
   for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if (tasks[i].exec == NULL) {
       tasks[i].delay = delay;
@@ -46,9 +47,11 @@ void schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period)
       }
       tasks[i].exec = exec;
       tasks[i].handle = handle;
+      taskId = i;
       break;
     }
   }
+  return taskId;
 }
 
 /*
@@ -61,6 +64,9 @@ void schDel(void (*exec)(void *), void *handle) {
   }
 }
 */
+void schDel(uint16_t taskId) {
+  tasks[taskId].exec = NULL;
+}
 
 void schExec() {
   for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {

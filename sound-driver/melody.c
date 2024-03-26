@@ -4,88 +4,83 @@
 
 
 const t_tone notes[] = {
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  // Triller
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_32,    .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_32,    .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_32,    .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_32,    .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_4,     .legato = true  },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_4,     .legato = true , .staccato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
 
-  // Staccato
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = true  },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_8,     .legato = true  },
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_16,    .legato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
 
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
 
 
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = true  },
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_As,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = true , .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_As,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_4,    .note = e_C,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_B,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_As,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_4,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_B,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_As,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = true  },
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = true , .staccato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = false, .staccato = false },
 
-  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
 
-  // Staccato
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_8,     .legato = true  },
-  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_8,     .legato = true  },
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_16,    .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_16,    .legato = false },
+  { .octave = e_O_3,    .note = e_Es,    .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
 
-  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false },
-  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false },
+  { .octave = e_O_3,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
 
-  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
 
-t_melody melody= {
+t_melody melody = {
+  .pace = 4,
+  .amplitude = 3,
   .channel = 0,
   .tones = notes
 };
 
 
 void melodyInit() {
-  psgAmplitude(melody.channel, 3);
   sequencerPlayMelody(&melody);
 }
 

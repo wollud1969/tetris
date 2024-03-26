@@ -19,11 +19,10 @@ typedef struct {
 
 
 void schInit();
-void schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period);
-void schDel(void (*exec)(void *), void *handle);
+uint16_t schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t period);
+// void schDel(void (*exec)(void *), void *handle);
+void schDel(uint16_t taskId);
 void schExec();
-void schUpdate();
-uint8_t schTaskCnt();
 
 
 #endif /* PONTCOOPSCHEDULER_H_ */
