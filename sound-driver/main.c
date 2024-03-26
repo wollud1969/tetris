@@ -85,6 +85,29 @@ static void writeFrequency(uint8_t channel, uint16_t frequencyCode) {
   writePSG(R1 + (channel * 2), ((frequencyCode >> 8) & 0x000f));
 }
 
+void playSomething(void *handle) {
+  static uint8_t state = 0;
+
+  switch (state) {
+    case 0:
+      writePSG(R7, 0b11111110);
+      writePSG(R10, 03);
+      state = 1;
+      // no break;
+    
+    case 1:
+      writeFrequency(0, C5);
+      state = 2;
+      break;
+
+    case 2:
+      writeFrequency(0, E5);
+      state = 1;
+      break;
+  }
+}
+
+
 int main() {
   WDTCTL = WDTPW | WDTHOLD;
 
@@ -143,7 +166,7 @@ int main() {
 
   __enable_interrupt();
 
-
+  schAdd(playSomething, NULL, 0, 500);
 
 
   /*
