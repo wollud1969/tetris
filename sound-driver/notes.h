@@ -10,7 +10,7 @@ typedef enum {
   e_O_6,
   e_O_7,
   e_O_8
-} t_octaves;
+} t_octave;
 
 typedef enum {
   e_C = 0,
@@ -25,7 +25,7 @@ typedef enum {
   e_A,
   e_Ais,
   e_H
-} t_notes;
+} t_note;
 
     
 
