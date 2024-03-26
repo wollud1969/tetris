@@ -2,12 +2,14 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "notes.h"
+#include "scheduler.h"
+
 
 #define ADDR_DATA_REG P2OUT
 #define BUS_CTRL_REG P1OUT
-#define BC1 BIT0
+#define BC1 BIT3
 #define BDIR BIT1
-#define _CS BIT3
 
 #define R0 0
 #define R1 1
@@ -24,12 +26,6 @@
 #define R14 014
 #define R15 015
 
-inline static void BUS_OP_ENABLE_CS() {
-  BUS_CTRL_REG &= ~_CS;
-}
-inline static void BUS_OP_DISABLE_CS() {
-  BUS_CTRL_REG |= _CS;
-}
 inline static void BUS_OP_NACT() {
   BUS_CTRL_REG &= ~(BDIR | BC1);
 }
@@ -62,9 +58,6 @@ asm volatile (
 static void writePSG(uint8_t address, uint8_t data) {
   // according to "State Timing" (p. 15) of datasheet
 
-  // select chip
-  //BUS_OP_ENABLE_CS();
-
   // put bus into inactive state
   BUS_OP_NACT();
 
@@ -85,16 +78,11 @@ static void writePSG(uint8_t address, uint8_t data) {
 
   // set inactive again
   BUS_OP_NACT();
-
-  // deselect chip
-  //BUS_OP_DISABLE_CS();
 }
 
 static void writeFrequency(uint8_t channel, uint16_t frequencyCode) {
-  uint8_t fine = frequencyCode & 0x00ff;
-  uint8_t coarse = (frequencyCode >> 8) & 0x000f;
-  writePSG(R0 + (channel * 2), fine);
-  writePSG(R1 + (channel * 2), coarse);
+  writePSG(R0 + (channel * 2), (frequencyCode & 0x00ff));
+  writePSG(R1 + (channel * 2), ((frequencyCode >> 8) & 0x000f));
 }
 
 int main() {
@@ -137,14 +125,12 @@ int main() {
   delay();
   
   // bus control lines
-  // BIT0: BC1
+  // BIT3: BC1
   // BIT1: BDIR
-  // BIT3: /CS
-  P1DIR |= BIT0 | BIT1 | BIT3;
+  P1DIR |= BIT1 | BIT3;
 
   // put bus into inactive state
   BUS_CTRL_REG &= ~(BDIR | BC1);
-  BUS_CTRL_REG |= _CS;
   
   // release sound chip from reset state
   P1OUT |= BIT2;
@@ -153,11 +139,12 @@ int main() {
   delay();
   
 
+  schInit();
+
   __enable_interrupt();
 
 
 
-  BUS_OP_ENABLE_CS();
 
   /*
   // single tone
@@ -191,9 +178,9 @@ int main() {
 
   /*
   // Akkord
-  writeFrequency(0, 01527);
-  writeFrequency(1, 01247);
-  writeFrequency(2, 01073);
+  writeFrequency(0, C5);
+  writeFrequency(1, E5);
+  writeFrequency(2, G5);
   writePSG(R7, 0b11111000);
   writePSG(R10, 03);
   writePSG(R11, 03);
@@ -201,9 +188,9 @@ int main() {
   */
 
 
-  BUS_OP_DISABLE_CS();
 
 
   while (1) {
+    schExec();
   }
 }
