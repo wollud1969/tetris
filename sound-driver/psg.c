@@ -4,7 +4,6 @@
 
 #include "psg.h"
 #include "scheduler.h"
-#include "notes.h"
 
 
 
@@ -62,7 +61,7 @@ asm volatile (
 );
 }
 
-static void writePSG(uint8_t address, uint8_t data) {
+void psgWrite(uint8_t address, uint8_t data) {
   // according to "State Timing" (p. 15) of datasheet
 
   // put bus into inactive state
@@ -87,13 +86,13 @@ static void writePSG(uint8_t address, uint8_t data) {
   BUS_OP_NACT();
 }
 
-static void writeFrequency(uint8_t channel, uint16_t frequencyCode) {
-  writePSG(R0 + (channel * 2), (frequencyCode & 0x00ff));
-  writePSG(R1 + (channel * 2), ((frequencyCode >> 8) & 0x000f));
+void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
+  psgWrite(R0 + (channel * 2), (frequencyCode & 0x00ff));
+  psgWrite(R1 + (channel * 2), ((frequencyCode >> 8) & 0x000f));
 }
 
 void psgPlayTone(uint8_t channel, t_octave octave, t_note note) {
-  writeFrequency(channel, frequencyCodes[octave][note]);
+  psgWriteFrequency(channel, frequencyCodes[octave][note]);
 }
 
 void playSomething(void *handle) {
@@ -101,8 +100,8 @@ void playSomething(void *handle) {
 
   switch (state) {
     case 0:
-      writePSG(R7, 0b11111110);
-      writePSG(R10, 03);
+      psgWrite(R7, 0b11111110);
+      psgWrite(R10, 03);
       state = 1;
       // no break;
     
@@ -148,7 +147,7 @@ void psgInit() {
   delay();
   delay();
 
-  schAdd(playSomething, NULL, 0, 500);
+//  schAdd(playSomething, NULL, 0, 500);
 }
 
 

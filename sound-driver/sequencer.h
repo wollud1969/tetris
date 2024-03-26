@@ -2,6 +2,7 @@
 #define _SEQUENCER_H_
 
 
+#include <stdint.h>
 #include "psg.h"
 
 typedef enum {
@@ -23,7 +24,7 @@ typedef struct {
   uint16_t idx;
   uint8_t lengthCnt;
   uint8_t channel;
-  t_tone *tones;
+  const t_tone *tones;
 } t_melody;
 
 void sequencerInit();

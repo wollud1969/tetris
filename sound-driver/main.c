@@ -5,6 +5,7 @@
 #include "psg.h"
 #include "scheduler.h"
 #include "sequencer.h"
+#include "melody.h"
 
 void __attribute__ ((interrupt (USCIAB0RX_VECTOR))) receive() {
   if (UC0IFG & UCB0RXIFG) {
@@ -44,6 +45,8 @@ int main() {
   sequencerInit();
 
   __enable_interrupt();
+
+  melodyInit();
 
 
   while (1) {
