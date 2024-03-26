@@ -11,7 +11,8 @@ typedef enum {
   e_O_5,
   e_O_6,
   e_O_7,
-  e_O_8
+  e_O_8,
+  e_O_Null
 } t_octave;
 
 typedef enum {
@@ -26,7 +27,9 @@ typedef enum {
   e_Gis,
   e_A,
   e_Ais,
-  e_H
+  e_H,
+  e_Pause,
+  e_Null
 } t_note;
     
 
@@ -34,5 +37,6 @@ void psgInit();
 void psgPlayTone(uint8_t channel, t_octave octave, t_note note);
 void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode);
 void psgWrite(uint8_t address, uint8_t data);
+uint8_t psgReadShadow(uint8_t address);
 
 #endif // _PSG_H_

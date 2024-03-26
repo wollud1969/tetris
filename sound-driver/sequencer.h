@@ -3,6 +3,7 @@
 
 
 #include <stdint.h>
+#include <stdbool.h>
 #include "psg.h"
 
 typedef enum {
@@ -18,11 +19,13 @@ typedef struct {
   t_octave octave;
   t_note note;
   t_noteLength length;
+  bool legato; 
 } t_tone;
 
 typedef struct {
   uint16_t idx;
   uint8_t lengthCnt;
+  uint8_t state;
   uint8_t channel;
   const t_tone *tones;
 } t_melody;

@@ -39,6 +39,8 @@ const uint16_t frequencyCodes[8][12] = {
 #define R14 014
 #define R15 015
 
+uint8_t psgShadowRegisters[14];
+
 inline static void BUS_OP_NACT() {
   BUS_CTRL_REG &= ~(BDIR | BC1);
 }
@@ -61,7 +63,13 @@ asm volatile (
 );
 }
 
+uint8_t psgReadShadow(uint8_t address) {
+  return psgShadowRegisters[address];
+}
+
 void psgWrite(uint8_t address, uint8_t data) {
+  psgShadowRegisters[address] = data;
+
   // according to "State Timing" (p. 15) of datasheet
 
   // put bus into inactive state
@@ -92,7 +100,12 @@ void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
 }
 
 void psgPlayTone(uint8_t channel, t_octave octave, t_note note) {
-  psgWriteFrequency(channel, frequencyCodes[octave][note]);
+  if (note == e_Pause) {
+    psgWrite(R7, psgReadShadow(R7) | (1 << channel));
+  } else {
+    psgWrite(R7, psgReadShadow(R7) & ~(1 << channel));
+    psgWriteFrequency(channel, frequencyCodes[octave][note]);
+  }
 }
 
 void playSomething(void *handle) {
