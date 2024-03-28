@@ -53,7 +53,7 @@ void sequencerExec(void *handle) {
 uint16_t sequencerPlayMelody(t_melody *melody) {
   melody->idx = 0;
   melody->lengthCnt = 0;
-  melody->state = e_PlayTone;
+  melody->state = e_Init;
 
   return schAdd(sequencerExec, (void*) melody, 0, melody->pace);
 }
