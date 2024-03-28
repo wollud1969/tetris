@@ -158,6 +158,6 @@ void psgInit() {
   delay();
 
   // disable everything
-  psgWrite(R7, 0xff);
+  psgWrite(_ENABLE_REG, 0xff);
 }
 
