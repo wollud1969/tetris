@@ -898,7 +898,7 @@ const t_tone tetris3[] = {
 t_melodies tetrisTheme = {
   .melodies = { { .amplitude = 3, .tones = tetris1 }, { .amplitude = 3, .tones = tetris2 }, { .amplitude = 3, .tones = tetris3 } },
   .numOfMelodies = 3,
-  .pace = 4
+  .pace = 160
 };
 
 void melodyInit() {
