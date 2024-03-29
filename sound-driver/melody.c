@@ -75,9 +75,9 @@ const t_tone notes[] = {
 
 
 /*
- * drei-stimmiges theme from https://www.gamemusicthemes.com/sheetmusic/gameboy/tetris/themea/Tetris_-_Theme_A_by_Gori_Fater.pdf
+ * three voices theme from https://www.gamemusicthemes.com/sheetmusic/gameboy/tetris/themea/Tetris_-_Theme_A_by_Gori_Fater.pdf
  */
-const t_tone tetris1[] = {
+const t_tone voice1[] = {
   // -------
   { .octave = e_O_5,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = false },
   { .octave = e_O_4,    .note = e_H,     .length = e_L_1_8,     .legato = false, .staccato = false },
@@ -299,7 +299,7 @@ const t_tone tetris1[] = {
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
-const t_tone tetris2[] = {
+const t_tone voice2[] = {
   // -------
   { .octave = e_O_4,    .note = e_H,     .length = e_L_1_4,     .legato = false, .staccato = false },
   { .octave = e_O_4,    .note = e_Gis,   .length = e_L_1_8,     .legato = false, .staccato = false },
@@ -539,7 +539,7 @@ const t_tone tetris2[] = {
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
-const t_tone tetris3[] = {
+const t_tone voice3[] = {
   // -------
   { .octave = e_O_2,    .note = e_E,     .length = e_L_1_8,     .legato = false, .staccato = false },
   { .octave = e_O_3,    .note = e_E,     .length = e_L_1_8,     .legato = false, .staccato = false },
@@ -896,7 +896,7 @@ const t_tone tetris3[] = {
 };
 
 t_melodies tetrisTheme = {
-  .melodies = { { .amplitude = 3, .tones = tetris1 }, { .amplitude = 3, .tones = tetris2 }, { .amplitude = 3, .tones = tetris3 } },
+  .melodies = { { .amplitude = 3, .tones = voice1 }, { .amplitude = 3, .tones = voice2 }, { .amplitude = 3, .tones = voice3 } },
   .numOfMelodies = 3,
   .pace = 160
 };
