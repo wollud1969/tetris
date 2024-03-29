@@ -517,13 +517,13 @@ const t_tone voice2[] = {
 
   // 11. beat
   { .octave = e_O_3,    .note = e_A,     .length = e_L_1_2,     .legato = false, .staccato = false },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_E,     .length = e_L_1_2,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
   // 12. beat
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_2,     .legato = false, .staccato = false },
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_E,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Gis,   .length = e_L_1_2,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
@@ -566,13 +566,13 @@ const t_tone voice2[] = {
 
   // 11. beat, repeat
   { .octave = e_O_3,    .note = e_A,     .length = e_L_1_2,     .legato = false, .staccato = false },
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_E,     .length = e_L_1_2,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
   // 12. beat, repeat
-  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_2,     .legato = false, .staccato = false },
-  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_E,     .length = e_L_1_2,     .legato = false, .staccato = false },
+  { .octave = e_O_3,    .note = e_Gis,   .length = e_L_1_2,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
