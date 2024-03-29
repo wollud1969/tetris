@@ -11,7 +11,7 @@ void sequencerInit() {
 void sequencerExec(void *handle) {  
   t_melodies *melodies = (t_melodies*) handle;
 
-  for (uint8_t channel = 0; channel < MAX(NUM_OF_CHANNELS, melodies->numOfMelodies); channel++) {
+  for (uint8_t channel = 0; channel < melodies->numOfMelodies; channel++) {
     t_melody *melody = &(melodies->melodies[channel]);
 
     switch (melody->state) {

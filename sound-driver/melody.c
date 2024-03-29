@@ -295,6 +295,8 @@ const t_tone tetris1[] = {
   { .octave = e_O_4,    .note = e_Gis,   .length = e_L_1,       .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
 const t_tone tetris2[] = {
@@ -533,6 +535,8 @@ const t_tone tetris2[] = {
   { .octave = e_O_3,    .note = e_E,     .length = e_L_1,       .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
 const t_tone tetris3[] = {
@@ -887,15 +891,15 @@ const t_tone tetris3[] = {
   { .octave = e_O_3,    .note = e_E,     .length = e_L_1_8,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
-};
 
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
 
 t_melodies tetrisTheme = {
   .melodies = { { .amplitude = 3, .tones = tetris1 }, { .amplitude = 3, .tones = tetris2 }, { .amplitude = 3, .tones = tetris3 } },
   .numOfMelodies = 3,
   .pace = 4
 };
-
 
 void melodyInit() {
   sequencerPlayMelodies(&tetrisTheme);
