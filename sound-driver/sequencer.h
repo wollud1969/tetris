@@ -8,6 +8,7 @@
 
 typedef enum {
   e_L_EndMark = 0,
+  e_L_SyncMark = 1,
   e_L_1 = 320,
   e_L_1_2 = 160,
   e_L_1_4 = 80,
@@ -27,6 +28,7 @@ typedef struct {
 typedef enum { 
   e_Init,
   e_PlayTone, 
+  e_Sync,
   e_HoldTone, 
   e_StaccatoBreak,
   e_HoldStaccatoBreak,
@@ -45,6 +47,7 @@ typedef struct {
 typedef struct {
   uint8_t numOfMelodies;
   uint8_t pace;
+  uint8_t sync;
   t_melody melodies[NUM_OF_CHANNELS];
 } t_melodies;
 

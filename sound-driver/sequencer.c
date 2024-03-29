@@ -20,12 +20,25 @@ void sequencerExec(void *handle) {
         melody->state = e_PlayTone;
         break;
       case e_PlayTone:
-        if (melody->tones[melody->idx].length == e_L_EndMark) {
-          melody->idx = 0;
+        if (melody->tones[melody->idx].length == e_L_SyncMark) {
+          if (melodies->sync == 0) {
+            melodies->sync = melodies->numOfMelodies;
+          }
+          melodies->sync -= 1;
+          melody->state = e_Sync;
+        } else {
+          if (melody->tones[melody->idx].length == e_L_EndMark) {
+            melody->idx = 0;
+          }
+          psgPlayTone(channel, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
+          melody->lengthCnt = (melody->tones[melody->idx].staccato) ? (melody->tones[melody->idx].length / 2) : melody->tones[melody->idx].length;
+          melody->state = e_HoldTone;
         }
-        psgPlayTone(channel, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
-        melody->lengthCnt = (melody->tones[melody->idx].staccato) ? (melody->tones[melody->idx].length / 2) : melody->tones[melody->idx].length;
-        melody->state = e_HoldTone;
+        break;
+      case e_Sync:
+        if (melodies->sync == 0) {
+          melody->state = e_SeparateTone;
+        }
         break;
       case e_HoldTone:
         melody->lengthCnt -= 1;
@@ -61,6 +74,7 @@ uint16_t sequencerPlayMelodies(t_melodies *melodies) {
     melodies->melodies[i].lengthCnt = 0;
     melodies->melodies[i].state = e_Init;
   }
+  melodies->sync = 0;
 
   return schAdd(sequencerExec, (void*) melodies, 0, melodies->pace);
 }
