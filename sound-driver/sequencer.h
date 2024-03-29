@@ -37,14 +37,20 @@ typedef struct {
   uint16_t idx;
   uint8_t lengthCnt;
   t_sequencerState state;
-  uint8_t pace;
   uint8_t amplitude;
-  uint8_t channel;
   const t_tone *tones;
 } t_melody;
 
+#define NUM_OF_CHANNELS 3
+typedef struct {
+  uint8_t numOfMelodies;
+  uint8_t pace;
+  t_melody melodies[NUM_OF_CHANNELS];
+} t_melodies;
+
 void sequencerInit();
 uint16_t sequencerPlayMelody(t_melody *melody);
+uint16_t sequencerPlayMelodies(t_melodies *melodies);
 
 
 #endif // _SEQUENCER_H_

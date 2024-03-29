@@ -2,7 +2,8 @@
 #include "psg.h"
 #include "sequencer.h"
 
-
+/*
+ * most simple Tetris from https://de.wikipedia.org/wiki/Korobeiniki
 const t_tone notes[] = {
   { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
   { .octave = e_O_3,    .note = e_D,     .length = e_L_1_8,     .legato = false, .staccato = false },
@@ -70,8 +71,12 @@ const t_tone notes[] = {
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
+*/
 
 
+/*
+ * drei-stimmiges theme from https://www.gamemusicthemes.com/sheetmusic/gameboy/tetris/themea/Tetris_-_Theme_A_by_Gori_Fater.pdf
+ */
 const t_tone tetris1[] = {
   // -------
   { .octave = e_O_5,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = false },
@@ -692,38 +697,16 @@ const t_tone tetris3[] = {
   { .octave = e_O_3,    .note = e_E,     .length = e_L_1_8,     .legato = false, .staccato = false },
 };
 
-t_melody melody = {
-  .pace = 4,
-  .amplitude = 3,
-  .channel = 0,
-  .tones = notes
-};
 
-
-t_melody melodyTetris1 = {
-  .pace = 4,
-  .amplitude = 3,
-  .channel = 0,
-  .tones = tetris1
-};
-t_melody melodyTetris2 = {
-  .pace = 4,
-  .amplitude = 3,
-  .channel = 1,
-  .tones = tetris2
-};
-t_melody melodyTetris3 = {
-  .pace = 4,
-  .amplitude = 3,
-  .channel = 1,
-  .tones = tetris3
+t_melodies tetrisTheme = {
+  .melodies = { { .amplitude = 3, .tones = tetris1 }, { .amplitude = 3, .tones = tetris2 }, { .amplitude = 3, .tones = tetris3 } },
+  .numOfMelodies = 3,
+  .pace = 4
 };
 
 
 void melodyInit() {
-  sequencerPlayMelody(&melodyTetris1);
-  sequencerPlayMelody(&melodyTetris2);
-  sequencerPlayMelody(&melodyTetris3);
+  sequencerPlayMelodies(&tetrisTheme);
 }
 
 
