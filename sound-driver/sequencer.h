@@ -38,7 +38,7 @@ typedef enum {
 
 typedef struct {
   uint16_t idx;
-  uint8_t lengthCnt;
+  uint16_t lengthCnt;
   t_sequencerState state;
   uint8_t amplitude;
   const t_tone *tones;
