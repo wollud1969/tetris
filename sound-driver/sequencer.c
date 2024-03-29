@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <stdbool.h>
 #include <sys/param.h>
 #include "sequencer.h"
 #include "scheduler.h"
@@ -9,7 +11,23 @@ void sequencerInit() {
 }
 
 void sequencerExec(void *handle) {  
+  static uint16_t lengths[e_L_LengthEnd];
   t_melodies *melodies = (t_melodies*) handle;
+
+  if (melodies->firstRun) {
+    melodies->firstRun = false;
+
+    lengths[e_L_1_4]  = 60000 / melodies->pace; // duration of a 1/4 tone in ms
+    lengths[e_L_1_2]  = lengths[e_L_1_4] << 1;
+    lengths[e_L_1]    = lengths[e_L_1_4] << 2;
+    lengths[e_L_1_8]  = lengths[e_L_1_4] >> 1;
+    lengths[e_L_1_16] = lengths[e_L_1_4] >> 2;
+    lengths[e_L_1_32] = lengths[e_L_1_4] >> 4;
+
+    for (uint8_t i = 0; i < e_L_LengthEnd; i++) {
+      lengths[i] /= SEQUENCER_PERIOD;
+    }
+  }
 
   for (uint8_t channel = 0; channel < melodies->numOfMelodies; channel++) {
     t_melody *melody = &(melodies->melodies[channel]);
@@ -31,7 +49,7 @@ void sequencerExec(void *handle) {
             melody->idx = 0;
           }
           psgPlayTone(channel, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
-          melody->lengthCnt = (melody->tones[melody->idx].staccato) ? (melody->tones[melody->idx].length / 2) : melody->tones[melody->idx].length;
+          melody->lengthCnt = (melody->tones[melody->idx].staccato) ? (lengths[melody->tones[melody->idx].length] / 2) : lengths[melody->tones[melody->idx].length];
           melody->state = e_HoldTone;
         }
         break;
@@ -48,7 +66,7 @@ void sequencerExec(void *handle) {
         break;
       case e_StaccatoBreak:
         psgPlayTone(channel, e_O_Null, e_Pause);
-        melody->lengthCnt = melody->tones[melody->idx].length / 2;
+        melody->lengthCnt = lengths[melody->tones[melody->idx].length] / 2;
         melody->state = e_HoldStaccatoBreak;
         break;
       case e_HoldStaccatoBreak:
@@ -75,7 +93,8 @@ uint16_t sequencerPlayMelodies(t_melodies *melodies) {
     melodies->melodies[i].state = e_Init;
   }
   melodies->sync = 0;
+  melodies->firstRun = true;
 
-  return schAdd(sequencerExec, (void*) melodies, 0, melodies->pace);
+  return schAdd(sequencerExec, (void*) melodies, 0, SEQUENCER_PERIOD);
 }
 

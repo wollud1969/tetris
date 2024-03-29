@@ -7,14 +7,15 @@
 #include "psg.h"
 
 typedef enum {
-  e_L_EndMark = 0,
-  e_L_SyncMark = 1,
-  e_L_1 = 320,
-  e_L_1_2 = 160,
-  e_L_1_4 = 80,
-  e_L_1_8 = 40,
-  e_L_1_16 = 20,
-  e_L_1_32 = 10,
+  e_L_1 = 0,
+  e_L_1_2 = 1,
+  e_L_1_4 = 2,
+  e_L_1_8 = 3,
+  e_L_1_16 = 4,
+  e_L_1_32 = 5,
+  e_L_LengthEnd = 6,
+  e_L_EndMark = 254,
+  e_L_SyncMark = 255,
 } t_noteLength;
 
 typedef struct {
@@ -43,16 +44,17 @@ typedef struct {
   const t_tone *tones;
 } t_melody;
 
+#define SEQUENCER_PERIOD 4 // ms
 #define NUM_OF_CHANNELS 3
 typedef struct {
   uint8_t numOfMelodies;
-  uint8_t pace;
+  bool firstRun;
+  uint8_t pace; // quarter notes per minute
   uint8_t sync;
   t_melody melodies[NUM_OF_CHANNELS];
 } t_melodies;
 
 void sequencerInit();
-uint16_t sequencerPlayMelody(t_melody *melody);
 uint16_t sequencerPlayMelodies(t_melodies *melodies);
 
 
