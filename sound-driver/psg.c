@@ -78,11 +78,11 @@ asm volatile (
 );
 }
 
-uint8_t psgReadShadow(uint8_t address) {
+static uint8_t psgReadShadow(uint8_t address) {
   return psgShadowRegisters[address];
 }
 
-void psgWrite(uint8_t address, uint8_t data) {
+static void psgWrite(uint8_t address, uint8_t data) {
   psgShadowRegisters[address] = data;
 
   // according to "State Timing" (p. 15) of datasheet
@@ -109,7 +109,7 @@ void psgWrite(uint8_t address, uint8_t data) {
   BUS_OP_NACT();
 }
 
-void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
+static void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
   psgWrite(CHANNEL_A_TONE_PERIOD_FINE_REG + (channel * 2), (frequencyCode & 0x00ff));
   psgWrite(CHANNEL_A_TONE_PERIOD_COARSE_REG + (channel * 2), ((frequencyCode >> 8) & 0x000f));
 }

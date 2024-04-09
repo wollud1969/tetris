@@ -42,11 +42,5 @@ void psgInit();
 void psgPlayTone(uint8_t channel, t_octave octave, t_note note);
 void psgAmplitude(uint8_t channel, uint8_t volume);
 
-// low level
-void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode);
-
-// very low level
-void psgWrite(uint8_t address, uint8_t data);
-uint8_t psgReadShadow(uint8_t address);
 
 #endif // _PSG_H_
