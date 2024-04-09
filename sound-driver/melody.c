@@ -74,27 +74,29 @@ const t_tone notes[] = {
 */
 
 const t_tone tonleiter[] = {
-  { .octave = e_O_6,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_A,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_6,    .note = e_H,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_C,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_D,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_E,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_F,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_G,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_A,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_6,    .note = e_H,     .length = e_L_1_16,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_StopMark,.legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
 const t_tone tonleiter2[] = {
-  { .octave = e_O_4,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_A,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_4,    .note = e_H,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_C,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_D,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_E,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_F,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_G,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_A,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_H,     .length = e_L_1_16,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
@@ -102,13 +104,13 @@ const t_tone tonleiter2[] = {
 };
 
 const t_tone tonleiter3[] = {
-  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_A,     .length = e_L_1_4,     .legato = false, .staccato = false },
-  { .octave = e_O_5,    .note = e_H,     .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_D,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_E,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_F,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_G,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_A,     .length = e_L_1_16,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_H,     .length = e_L_1_16,     .legato = false, .staccato = false },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
 
@@ -1033,19 +1035,20 @@ const t_tone voice3[] = {
 };
 
 t_melodies tetrisTheme = {
-  .melodies = { { .amplitude = 3, .tones = voice1 }, { .amplitude = 3, .tones = voice2 }, { .amplitude = 3, .tones = voice3 } },
+  .melodies = { { .chip = 0, .amplitude = 3, .tones = voice1 }, { .chip = 0, .amplitude = 3, .tones = voice2 }, { .chip = 0, .amplitude = 3, .tones = voice3 } },
   .numOfMelodies = 3,
   .pace = 160
 };
 
 t_melodies tonleiterTheme = {
-  .melodies = { { .amplitude = 3, .tones = tonleiter }, { .amplitude = 3, .tones = tonleiter2 }, { .amplitude = 3, .tones = tonleiter3 } },
+  .melodies = { { .chip = 1, .amplitude = 3, .tones = tonleiter }, { .chip = 1, .amplitude = 3, .tones = tonleiter2 }, { .chip = 1, .amplitude = 3, .tones = tonleiter3 } },
   .numOfMelodies = 3,
   .pace = 160
 };
 
 void melodyInit() {
   sequencerPlayMelodies(&tetrisTheme);
+  sequencerPlayMelodies(&tonleiterTheme);
 }
 
 

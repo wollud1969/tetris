@@ -56,7 +56,7 @@ const uint16_t frequencyCodes[8][12] = {
 #define R15 015
 #define ENVELOPE_SHAPE_REG R15
 
-uint8_t psgShadowRegisters[14];
+uint8_t psgShadowRegisters[2][14];
 
 inline static void BUS_OP_NACT() {
   BUS_CTRL_REG &= ~(BDIR | BC1);
@@ -94,16 +94,20 @@ asm volatile (
 }
 #endif
 
-static uint8_t psgReadShadow(uint8_t address) {
-  return psgShadowRegisters[address];
+static uint8_t psgReadShadow(uint8_t chip, uint8_t address) {
+  return psgShadowRegisters[chip][address];
 }
 
-static void psgWrite(uint8_t address, uint8_t data) {
-  psgShadowRegisters[address] = data;
+static void psgWrite(uint8_t chip, uint8_t address, uint8_t data) {
+  psgShadowRegisters[chip][address] = data;
 
   // according to "State Timing" (p. 15) of datasheet
 
-  BUS_OP_CS1_ENABLE();
+  if (chip == 0) {
+    BUS_OP_CS0_ENABLE();
+  } else {
+    BUS_OP_CS1_ENABLE();
+  }
 
   // put bus into inactive state
   BUS_OP_NACT();
@@ -126,26 +130,30 @@ static void psgWrite(uint8_t address, uint8_t data) {
   // set inactive again
   BUS_OP_NACT();
 
-  BUS_OP_CS1_DISABLE();
-}
-
-static void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
-  psgWrite(CHANNEL_A_TONE_PERIOD_FINE_REG + (channel * 2), (frequencyCode & 0x00ff));
-  psgWrite(CHANNEL_A_TONE_PERIOD_COARSE_REG + (channel * 2), ((frequencyCode >> 8) & 0x000f));
-}
-
-void psgPlayTone(uint8_t channel, uint8_t volume, t_octave octave, t_note note) {
-  if (note == e_Pause) {
-    psgWrite(_ENABLE_REG, psgReadShadow(_ENABLE_REG) | (1 << channel));
+  if (chip == 0) {
+    BUS_OP_CS0_DISABLE();
   } else {
-    psgWrite(_ENABLE_REG, psgReadShadow(_ENABLE_REG) & ~(1 << channel));
-    psgAmplitude(channel, volume);
-    psgWriteFrequency(channel, frequencyCodes[octave][note]);
+    BUS_OP_CS1_DISABLE();
   }
 }
 
-void psgAmplitude(uint8_t channel, uint8_t volume) {
-  psgWrite(CHANNEL_A_AMPLITUDE_REG + channel, volume);
+static void psgWriteFrequency(uint8_t chip, uint8_t channel, uint16_t frequencyCode) {
+  psgWrite(chip, CHANNEL_A_TONE_PERIOD_FINE_REG + (channel * 2), (frequencyCode & 0x00ff));
+  psgWrite(chip, CHANNEL_A_TONE_PERIOD_COARSE_REG + (channel * 2), ((frequencyCode >> 8) & 0x000f));
+}
+
+void psgPlayTone(uint8_t chip, uint8_t channel, uint8_t volume, t_octave octave, t_note note) {
+  if (note == e_Pause) {
+    psgWrite(chip, _ENABLE_REG, psgReadShadow(chip, _ENABLE_REG) | (1 << channel));
+  } else {
+    psgWrite(chip, _ENABLE_REG, psgReadShadow(chip, _ENABLE_REG) & ~(1 << channel));
+    psgAmplitude(chip, channel, volume);
+    psgWriteFrequency(chip, channel, frequencyCodes[octave][note]);
+  }
+}
+
+void psgAmplitude(uint8_t chip, uint8_t channel, uint8_t volume) {
+  psgWrite(chip, CHANNEL_A_AMPLITUDE_REG + channel, volume);
 }
 
 void psgInit() {
@@ -154,18 +162,6 @@ void psgInit() {
   P2SEL = 0;
   P2SEL2 = 0;
 
-  // sound chip reset
-  // BIT2: /RST
-  // P1DIR |= BIT2;
-
-#if 0
-  // put sound chip into reset state
-  P1OUT &= ~BIT2;
-  delay();
-  delay();
-  delay();
-#endif
-  
   // bus control lines
   // BIT3: BC1
   // BIT1: BDIR
@@ -176,15 +172,8 @@ void psgInit() {
   // put bus into inactive state
   BUS_CTRL_REG &= ~(BDIR | BC1);
   
-#if 0
-  // release sound chip from reset state
-  P1OUT |= BIT2;
-  delay();
-  delay();
-  delay();
-#endif
-
   // disable everything
-  psgWrite(_ENABLE_REG, 0xff);
+  psgWrite(0, _ENABLE_REG, 0xff);
+  psgWrite(1, _ENABLE_REG, 0xff);
 }
 
