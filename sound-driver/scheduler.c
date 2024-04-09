@@ -6,7 +6,6 @@ tTask tasks[MAX_NUM_OF_TASKS];
 
 
 void schInit() {
-  P1DIR |= BIT0;
   TACCR0 = 19600;
   TACCTL0 = CCIE;
   TACTL = MC_1 | ID_0 | TASSEL_2 | TACLR;
@@ -21,7 +20,6 @@ void schInit() {
 }
 
 void __attribute__ ((interrupt (TIMER0_A0_VECTOR))) schUpdate() {
-  P1OUT ^= BIT0;
   for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if (tasks[i].exec != NULL) {
       if (tasks[i].delay == 0) {

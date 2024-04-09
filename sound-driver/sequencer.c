@@ -34,7 +34,6 @@ void sequencerExec(void *handle) {
 
     switch (melody->state) {
       case e_Init:
-        psgAmplitude(channel, melody->amplitude);
         melody->state = e_PlayTone;
         break;
       case e_PlayTone:
@@ -48,7 +47,7 @@ void sequencerExec(void *handle) {
           if (melody->tones[melody->idx].length == e_L_EndMark) {
             melody->idx = 0;
           }
-          psgPlayTone(channel, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
+          psgPlayTone(channel, melody->amplitude, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
           melody->lengthCnt = (melody->tones[melody->idx].staccato) ? (lengths[melody->tones[melody->idx].length] / 2) : lengths[melody->tones[melody->idx].length];
           melody->state = e_HoldTone;
         }
@@ -65,7 +64,7 @@ void sequencerExec(void *handle) {
         }
         break;
       case e_StaccatoBreak:
-        psgPlayTone(channel, e_O_Null, e_Pause);
+        psgPlayTone(channel, 0, e_O_Null, e_Pause);
         melody->lengthCnt = lengths[melody->tones[melody->idx].length] / 2;
         melody->state = e_HoldStaccatoBreak;
         break;
@@ -77,7 +76,7 @@ void sequencerExec(void *handle) {
         break;
       case e_SeparateTone:
         if (! (melody->tones[melody->idx].legato)) {
-          psgPlayTone(channel, e_O_Null, e_Pause);
+          psgPlayTone(channel, 0, e_O_Null, e_Pause);
         }
         melody->idx += 1;
         melody->state = e_PlayTone;

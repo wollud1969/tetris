@@ -22,7 +22,7 @@ int main() {
 
   schInit();
 
-  spiInit();
+//  spiInit();
   psgInit();
   sequencerInit();
 

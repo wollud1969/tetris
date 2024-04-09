@@ -39,7 +39,7 @@ typedef enum {
 
 void psgInit();
 
-void psgPlayTone(uint8_t channel, t_octave octave, t_note note);
+void psgPlayTone(uint8_t channel, uint8_t volume, t_octave octave, t_note note);
 void psgAmplitude(uint8_t channel, uint8_t volume);
 
 

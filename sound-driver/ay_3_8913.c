@@ -24,6 +24,8 @@ const uint16_t frequencyCodes[8][12] = {
 #define BUS_CTRL_REG P1OUT
 #define BC1 BIT3
 #define BDIR BIT1
+#define _CS0 BIT2
+#define _CS1 BIT0
 
 #define R0 0
 #define CHANNEL_A_TONE_PERIOD_FINE_REG R0
@@ -66,7 +68,20 @@ inline static void BUS_OP_DWS() {
   BUS_CTRL_REG |= BDIR;
   BUS_CTRL_REG &= ~BC1;
 }
+inline static void BUS_OP_CS0_ENABLE() {
+  BUS_CTRL_REG &= ~_CS0;
+}
+inline static void BUS_OP_CS0_DISABLE() {
+  BUS_CTRL_REG |= _CS0;
+}
+inline static void BUS_OP_CS1_ENABLE() {
+  BUS_CTRL_REG &= ~_CS1;
+}
+inline static void BUS_OP_CS1_DISABLE() {
+  BUS_CTRL_REG |= _CS1;
+}
 
+#if 0
 static void delay() {
 asm volatile (
     "push r12\n"
@@ -77,6 +92,7 @@ asm volatile (
     "pop r12\n"
 );
 }
+#endif
 
 static uint8_t psgReadShadow(uint8_t address) {
   return psgShadowRegisters[address];
@@ -86,6 +102,8 @@ static void psgWrite(uint8_t address, uint8_t data) {
   psgShadowRegisters[address] = data;
 
   // according to "State Timing" (p. 15) of datasheet
+
+  BUS_OP_CS1_ENABLE();
 
   // put bus into inactive state
   BUS_OP_NACT();
@@ -107,6 +125,8 @@ static void psgWrite(uint8_t address, uint8_t data) {
 
   // set inactive again
   BUS_OP_NACT();
+
+  BUS_OP_CS1_DISABLE();
 }
 
 static void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
@@ -114,11 +134,12 @@ static void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
   psgWrite(CHANNEL_A_TONE_PERIOD_COARSE_REG + (channel * 2), ((frequencyCode >> 8) & 0x000f));
 }
 
-void psgPlayTone(uint8_t channel, t_octave octave, t_note note) {
+void psgPlayTone(uint8_t channel, uint8_t volume, t_octave octave, t_note note) {
   if (note == e_Pause) {
     psgWrite(_ENABLE_REG, psgReadShadow(_ENABLE_REG) | (1 << channel));
   } else {
     psgWrite(_ENABLE_REG, psgReadShadow(_ENABLE_REG) & ~(1 << channel));
+    psgAmplitude(channel, volume);
     psgWriteFrequency(channel, frequencyCodes[octave][note]);
   }
 }
@@ -135,27 +156,33 @@ void psgInit() {
 
   // sound chip reset
   // BIT2: /RST
-  P1DIR |= BIT2;
+  // P1DIR |= BIT2;
 
+#if 0
   // put sound chip into reset state
   P1OUT &= ~BIT2;
   delay();
   delay();
   delay();
+#endif
   
   // bus control lines
   // BIT3: BC1
   // BIT1: BDIR
-  P1DIR |= BIT1 | BIT3;
+  // BIT0: _CS1
+  // BIT2: _CS0
+  P1DIR |= BIT0 | BIT1 | BIT2 | BIT3 ;
 
   // put bus into inactive state
   BUS_CTRL_REG &= ~(BDIR | BC1);
   
+#if 0
   // release sound chip from reset state
   P1OUT |= BIT2;
   delay();
   delay();
   delay();
+#endif
 
   // disable everything
   psgWrite(_ENABLE_REG, 0xff);

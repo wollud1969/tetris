@@ -36,7 +36,20 @@ const uint16_t frequencyCodes[8][12] = {
 
 #define IGNORE_OCTET 0xff
 
-inline static void BEGIN_WRITE(uint8_t chipNo) {
+uint8_t psgAmplitudeShadowValue[3];
+
+static void delay() {
+  asm volatile (
+      "push r12\n"
+      "mov.w #5, r12\n"
+      "loop:\n"
+      "dec.w r12\n"
+      "jnz loop\n"
+      "pop r12\n"
+  );
+}
+
+inline static void WRITE_CYCLE(uint8_t chipNo) {
   if (chipNo == 0) {
     BUS_CTRL_REG &= ~_CS0;
   } else {
@@ -44,10 +57,10 @@ inline static void BEGIN_WRITE(uint8_t chipNo) {
   }
 
   BUS_CTRL_REG &= ~_WE;
-}
 
-inline static void END_WRITE(uint8_t chipNo) {
-  while ((BUS_CTRL_IN_REG & ~READY) == 0);
+  delay();
+
+  while ((BUS_CTRL_IN_REG & READY) == 0);
 
   BUS_CTRL_REG |= _WE;
 
@@ -56,21 +69,76 @@ inline static void END_WRITE(uint8_t chipNo) {
   } else {
     BUS_CTRL_REG |= _CS1;
   }
+
+  delay();
 }
 
-
+static void psgWrite(uint8_t chipNo, uint8_t value) {
+  ADDR_DATA_REG = value;
+  WRITE_CYCLE(chipNo);
+}
 
 static void psgWriteFrequency(uint8_t channel, uint16_t frequencyCode) {
   uint8_t chipNo = channel / 3;
-  uint8_t channelAddr = (channel % 3) * 2;
+  uint8_t regAddr = (channel % 3) * 2;
 
-  uint8_t firstOctet = 0x01 | (channelAddr << 1) | ((frequencyCode & 0x03c0) 
-}
+  // bit order in frequncyCode and order in octet on data bus are reversed
+  // see datacheat cp. 1 and cp. 6
+  uint8_t firstOctet = 0x01;
+  firstOctet |= ((regAddr & 0x04) > 1);
+  firstOctet |= ((regAddr & 0x02) < 1);
+  firstOctet |= ((regAddr & 0x01) < 3);
+  uint8_t lowerPart = frequencyCode & 0x0f;
+  firstOctet |= ((lowerPart & 0x08) << 1);
+  firstOctet |= ((lowerPart & 0x04) << 3);
+  firstOctet |= ((lowerPart & 0x02) << 5);
+  firstOctet |= ((lowerPart & 0x01) << 7);
 
-void psgPlayTone(uint8_t channel, t_octave octave, t_note note) {
+  uint8_t secondOctet = 0;
+  uint8_t upperPart = (frequencyCode & 0x03f0) >> 4;
+  secondOctet |= ((upperPart & 0x20) >> 3);
+  secondOctet |= ((upperPart & 0x10) >> 1);
+  secondOctet |= ((upperPart & 0x08) << 1);
+  secondOctet |= ((upperPart & 0x04) << 3);
+  secondOctet |= ((upperPart & 0x02) << 5);
+  secondOctet |= ((upperPart & 0x01) << 7);
+
+  ADDR_DATA_REG = firstOctet;
+  WRITE_CYCLE(chipNo);
+
+  ADDR_DATA_REG = secondOctet;
+  WRITE_CYCLE(chipNo);
 }
 
 void psgAmplitude(uint8_t channel, uint8_t volume) {
+  psgAmplitudeShadowValue[channel] = volume;
+  uint8_t chipNo = channel / 3;
+  uint8_t regAddr = ((channel % 3) * 2) + 1;
+
+  uint8_t attenuation = 15 - volume;
+
+  uint8_t firstOctet = 0x01;
+  firstOctet |= ((regAddr & 0x04) >> 1);
+  firstOctet |= ((regAddr & 0x02) << 1);
+  firstOctet |= ((regAddr & 0x01) << 3);
+  firstOctet |= ((attenuation & 0x01) << 7);
+  firstOctet |= ((attenuation & 0x02) << 5);
+  firstOctet |= ((attenuation & 0x04) << 3);
+  firstOctet |= ((attenuation & 0x08) << 1);
+
+  ADDR_DATA_REG = firstOctet;
+  WRITE_CYCLE(chipNo);
+}
+
+void psgPlayTone(uint8_t channel, uint8_t volume, t_octave octave, t_note note) {
+  if (note == e_Pause) {
+    psgAmplitude(channel, 0);
+  } else {
+//    if (psgAmplitudeShadowValue[channel] == 0) {
+      psgAmplitude(channel, volume);
+//    }
+    psgWriteFrequency(channel, frequencyCodes[octave][note]);
+  }
 }
 
 void psgInit() {
@@ -89,6 +157,15 @@ void psgInit() {
   P1DIR |= BIT0 | BIT1 | BIT2;
   P1DIR &= ~BIT3;
   // immediately disable all outputs, all are active low
-  P1OUT |= BIT0 | BIT1 | BIT2;
+  P1OUT |= BIT0 | BIT1 | BIT2;
+
+  // shutdown all channels including noise
+  psgWrite(0, 0b11111001);
+  psgWrite(0, 0b11111101);
+  psgWrite(0, 0b11111011);
+  psgWrite(0, 0b11111111);
+
+//  psgPlayTone(0, 5, e_O_3, e_A);
+  psgAmplitude(0, 3);
 }
 
