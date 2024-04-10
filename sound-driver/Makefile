@@ -11,7 +11,7 @@ CFLAGS=-Wall -mmcu=$(MCU) -std=gnu99 -I $(TOOLCHAIN_PREFIX)/include -O1 -g0
 
 LDFLAGS=-mmcu=$(MCU) -L $(TOOLCHAIN_PREFIX)/include
 
-$(ARTIFACT).elf:	main.o scheduler.o spi.o sequencer.o melody.o ay_3_8913.o
+$(ARTIFACT).elf:	main.o scheduler.o spi.o sequencer.o melody_tetris.o melody_tusch1.o ay_3_8913.o
 	$(CC) -o $@ $(LDFLAGS) $^
 	$(OBJDUMP) -D $(ARTIFACT).elf > $(ARTIFACT).txt
 

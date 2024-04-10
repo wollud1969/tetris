@@ -6,7 +6,7 @@
 #include "psg.h"
 #include "scheduler.h"
 #include "sequencer.h"
-#include "melody.h"
+#include "melody_tetris.h"
 
 int main() {
   WDTCTL = WDTPW | WDTHOLD;
@@ -28,7 +28,7 @@ int main() {
 
   __enable_interrupt();
 
-  melodyInit();
+  playMelodyTetris();
 
 
   while (1) {
