@@ -53,8 +53,8 @@ typedef struct {
 #define NUM_OF_CHANNELS 3
 typedef struct {
   uint8_t taskId;
-  uint8_t numOfMelodies;
   bool firstRun;
+  uint8_t numOfMelodies;
   uint8_t pace; // quarter notes per minute
   uint8_t sync;
   t_melody melodies[NUM_OF_CHANNELS];

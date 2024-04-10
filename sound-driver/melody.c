@@ -1165,10 +1165,11 @@ t_melodies tusch2 = {
 
 void playTusch1(void *handle) {
   sequencerPlayMelodies(&tusch1);
+  schAdd(playTusch1, NULL, 30000, 0);
 }
 
 void melodyInit() {
-//  sequencerPlayMelodies(&tetrisTheme);
+  sequencerPlayMelodies(&tetrisTheme);
   schAdd(playTusch1, NULL, 2000, 0);
 }
 
