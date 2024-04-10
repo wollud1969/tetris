@@ -7,6 +7,7 @@
 #include "scheduler.h"
 #include "sequencer.h"
 #include "melody_tetris.h"
+#include "mute.h"
 
 int main() {
   WDTCTL = WDTPW | WDTHOLD;
@@ -24,6 +25,7 @@ int main() {
 
 //  spiInit();
   psgInit();
+  muteInit();
   sequencerInit();
 
   __enable_interrupt();

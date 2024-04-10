@@ -15,8 +15,8 @@ void spiInit() {
   // BIT5: UCB0CLK
   // BIT6: UCB0SOMI
   // BIT7: UCB0SIMO
-  P1SEL |= BIT4 | BIT5 | BIT6 | BIT7;
-  P1SEL2 |= BIT4 | BIT5 | BIT6 | BIT7;
+  P1SEL |= BIT4 | BIT5 | BIT7;
+  P1SEL2 |= BIT4 | BIT5 | BIT7;
 
   // most significant bit first, enable STE
   UCB0CTL0 = UCSYNC | UCMSB | UCMODE_2;
