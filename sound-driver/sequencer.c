@@ -43,6 +43,8 @@ void sequencerExec(void *handle) {
           }
           melodies->sync -= 1;
           melody->state = e_Sync;
+        } else if (melody->tones[melody->idx].length == e_L_HoldMark) {
+          melody->state = e_Hold;
         } else if (melody->tones[melody->idx].length == e_L_StopMark) {
           melody->state = e_Terminate;
         } else {
@@ -82,6 +84,8 @@ void sequencerExec(void *handle) {
         }
         melody->idx += 1;
         melody->state = e_PlayTone;
+        break;
+      case e_Hold:
         break;
       case e_Terminate:
         schDel(melodies->taskId);

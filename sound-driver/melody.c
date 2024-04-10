@@ -1,6 +1,8 @@
 #include <stdbool.h>
+#include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
+#include "scheduler.h"
 
 /*
  * most simple Tetris from https://de.wikipedia.org/wiki/Korobeiniki
@@ -1034,6 +1036,111 @@ const t_tone voice3[] = {
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
+const t_tone tusch1voice1[] = {
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_5,    .note = e_F,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_5,    .note = e_F,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_5,    .note = e_F,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_StopMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
+const t_tone tusch1voice2[] = {
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_HoldMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
+const t_tone tusch1voice3[] = {
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_A,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_A,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_8,     .legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Pause, .length = e_L_1_4,     .legato = false, .staccato = false },
+  { .octave = e_O_4,    .note = e_A,     .length = e_L_1_2,     .legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_HoldMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
+const t_tone tusch2voice1[] = {
+  { .octave = e_O_4,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_4,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_4,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_5,    .note = e_C,     .length = e_L_1_2,     .legato = false, .staccato = true  },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_StopMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
+const t_tone tusch2voice2[] = {
+  { .octave = e_O_3,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_H,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_4,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_4,    .note = e_Fis,   .length = e_L_1_2,     .legato = false, .staccato = true  },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_HoldMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
+const t_tone tusch2voice3[] = {
+  { .octave = e_O_2,    .note = e_B,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_D,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_F,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_3,    .note = e_B,     .length = e_L_1_2,     .legato = false, .staccato = true  },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_HoldMark,.legato = false, .staccato = false },
+
+  { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
+};
+
 t_melodies tetrisTheme = {
   .melodies = { { .chip = 0, .amplitude = 3, .tones = voice1 }, { .chip = 0, .amplitude = 3, .tones = voice2 }, { .chip = 0, .amplitude = 3, .tones = voice3 } },
   .numOfMelodies = 3,
@@ -1045,10 +1152,24 @@ t_melodies tonleiterTheme = {
   .numOfMelodies = 3,
   .pace = 160
 };
+t_melodies tusch1 = {
+  .melodies = { { .chip = 1, .amplitude = 8, .tones = tusch1voice1 }, { .chip = 1, .amplitude = 8, .tones = tusch1voice2 }, { .chip = 1, .amplitude = 8, .tones = tusch1voice3 } },
+  .numOfMelodies = 3,
+  .pace = 200
+};
+t_melodies tusch2 = {
+  .melodies = { { .chip = 1, .amplitude = 1, .tones = tusch2voice1 }, { .chip = 1, .amplitude = 1, .tones = tusch2voice2 }, { .chip = 1, .amplitude = 1, .tones = tusch2voice3 } },
+  .numOfMelodies = 3,
+  .pace = 160
+};
+
+void playTusch1(void *handle) {
+  sequencerPlayMelodies(&tusch1);
+}
 
 void melodyInit() {
-  sequencerPlayMelodies(&tetrisTheme);
-  sequencerPlayMelodies(&tonleiterTheme);
+//  sequencerPlayMelodies(&tetrisTheme);
+  schAdd(playTusch1, NULL, 2000, 0);
 }
 
 

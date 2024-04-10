@@ -14,6 +14,7 @@ typedef enum {
   e_L_1_16 = 4,
   e_L_1_32 = 5,
   e_L_LengthEnd = 6,
+  e_L_HoldMark = 252,
   e_L_StopMark = 253,
   e_L_EndMark = 254,
   e_L_SyncMark = 255,
@@ -35,6 +36,7 @@ typedef enum {
   e_StaccatoBreak,
   e_HoldStaccatoBreak,
   e_SeparateTone,
+  e_Hold,
   e_Terminate
 } t_sequencerState;
 
