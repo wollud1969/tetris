@@ -7,6 +7,7 @@
 #include "scheduler.h"
 #include "sequencer.h"
 #include "melody_tetris.h"
+#include "melody_tusch1.h"
 #include "mute.h"
 
 int main() {
@@ -31,7 +32,9 @@ int main() {
   __enable_interrupt();
 
   playMelodyTetris();
-
+  schAdd(playTusch1, NULL, 5000, 0);
+  schAdd(mute, NULL, 10000, 0);
+  schAdd(unMute, NULL, 12000, 0);
 
   while (1) {
     schExec();
