@@ -71,7 +71,7 @@ const t_tone tusch1voice3[] = {
 };
 
 t_melodies tusch1 = {
-  .melodies = { { .chip = 1, .amplitude = 6, .tones = tusch1voice1 }, { .chip = 1, .amplitude = 6, .tones = tusch1voice2 }, { .chip = 1, .amplitude = 6, .tones = tusch1voice3 } },
+  .melodies = { { .chip = 1, .amplitude = 12, .tones = tusch1voice1 }, { .chip = 1, .amplitude = 12, .tones = tusch1voice2 }, { .chip = 1, .amplitude = 12, .tones = tusch1voice3 } },
   .numOfMelodies = 3,
   .pace = 200
 };

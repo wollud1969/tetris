@@ -923,7 +923,7 @@ const t_tone voice3[] = {
 };
 
 t_melodies tetrisTheme = {
-  .melodies = { { .chip = 0, .amplitude = 3, .tones = voice1 }, { .chip = 0, .amplitude = 3, .tones = voice2 }, { .chip = 0, .amplitude = 3, .tones = voice3 } },
+  .melodies = { { .chip = 0, .amplitude = 8, .tones = voice1 }, { .chip = 0, .amplitude = 8, .tones = voice2 }, { .chip = 0, .amplitude = 8, .tones = voice3 } },
   .numOfMelodies = 3,
   .pace = 160
 };
