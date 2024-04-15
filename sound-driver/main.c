@@ -24,7 +24,7 @@ int main() {
 
   schInit();
 
-//  spiInit();
+  spiInit();
   psgInit();
   muteInit();
   sequencerInit();
