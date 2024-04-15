@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 #include <msp430g2553.h>
 #include "spi.h"
 #include "../game-ctrl/sound.h"
