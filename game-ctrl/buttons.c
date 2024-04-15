@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <msp430g2553.h>
 
 #include "buttons.h"
