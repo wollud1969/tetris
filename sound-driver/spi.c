@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <msp430g2553.h>
 #include "spi.h"
 #include "../game-ctrl/sound.h"
@@ -8,7 +9,7 @@ volatile t_SoundCmd cmd;
 void __attribute__ ((interrupt (USCIAB0RX_VECTOR))) receive() {
   if (UC0IFG & UCB0RXIFG) {
     // receive an octet
-    cmd = UCB0RXBUF
+    cmd = UCB0RXBUF;
   }
 }
 
