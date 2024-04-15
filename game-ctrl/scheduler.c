@@ -12,6 +12,7 @@
 
 tTask tasks[MAX_NUM_OF_TASKS];
 
+uint32_t seconds;
 
 void schInit() {
   TACCR0 = 32;
@@ -25,9 +26,18 @@ void schInit() {
     tasks[i].exec = NULL;
     tasks[i].handle = NULL;
   }
+
+  seconds = 0;
 }
 
 void __attribute__ ((interrupt (TIMER0_A0_VECTOR))) schUpdate() {
+  static uint16_t milliSeconds = 0;
+  if (milliSeconds >= 1000) {
+    seconds += 1;
+    milliSeconds = 0;
+  }
+  milliSeconds += 1;
+
   for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
     if (tasks[i].exec != NULL) {
       if (tasks[i].delay == 0) {
@@ -89,4 +99,13 @@ void schExec() {
   }
 }
 
+uint32_t getSeconds() {
+  uint32_t s;
+
+  __disable_interrupt();
+  s = seconds;
+  __enable_interrupt();
+
+  return s;
+}
 

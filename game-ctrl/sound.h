@@ -1,0 +1,33 @@
+#ifndef _SOUND_H_
+#define _SOUND_H_
+
+#define MUTE_DELAY 30 // seconds
+
+typedef enum {
+  e_SOUND_IDLE = 0,
+  e_SOUND_MUTE = 1,
+  e_SOUND_UNMUTE = 2,
+  e_SOUND_START_BACKGROUND = 3,
+  e_SOUND_STOP_BACKGROUND = 4,
+  e_SOUND_START_GAMEOVER = 5,
+  e_SOUND_STOP GAMEOVER = 6,
+  e_SOUND_SPEED_UP = 7,
+  e_SOUND_FANFARE_1 = 8,
+  e_SOUND_FANFARE_2 = 9,
+  e_SOUND_FANFARE_3 = 10,
+  e_SOUND_FANFARE_4 = 11,
+  e_SOUND_STONE_LOCKED = 12,
+  e_SOUND_STONE_MOVE_LEFT = 13,
+  e_SOUND_STONE_MOVE_RIGHT = 14,
+  e_SOUND_STONE_ROTATE_LEFT = 15,
+  e_SOUND_STONE_ROTATE_RIGHT = 16,
+  e_SOUND_DROPPING_START = 17,
+  e_SOUND_DROPPING_STOP = 18,
+} t_SoundCmd;
+
+void soundInit();
+void soundCtrl(t_SoundCmd cmd);
+
+
+
+#endif // _SOUND_H_

@@ -6,6 +6,7 @@
 #include "scheduler.h"
 #include "shapes.h"
 #include "canvas.h"
+#include "sound.h"
 
 
 static uint8_t buttonsMoveLeftPressed() {
@@ -45,6 +46,11 @@ static uint8_t buttonsMoveDownPressed() {
 }
 
 void buttonsExec(void *handle) {
+  static uint32_t unmuteTimestamp;
+  uint32_t currentTimestamp = getSeconds();
+  static bool unmuteFlag = false;
+
+
   if (! stoneIsValid()) {
     // don't do anything, the stone has not been initialized
     return;
@@ -75,6 +81,17 @@ void buttonsExec(void *handle) {
 
   if (buttonPressed == 1) {
     canvasShow();
+
+    if (! unmuteFlag) {
+      soundCtrl(e_SOUND_UNMUTE);
+      unmuteFlag = true;
+    }
+    unmuteTimestamp = currentTimestamp;
+  }
+
+  if (unmuteFlag && (unmuteTimestamp + MUTE_DELAY < currentTimestamp)) {
+    soundCtrl(e_SOUND_MUTE);
+    unmuteFlag = false;
   }
 }
 
