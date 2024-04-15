@@ -62,6 +62,6 @@ typedef struct {
 
 void sequencerInit();
 uint16_t sequencerPlayMelodies(t_melodies *melodies);
-
+void sequencerStopMelodies(t_melodies *melodies);
 
 #endif // _SEQUENCER_H_

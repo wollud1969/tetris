@@ -116,3 +116,7 @@ uint16_t sequencerPlayMelodies(t_melodies *melodies) {
   return melodies->taskId;
 }
 
+void sequencerStopMelodies(t_melodies *melodies) {
+  schDel(melodies->taskId);
+}
+

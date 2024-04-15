@@ -3,6 +3,7 @@
 
 
 void playMelodyTetris();
+void stopMelodyTetris();
 
 
 #endif // _MELODY_TETRIS_H_

@@ -932,4 +932,8 @@ void playMelodyTetris() {
   sequencerPlayMelodies(&tetrisTheme);
 }
 
+void stopMelodyTetris() {
+  sequencerStopMelodies(&tetrisTheme);
+}
+
 

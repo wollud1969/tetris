@@ -4,6 +4,11 @@
 #include "spi.h"
 #include "../game-ctrl/sound.h"
 #include "scheduler.h"
+#include "psg.h"
+#include "mute.h"
+#include "melody_tetris.h"
+#include "melody_tusch1.h"
+
 
 volatile t_SoundCmd cmd;
 
@@ -45,12 +50,16 @@ void spiCmdHandler(void *handle) {
 
   switch (cmdShadow) {
     case e_SOUND_MUTE:
+      mute();
       break;
     case e_SOUND_UNMUTE:
+      unMute();
       break;
     case e_SOUND_START_BACKGROUND:
+      playMelodyTetris();
       break;
     case e_SOUND_STOP_BACKGROUND:
+      stopMelodyTetris();
       break;
     case e_SOUND_START_GAMEOVER:
       break;
@@ -59,12 +68,16 @@ void spiCmdHandler(void *handle) {
     case e_SOUND_SPEED_UP:
       break;
     case e_SOUND_FANFARE_1:
+      playTusch1();
       break;
     case e_SOUND_FANFARE_2:
+      playTusch1();
       break;
     case e_SOUND_FANFARE_3:
+      playTusch1();
       break;
     case e_SOUND_FANFARE_4:
+      playTusch1();
       break;
     case e_SOUND_STONE_LOCKED:
       break;
