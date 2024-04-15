@@ -60,22 +60,27 @@ void buttonsExec(void *handle) {
 
   if (buttonsMoveLeftPressed()) {
     stoneMoveLeft();
+    soundCtrl(e_SOUND_STONE_MOVE_LEFT);
     buttonPressed = 1;
   }
   if (buttonsMoveRightPressed()) {
     stoneMoveRight();
+    soundCtrl(e_SOUND_STONE_MOVE_RIGHT);
     buttonPressed = 1;
   }
   if (buttonsRotateLeftPressed()) {
     stoneRotateLeft();
+    soundCtrl(e_SOUND_STONE_ROTATE_LEFT);
     buttonPressed = 1;
   }
   if (buttonsRotateRightPressed()) {
     stoneRotateRight();
+    soundCtrl(e_SOUND_STONE_ROTATE_RIGHT);
     buttonPressed = 1;
   }
   if (buttonsMoveDownPressed()) {
     stoneMoveDown();
+    soundCtrl(e_SOUND_STONE_MOVE_DOWN);
     buttonPressed = 1;
   }
 

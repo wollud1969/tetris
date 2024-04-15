@@ -7,6 +7,7 @@
 #include "canvas.h"
 #include "../rgb-driver/colors.h"
 #include "display.h"
+#include "sound.h"
 
 
 #define GAME_CYCLE_TIME 100
@@ -40,6 +41,7 @@ void gameExec(void *handle) {
 // --- phase: game --------------------------------------------------------
     case e_Start:
       canvasClear();
+      soundCtrl(e_SOUND_START_BACKGROUND);
       level = 1;
       score = 0;
       displaySetValue(score);
@@ -71,6 +73,7 @@ void gameExec(void *handle) {
       
     case e_Down:
       if (! stoneMoveDown()) {
+        soundCtrl(e_SOUND_STONE_LOCKED);
         state = e_NewStone;
       } else {
         proceedDelay = delayFactor(level);
@@ -80,6 +83,8 @@ void gameExec(void *handle) {
 
 // --- phase: game over ---------------------------------------------------
     case e_GameOver:
+      soundCtrl(e_SOUND_STOP_BACKGROUND);
+      soundCtrl(e_SOUND_START_GAMEOVER);
       rowIndex = CANVAS_HEIGHT;
       phase = e_Phase_GameOver;
       state = e_GameOverFill;
@@ -105,6 +110,7 @@ void gameExec(void *handle) {
     case e_GameOverDelay:
       gameOverDelay--;
       if (gameOverDelay == 0) {
+        soundCtrl(e_SOUND_STOP_GAMEOVER);
         state = e_Start;
       }
       break;
@@ -113,14 +119,17 @@ void gameExec(void *handle) {
 
   canvasShow();
   if (phase == e_Phase_Game) {
+    uint8_t wipeCnt = 0;
     for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
       if (canvasIsRowFilled(r)) {
         score += level;
         displaySetValue(score);
         canvasWipeRow(r);
         canvasShow();
+        wipeCnt += 1;
       }
     }
+    soundCtrl(e_SOUND_FANFARE_BASE + wipeCnt); 
   }
 }
 
