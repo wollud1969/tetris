@@ -2,7 +2,7 @@
 #include <msp430g2553.h>
 #include "spi.h"
 #include "../game-ctrl/sound.h"
-
+#include "scheduler.h"
 
 volatile t_SoundCmd cmd;
 
@@ -95,6 +95,8 @@ void spiInit() {
 
   // enable RX interrupt
   UC0IE |= UCB0RXIE;
+
+  schAdd(spiCmdHandler, NULL, 0, 10);
 }
 
 
