@@ -10,9 +10,9 @@
 void sequencerInit() {
 }
 
-// #pragma GCC diagnostic push
-// #pragma GCC diagnostic ignored "-Wswitch"
-// #pragma GCC diagnostic ignored "-Wreturn-type"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch"
+#pragma GCC diagnostic ignored "-Wreturn-type"
 static uint16_t calcLength(t_melodies *m, t_noteLength l) {
   switch (l) {
     case e_L_1:
@@ -29,7 +29,7 @@ static uint16_t calcLength(t_melodies *m, t_noteLength l) {
       return m->quarterLength >> 4;
   }
 }
-// #pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 
 
 void sequencerExec(void *handle) {  
