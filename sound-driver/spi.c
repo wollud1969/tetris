@@ -20,7 +20,7 @@ void __attribute__ ((interrupt (USCIAB0RX_VECTOR))) receive() {
 }
 
 void spiCmdHandler(void *handle) {
-  uint8_t cmdShadow;
+  t_SoundCmd cmdShadow;
 
   __disable_interrupt(); 
   cmdShadow = cmd;
