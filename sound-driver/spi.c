@@ -91,6 +91,8 @@ void spiCmdHandler(void *handle) {
       break;
     case e_SOUND_STONE_ROTATE_RIGHT:
       break;
+    default:
+      break;
   }
 }
 
