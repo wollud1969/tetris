@@ -1,0 +1,14 @@
+#ifndef _SOUND_CODES_H_
+#define _SOUND_CODES_H_
+
+#define SOUND_IDLE 0x00
+#define SOUND_MUTE 0x01
+#define SOUND_UNMUTE 0x02
+#define SOUND_START 0x04
+#define SOUND_GAMEOVER 0x08
+#define SOUND_FANFARE 0x10
+#define SOUND_LOCK 0x20
+#define SOUND_MOTION 0x40
+#define SOUND_SPEED_UP 0x80
+
+#endif // _SOUND_CODES_H_

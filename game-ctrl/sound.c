@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "sound.h"
 #include "spi.h"
 
@@ -7,10 +8,10 @@ void soundInit() {
 }
 
 
-void soundCtrl(t_SoundCmd cmd) {
+void soundCtrl(uint8_t cmd) {
   spiSendBegin(e_SPI_SOUND);
 
-  spiSendOctet((uint8_t)cmd);
+  spiSendOctet(cmd);
 
   spiSendEnd(e_SPI_SOUND);
 }

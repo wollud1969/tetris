@@ -6,8 +6,10 @@
 #include "psg.h"
 
 
+uint8_t slots;
 
 void sequencerInit() {
+  slots = 0;
 }
 
 #pragma GCC diagnostic push
@@ -97,12 +99,18 @@ void sequencerExec(void *handle) {
         break;
       case e_Terminate:
         schDel(melodies->taskId);
+        slots &= ~(melodies->slotMask);
         break;
     }
   }
 }
 
-uint16_t sequencerPlayMelodies(t_melodies *melodies) {
+void sequencerPlayMelodies(t_melodies *melodies) {
+  if ((slots & melodies->slotMask) != 0) {
+    return;
+  }
+
+  slots |= melodies->slotMask;
   for (uint8_t i = 0; i < NUM_OF_CHANNELS; i++) {
     melodies->melodies[i].idx = 0;
     melodies->melodies[i].lengthCnt = 0;
@@ -112,11 +120,10 @@ uint16_t sequencerPlayMelodies(t_melodies *melodies) {
   melodies->quarterLength = 60000 / melodies->pace / SEQUENCER_PERIOD; // duration of a 1/4 tone in ms
 
   melodies->taskId = schAdd(sequencerExec, (void*) melodies, 0, SEQUENCER_PERIOD);
-
-  return melodies->taskId;
 }
 
 void sequencerStopMelodies(t_melodies *melodies) {
+  slots &= ~(melodies->slotMask);
   schDel(melodies->taskId);
 }
 

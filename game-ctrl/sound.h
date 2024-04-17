@@ -1,32 +1,14 @@
 #ifndef _SOUND_H_
 #define _SOUND_H_
 
+#include <stdint.h>
+
 #define MUTE_DELAY 30 // seconds
 
-typedef enum {
-  e_SOUND_IDLE = 0,
-  e_SOUND_MUTE = 1,
-  e_SOUND_UNMUTE,
-  e_SOUND_START_BACKGROUND,
-  e_SOUND_STOP_BACKGROUND,
-  e_SOUND_START_GAMEOVER,
-  e_SOUND_STOP_GAMEOVER,
-  e_SOUND_SPEED_UP,
-  e_SOUND_FANFARE_BASE,
-  e_SOUND_FANFARE_1,
-  e_SOUND_FANFARE_2,
-  e_SOUND_FANFARE_3,
-  e_SOUND_FANFARE_4,
-  e_SOUND_STONE_LOCKED,
-  e_SOUND_STONE_MOVE_LEFT,
-  e_SOUND_STONE_MOVE_RIGHT,
-  e_SOUND_STONE_ROTATE_LEFT,
-  e_SOUND_STONE_ROTATE_RIGHT,
-  e_SOUND_STONE_MOVE_DOWN,
-} t_SoundCmd;
+#include "../sound-driver/soundCodes.h"
 
 void soundInit();
-void soundCtrl(t_SoundCmd cmd);
+void soundCtrl(uint8_t cmd);
 
 
 

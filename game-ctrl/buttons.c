@@ -49,7 +49,7 @@ static uint8_t buttonsMoveDownPressed() {
 void buttonsExec(void *handle) {
   static uint32_t unmuteTimestamp;
   uint32_t currentTimestamp = getSeconds();
-  static bool unmuteFlag = false;
+  static bool unmuteFlag = true;
 
 
   if (! stoneIsValid()) {
@@ -61,27 +61,27 @@ void buttonsExec(void *handle) {
 
   if (buttonsMoveLeftPressed()) {
     stoneMoveLeft();
-    soundCtrl(e_SOUND_STONE_MOVE_LEFT);
+    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsMoveRightPressed()) {
     stoneMoveRight();
-    soundCtrl(e_SOUND_STONE_MOVE_RIGHT);
+    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsRotateLeftPressed()) {
     stoneRotateLeft();
-    soundCtrl(e_SOUND_STONE_ROTATE_LEFT);
+    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsRotateRightPressed()) {
     stoneRotateRight();
-    soundCtrl(e_SOUND_STONE_ROTATE_RIGHT);
+    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsMoveDownPressed()) {
     stoneMoveDown();
-    soundCtrl(e_SOUND_STONE_MOVE_DOWN);
+    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
 
@@ -89,14 +89,14 @@ void buttonsExec(void *handle) {
     canvasShow();
 
     if (! unmuteFlag) {
-      soundCtrl(e_SOUND_UNMUTE);
+      soundCtrl(SOUND_UNMUTE);
       unmuteFlag = true;
     }
     unmuteTimestamp = currentTimestamp;
   }
 
   if (unmuteFlag && (unmuteTimestamp + MUTE_DELAY < currentTimestamp)) {
-    soundCtrl(e_SOUND_MUTE);
+    soundCtrl(SOUND_MUTE);
     unmuteFlag = false;
   }
 }

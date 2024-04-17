@@ -52,6 +52,7 @@ typedef struct {
 #define SEQUENCER_PERIOD 4 // ms
 #define NUM_OF_CHANNELS 3
 typedef struct {
+  uint8_t slotMask;
   uint8_t taskId;
   uint16_t quarterLength;
   uint8_t numOfMelodies;
@@ -61,7 +62,7 @@ typedef struct {
 } t_melodies;
 
 void sequencerInit();
-uint16_t sequencerPlayMelodies(t_melodies *melodies);
+void sequencerPlayMelodies(t_melodies *melodies);
 void sequencerStopMelodies(t_melodies *melodies);
 
 #endif // _SEQUENCER_H_

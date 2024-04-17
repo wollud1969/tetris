@@ -41,7 +41,7 @@ void gameExec(void *handle) {
 // --- phase: game --------------------------------------------------------
     case e_Start:
       canvasClear();
-      soundCtrl(e_SOUND_START_BACKGROUND);
+      soundCtrl(SOUND_START);
       level = 1;
       score = 0;
       displaySetValue(score);
@@ -73,7 +73,7 @@ void gameExec(void *handle) {
       
     case e_Down:
       if (! stoneMoveDown()) {
-        soundCtrl(e_SOUND_STONE_LOCKED);
+        soundCtrl(SOUND_LOCK);
         state = e_NewStone;
       } else {
         proceedDelay = delayFactor(level);
@@ -83,8 +83,7 @@ void gameExec(void *handle) {
 
 // --- phase: game over ---------------------------------------------------
     case e_GameOver:
-      soundCtrl(e_SOUND_STOP_BACKGROUND);
-      soundCtrl(e_SOUND_START_GAMEOVER);
+      soundCtrl(SOUND_GAMEOVER);
       rowIndex = CANVAS_HEIGHT;
       phase = e_Phase_GameOver;
       state = e_GameOverFill;
@@ -110,7 +109,6 @@ void gameExec(void *handle) {
     case e_GameOverDelay:
       gameOverDelay--;
       if (gameOverDelay == 0) {
-        soundCtrl(e_SOUND_STOP_GAMEOVER);
         state = e_Start;
       }
       break;
@@ -129,10 +127,13 @@ void gameExec(void *handle) {
         wipeCnt += 1;
       }
     }
-    soundCtrl(e_SOUND_FANFARE_BASE + wipeCnt); 
+    if (wipeCnt != 0) {
+      soundCtrl(SOUND_FANFARE); 
+    }
   }
 }
 
 void gameInit() {
   schAdd(gameExec, NULL, 0, GAME_CYCLE_TIME);
 }
+

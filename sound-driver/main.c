@@ -31,6 +31,8 @@ int main() {
 
   __enable_interrupt();
 
+  // playMelodyTetris();
+
   while (1) {
     schExec();
   }

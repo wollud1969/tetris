@@ -3,7 +3,7 @@
 
 
 void spiInit();
-
+void spiCmdHandler();
 
 
 #endif // _SPI_H_
