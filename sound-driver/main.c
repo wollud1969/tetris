@@ -9,6 +9,7 @@
 #include "melody_tetris.h"
 #include "melody_tusch1.h"
 #include "mute.h"
+#include "effects.h"
 
 int main() {
   WDTCTL = WDTPW | WDTHOLD;
@@ -28,10 +29,9 @@ int main() {
   psgInit();
   muteInit();
   sequencerInit();
+  effectsInit();
 
   __enable_interrupt();
-
-  // playMelodyTetris();
 
   while (1) {
     schExec();

@@ -44,6 +44,7 @@ spiCmdHandler_5:
 spiCmdHandler_6:
   bit     #SOUND_LOCK, &cmd
   jz      spiCmdHandler_7
+  call    #playEffect1
   ;; insert a call here
   bic     #SOUND_LOCK, &cmd
 spiCmdHandler_7:

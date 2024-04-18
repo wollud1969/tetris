@@ -27,35 +27,6 @@ const uint16_t frequencyCodes[8][12] = {
 #define _CS0 BIT2
 #define _CS1 BIT0
 
-#define R0 0
-#define CHANNEL_A_TONE_PERIOD_FINE_REG R0
-#define R1 1
-#define CHANNEL_A_TONE_PERIOD_COARSE_REG R1
-#define R2 2
-#define CHANNEL_B_TONE_PERIOD_FINE_REG R2
-#define R3 3
-#define CHANNEL_B_TONE_PERIOD_COARSE_REG R3
-#define R4 4
-#define CHANNEL_C_TONE_PERIOD_FINE_REG R4
-#define R5 5
-#define CHANNEL_C_TONE_PERIOD_COARSE_REG R5
-#define R6 6
-#define NOISE_PERIOD_REG R6
-#define R7 7
-#define _ENABLE_REG R7
-#define R10 010
-#define CHANNEL_A_AMPLITUDE_REG R10
-#define R11 011
-#define CHANNEL_B_AMPLITUDE_REG R11
-#define R12 012
-#define CHANNEL_C_AMPLITUDE_REG R12
-#define R13 013
-#define ENVELOPE_PERIOD_FINE_REG R13
-#define R14 014
-#define ENVELOPE_PERIOD_COARSE_REG R13
-#define R15 015
-#define ENVELOPE_SHAPE_REG R15
-
 uint8_t psgShadowRegisters[2][14];
 
 inline static void BUS_OP_NACT() {
@@ -94,11 +65,11 @@ asm volatile (
 }
 #endif
 
-static uint8_t psgReadShadow(uint8_t chip, uint8_t address) {
+uint8_t psgReadShadow(uint8_t chip, uint8_t address) {
   return psgShadowRegisters[chip][address];
 }
 
-static void psgWrite(uint8_t chip, uint8_t address, uint8_t data) {
+void psgWrite(uint8_t chip, uint8_t address, uint8_t data) {
   psgShadowRegisters[chip][address] = data;
 
   // according to "State Timing" (p. 15) of datasheet
