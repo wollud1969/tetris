@@ -49,7 +49,7 @@ static uint8_t buttonsMoveDownPressed() {
 void buttonsExec(void *handle) {
   static uint32_t unmuteTimestamp;
   uint32_t currentTimestamp = getSeconds();
-  static bool unmuteFlag = true;
+  static bool mutedFlag = true;
 
 
   if (! stoneIsValid()) {
@@ -88,16 +88,16 @@ void buttonsExec(void *handle) {
   if (buttonPressed == 1) {
     canvasShow();
 
-    if (! unmuteFlag) {
+    if (mutedFlag) {
       soundCtrl(SOUND_UNMUTE);
-      unmuteFlag = true;
+      mutedFlag = false;
     }
     unmuteTimestamp = currentTimestamp;
   }
 
-  if (unmuteFlag && (unmuteTimestamp + MUTE_DELAY < currentTimestamp)) {
+  if ((! mutedFlag) && (unmuteTimestamp + MUTE_DELAY < currentTimestamp)) {
     soundCtrl(SOUND_MUTE);
-    unmuteFlag = false;
+    mutedFlag = true;
   }
 }
 
