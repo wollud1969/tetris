@@ -123,7 +123,7 @@ init:
 
   ;; spi configuration
   ;;  USCI B to slave mode, enable STE and most significant bit first
-  mov.b   #UCSYNC|UCMODE_2|UCMSB, &UCB0CTL0
+  mov.b   #UCCKPH|UCSYNC|UCMODE_2|UCMSB, &UCB0CTL0
   mov.b   #0x00, &UCB0CTL1
 
   ;; make sure the isr will not immediately start

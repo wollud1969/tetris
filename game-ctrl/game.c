@@ -8,6 +8,8 @@
 #include "../rgb-driver/colors.h"
 #include "display.h"
 #include "sound.h"
+#include "eeprom.h"
+#include "buttons.h"
 
 
 #define GAME_CYCLE_TIME 100
@@ -35,6 +37,7 @@ void gameExec(void *handle) {
   static uint8_t proceedDelay;
   static uint8_t level;
   static uint16_t score;
+  static bool newHighScoreAchieved;
 
 // --- engine begin -------------------------------------------------------
   switch (state) {
@@ -44,7 +47,7 @@ void gameExec(void *handle) {
       soundCtrl(SOUND_START);
       level = 1;
       score = 0;
-      displaySetValue(score);
+      newHighScoreAchieved = false;
       phase = e_Phase_Game;
       state = e_NewStone;
       break;
@@ -91,7 +94,7 @@ void gameExec(void *handle) {
 
     case e_GameOverFill:
       rowIndex--;
-      canvasFillRow(rowIndex, _red);
+      canvasFillRow(rowIndex, newHighScoreAchieved ? _green : _red);
       if (rowIndex == 0) {
         state = e_GameOverWipe;
       }
@@ -121,6 +124,10 @@ void gameExec(void *handle) {
     for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
       if (canvasIsRowFilled(r)) {
         score += level;
+        if (score > eepromReadHighScore()) {
+          newHighScoreAchieved = true;
+          eepromWriteHighScore(score);
+        }
         displaySetValue(score);
         canvasWipeRow(r);
         canvasShow();
@@ -130,6 +137,12 @@ void gameExec(void *handle) {
     if (wipeCnt != 0) {
       soundCtrl(SOUND_FANFARE); 
     }
+  }
+
+  if (isGameActive()) {
+    displaySetValue(score);
+  } else {
+    displaySetValue(eepromReadHighScore());
   }
 }
 

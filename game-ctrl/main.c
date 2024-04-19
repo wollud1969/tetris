@@ -12,6 +12,7 @@
 #include "myrand.h"
 #include "spi.h"
 #include "display.h"
+#include "eeprom.h"
 
 
 int main() {
@@ -28,6 +29,7 @@ int main() {
     schInit();
 
     spiInit();
+    eepromInit();
     displayInit();
     myRandInit();
     canvasInit();

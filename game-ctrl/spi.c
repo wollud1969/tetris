@@ -3,7 +3,7 @@
 
 void spiInit() {
   // SPI in master mode, most significant bit first
-  UCB0CTL0 = UCMST | UCMSB;
+  UCB0CTL0 = UCCKPH | UCMST | UCMSB;
   // SPI timing config
   UCB0CTL1 = UCSSEL_3;
   // Faster than 8 ends up in strange communication errors
@@ -19,25 +19,25 @@ void spiInit() {
   // BIT7: UCB0SIMO
   P1SEL |= BIT5 | BIT6 | BIT7;
   P1SEL2 |= BIT5 | BIT6 | BIT7;
-  P1DIR |= BIT5 | BIT7;
+  // P1DIR |= BIT5 | BIT7;
 
-  // Device Select Lines: 0: Canvas, 1: Display, 2: Sound
-  P1DIR |= BIT0 | BIT1 | BIT2;
+  // Device Select Lines: 0: Canvas, 1: Display, 2: Sound, 4: EEPROM
+  P1DIR |= BIT0 | BIT1 | BIT2 | BIT4;
   // Disable all of them
-  P1OUT |= BIT0 | BIT1 | BIT2;
+  P1OUT |= BIT0 | BIT1 | BIT2 | BIT4;
 
   // enable SPI module
   UCB0CTL1 &= ~UCSWRST;
 }
 
 void spiSendBegin(t_SpiDeviceSelector d) {
-  uint16_t bit = ((uint16_t[]){ BIT0, BIT1, BIT2 })[d];
+  uint16_t bit = ((uint16_t[]){ BIT0, BIT1, BIT2, BIT4 })[d];
   P1OUT &= ~bit;
 }
 
 void spiSendEnd(t_SpiDeviceSelector d) {
   while (UCB0STAT & UCBUSY);
-  uint16_t bit = ((uint16_t[]){ BIT0, BIT1, BIT2 })[d];
+  uint16_t bit = ((uint16_t[]){ BIT0, BIT1, BIT2, BIT4 })[d];
   P1OUT |= bit;
 }
 
@@ -46,5 +46,11 @@ void spiSendOctet(uint8_t v) {
   while (!(UC0IFG & UCB0TXIFG));
   // load octet into TX buffer
   UCB0TXBUF = v;
+}
+
+uint8_t spiReceiveOctet() {
+  while (!(UC0IFG & UCB0RXIFG));
+  uint8_t v = UCB0RXBUF;
+  return v;
 }
 

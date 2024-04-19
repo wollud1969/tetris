@@ -18,7 +18,7 @@ void spiInit() {
   P1SEL2 |= BIT4 | BIT5 | BIT7;
 
   // most significant bit first, enable STE
-  UCB0CTL0 = UCSYNC | UCMSB | UCMODE_2;
+  UCB0CTL0 = UCCKPH | UCSYNC | UCMSB | UCMODE_2;
   UCB0CTL1 = 0x00;
 
   // enable RX interrupt

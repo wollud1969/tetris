@@ -10,6 +10,8 @@
 #include "sound.h"
 
 
+bool mutedFlag = true;
+
 static uint8_t buttonsMoveLeftPressed() {
   static uint8_t last = 0;
   uint8_t current = (P2IN & BIT4);
@@ -49,7 +51,6 @@ static uint8_t buttonsMoveDownPressed() {
 void buttonsExec(void *handle) {
   static uint32_t unmuteTimestamp;
   uint32_t currentTimestamp = getSeconds();
-  static bool mutedFlag = true;
 
 
   if (! stoneIsValid()) {
@@ -105,5 +106,9 @@ void buttonsInit() {
   P2DIR &= ~(BIT0|BIT1|BIT2|BIT3|BIT4);
 
   schAdd(buttonsExec, NULL, 0, 25);
+}
+
+bool isGameActive() {
+  return ! mutedFlag;
 }
 
