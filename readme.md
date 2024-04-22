@@ -4,6 +4,8 @@ This Tetris implementation consists of a hardware and a software (running on tha
 
 The hardware utilizes four MSP430 microcontrollers for 1.) the game play, 2.) the play ground canvas, 3.) the score display and 4.) the sound effects.
 
+Further documentation including calculations and drawing can be found in the `docs` subdirs of the four main subdirs.
+
 ## Game Play
 
 Code is in subdir `game-ctrl` (https://gitea.hottis.de/wn/tetris/src/branch/main/game-ctrl).
