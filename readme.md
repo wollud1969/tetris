@@ -14,6 +14,9 @@ The buttons are debounced using RC circuitry and Schmitt triggers and connected 
 
 The peripherial microcontrollers and the EEPROM are connected via SPI including individual chip select lines.
 
+![](./docs/game-ctrl.jpg)
+
+
 ## Play Ground Canvas
 
 Code is in subdir `rgb-driver` (https://gitea.hottis.de/wn/tetris/src/branch/main/rgb-driver).
@@ -22,6 +25,9 @@ The play ground is implemented using a 10 * 20 matrix of PL9823 RGB LEDs which a
 
 The communcation with the game play controller is implemented as a sequences of tuples of LED address (0 to 211) and color code. A single octet of 253 where the LED address is expected is taken as the end-of-telegram mark. Readiness to receive a telegram is signaled to the game play controller via a single line connected to a GPIO of the game play controller.
 
+![](./docs/rgb-driver.jpg)
+
+
 ## Score Display
 
 Code is in subdir `display-driver` (https://gitea.hottis.de/wn/tetris/src/branch/main/display-driver).
@@ -29,6 +35,9 @@ Code is in subdir `display-driver` (https://gitea.hottis.de/wn/tetris/src/branch
 In the first place, a MAX7221 was meant to be used for connecting a multiple digit seven-segment display. However, it appears, that the MAX7221 requires 3.5V as minimum voltage for the high-level, which caan't be provided by the MSP430 (which runs on 3.3V) and level-shifters haven't been around. Thus, the minimal required amount of functionality of the MAX7221 has been implemented in C on an MSP430. Just four digits are supported. 
 
 Communication with the game play controller is just a 16 bit number to be displayed.
+
+![](./docs/display-driver.jpg)
+
 
 ## Sound Effects
 
@@ -40,4 +49,8 @@ An amplifier following the proposal of the AY-3-8913 datasheet is implemented us
 
 The clock generator proposed by the AY-3-8913 does not work reliably, so an alternative design from "The Art of Electronics" has been used.
 
+![](./docs/sound-driver-1.jpg) 
+![](./docs/sound-driver-2.jpg) 
+![](./docs/sound-driver-3.jpg) 
+![](./docs/sound-driver-4.jpg) 
 
