@@ -1,5 +1,7 @@
 # Tetris - Hardware and Software
 
+![](./docs/IMG_4936.jpg)
+
 This Tetris implementation consists of a hardware and a software (running on that hardware).
 
 The hardware utilizes four MSP430 microcontrollers for 1.) the game play, 2.) the play ground canvas, 3.) the score display and 4.) the sound effects.
