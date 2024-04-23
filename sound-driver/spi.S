@@ -52,10 +52,10 @@ spiCmdHandler_7:
   ;; insert a call here
   bic     #SOUND_MOTION, &cmd
 spiCmdHandler_8:
-  bit     #SOUND_SPEED_UP, &cmd
+  bit     #SOUND_PLING, &cmd
   jz      spiCmdHandler_end
-  ;; insert a call here
-  bic     #SOUND_SPEED_UP, &cmd
+  call    #playPling
+  bic     #SOUND_PLING, &cmd
 spiCmdHandler_end:
   ret
 

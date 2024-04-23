@@ -3,6 +3,7 @@
 #include "psg.h"
 #include "sequencer.h"
 #include "scheduler.h"
+#include "melody_tetris.h"
 
 const t_tone tusch1voice1[] = {
   { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
@@ -79,6 +80,7 @@ t_melodies tusch1 = {
 
 void playTusch1() {
   sequencerPlayMelodies(&tusch1);
+  playMelodyTetrisFaster();
 }
 
 

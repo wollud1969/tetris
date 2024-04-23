@@ -4,6 +4,6 @@
 
 void playMelodyTetris();
 void stopMelodyTetris();
-
+void playMelodyTetrisFaster();
 
 #endif // _MELODY_TETRIS_H_

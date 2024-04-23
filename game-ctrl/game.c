@@ -12,12 +12,13 @@
 #include "buttons.h"
 
 
-#define GAME_CYCLE_TIME 100
+#define GAME_CYCLE_TIME 50
 #define GAMEOVER_DELAY 10
+#define MAX_LEVEL 20
 
 
 static uint8_t delayFactor(uint8_t level) {
-  return 11 - level;
+  return MAX_LEVEL + 1 - level;
 }
 
 typedef enum {
@@ -36,6 +37,7 @@ void gameExec(void *handle) {
   static uint8_t rowIndex;
   static uint8_t proceedDelay;
   static uint8_t level;
+  static uint16_t filledLines;
   static uint16_t score;
   static bool newHighScoreAchieved;
 
@@ -46,6 +48,7 @@ void gameExec(void *handle) {
       canvasClear();
       soundCtrl(SOUND_START);
       level = 1;
+      filledLines = 0;
       score = 0;
       newHighScoreAchieved = false;
       phase = e_Phase_Game;
@@ -118,9 +121,9 @@ void gameExec(void *handle) {
   }
 // --- engine end ---------------------------------------------------------
 
+  bool wipedLines = false;
   canvasShow();
   if (phase == e_Phase_Game) {
-    uint8_t wipeCnt = 0;
     for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
       if (canvasIsRowFilled(r)) {
         score += level;
@@ -131,13 +134,23 @@ void gameExec(void *handle) {
         displaySetValue(score);
         canvasWipeRow(r);
         canvasShow();
-        wipeCnt += 1;
+        wipedLines = true;
+        filledLines += 1;
       }
     }
-    if (wipeCnt != 0) {
-      soundCtrl(SOUND_FANFARE); 
-    }
   }
+
+  if (wipedLines) {
+    soundCtrl(SOUND_PLING);
+  }
+
+  if (wipedLines && (filledLines > 0) && ((filledLines % 10) == 0)) {
+    if (level < MAX_LEVEL) {
+      level += 1;
+    }
+    soundCtrl(SOUND_FANFARE); 
+  }
+
 
   if (isGameActive()) {
     displaySetValue(score);

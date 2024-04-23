@@ -9,6 +9,6 @@
 #define SOUND_FANFARE 0x10
 #define SOUND_LOCK 0x20
 #define SOUND_MOTION 0x40
-#define SOUND_SPEED_UP 0x80
+#define SOUND_PLING 0x80
 
 #endif // _SOUND_CODES_H_

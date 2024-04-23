@@ -127,3 +127,7 @@ void sequencerStopMelodies(t_melodies *melodies) {
   schDel(melodies->taskId);
 }
 
+void sequencerChangePace(t_melodies *melodies) {
+  melodies->quarterLength = 60000 / melodies->pace / SEQUENCER_PERIOD; // duration of a 1/4 tone in ms
+}
+

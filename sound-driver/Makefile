@@ -13,7 +13,7 @@ CFLAGS+= -g3 -ggdb -gdwarf-2
 
 LDFLAGS=-mmcu=$(MCU) -L $(TOOLCHAIN_PREFIX)/include
 
-$(ARTIFACT).elf:	main.o scheduler.o spi.o spi_init.o sequencer.o melody_tetris.o melody_tusch1.o psg.o mute.o
+$(ARTIFACT).elf:	main.o scheduler.o spi.o spi_init.o sequencer.o melody_tetris.o melody_tusch1.o psg.o mute.o melody_pling.o
 	$(CC) -o $@ $(LDFLAGS) $^
 	$(OBJDUMP) -D $(ARTIFACT).elf > $(ARTIFACT).txt
 

@@ -930,11 +930,18 @@ t_melodies tetrisTheme = {
 };
 
 void playMelodyTetris() {
+  tetrisTheme.pace = 160; // reset to start value each time
   sequencerPlayMelodies(&tetrisTheme);
+}
+
+void playMelodyTetrisFaster() {
+  tetrisTheme.pace += 10;
+  sequencerChangePace(&tetrisTheme);
 }
 
 void stopMelodyTetris() {
   sequencerStopMelodies(&tetrisTheme);
 }
+
 
 
