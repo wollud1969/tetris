@@ -6,8 +6,6 @@
 #include "psg.h"
 #include "scheduler.h"
 #include "sequencer.h"
-#include "melody_tetris.h"
-#include "melody_tusch1.h"
 #include "mute.h"
 
 int main() {
@@ -30,8 +28,6 @@ int main() {
   sequencerInit();
 
   __enable_interrupt();
-
-  // playMelodyTetris();
 
   while (1) {
     schExec();

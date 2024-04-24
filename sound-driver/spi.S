@@ -1,10 +1,10 @@
 #include <msp430g2553.h>
 #include "soundCodes.h"
 
-  .section ".data"
-  .global cmd
-cmd:
-  .byte   
+;;  .global cmd
+;;  .section .data.spi,"aw"
+;;cmd:
+;;  .byte   
 
   .section ".text","ax",@progbits
 receive_isr:
@@ -29,17 +29,19 @@ spiCmdHandler_2:
 spiCmdHandler_3:
   bit     #SOUND_START, &cmd
   jz      spiCmdHandler_4
-  call    #playMelodyTetris
+  ;;call    #playMelodyTetris
   bic     #SOUND_START, &cmd
 spiCmdHandler_4:
   bit     #SOUND_GAMEOVER, &cmd
   jz      spiCmdHandler_5
+  ;;call    #stopMelodyTetris
   ;; insert a call here
   bic     #SOUND_GAMEOVER, &cmd
 spiCmdHandler_5:
   bit     #SOUND_FANFARE, &cmd
   jz      spiCmdHandler_6
-  call    #playTusch1
+  ;;call    #playMelodyTetrisFaster
+  ;;call    #playTusch1
   bic     #SOUND_FANFARE, &cmd
 spiCmdHandler_6:
   bit     #SOUND_LOCK, &cmd
@@ -54,17 +56,12 @@ spiCmdHandler_7:
 spiCmdHandler_8:
   bit     #SOUND_PLING, &cmd
   jz      spiCmdHandler_end
-  call    #playPling
+  ;;call    #playPling
   bic     #SOUND_PLING, &cmd
 spiCmdHandler_end:
   ret
 
- 
-
-
-
   .section "__interrupt_vector_8","ax",@progbits
   .word   receive_isr
-
 
   .end

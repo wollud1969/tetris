@@ -175,5 +175,21 @@ void psgInit() {
   // disable everything
   psgWrite(0, _ENABLE_REG, 0xff);
   psgWrite(1, _ENABLE_REG, 0xff);
+
+  // volume to 0 on all channels
+  psgWrite(0, CHANNEL_A_AMPLITUDE_REG, 0);
+  psgWrite(0, CHANNEL_B_AMPLITUDE_REG, 0);
+  psgWrite(0, CHANNEL_C_AMPLITUDE_REG, 0);
+  psgWrite(1, CHANNEL_A_AMPLITUDE_REG, 0);
+  psgWrite(1, CHANNEL_B_AMPLITUDE_REG, 0);
+  psgWrite(1, CHANNEL_C_AMPLITUDE_REG, 0);
+
+  // frequency preset
+  psgWriteFrequency(0, 0, 0);
+  psgWriteFrequency(0, 1, 0);
+  psgWriteFrequency(0, 2, 0);
+  psgWriteFrequency(1, 0, 0);
+  psgWriteFrequency(1, 1, 0);
+  psgWriteFrequency(1, 2, 0);
 }
 
