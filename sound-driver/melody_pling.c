@@ -6,7 +6,7 @@
 
 const t_tone plingVoice1[] = {
   { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
-  { .octave = e_O_5,    .note = e_G,     .length = e_L_1_4,     .legato = false, .staccato = true  },
+  { .octave = e_O_5,    .note = e_E,     .length = e_L_1_4,     .legato = false, .staccato = true  },
 
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_SyncMark,.legato = false, .staccato = false },
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_StopMark,.legato = false, .staccato = false },
