@@ -80,7 +80,7 @@ t_melodies tusch1 = {
 
 void playTusch1() {
   sequencerPlayMelodies(&tusch1);
-  playMelodyTetrisFaster();
+//  playMelodyTetrisFaster();
 }
 
 

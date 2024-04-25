@@ -35,6 +35,7 @@ spiCmdHandler_4:
 spiCmdHandler_5:
   bit     #SOUND_FANFARE, &cmd
   jz      spiCmdHandler_6
+  call    #playMelodyTetrisFaster
   call    #playTusch1
   bic     #SOUND_FANFARE, &cmd
 spiCmdHandler_6:

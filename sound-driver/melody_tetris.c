@@ -936,7 +936,7 @@ void playMelodyTetris() {
 }
 
 void playMelodyTetrisFaster() {
-  tetrisTheme.pace += 10;
+  tetrisTheme.pace += 15;
   sequencerChangePace(&tetrisTheme);
 }
 
