@@ -15,10 +15,10 @@ const t_tone plingVoice1[] = {
 };
 
 t_melodies pling = {
-  .melodies = { { .chip = 1, .amplitude = 12, .tones = plingVoice1 } },
+  .melodies = { { .amplitude = 12, .tones = plingVoice1 } },
   .numOfMelodies = 1,
   .pace = 200,
-  .slotMask = 0x02
+  .chip = 1
 };
 
 void playPling() {

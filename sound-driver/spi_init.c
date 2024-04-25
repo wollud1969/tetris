@@ -6,7 +6,7 @@
 #include "soundCodes.h"
 
 
-extern uint8_t cmd;
+uint8_t cmd;
 
 void spiInit() {
   // SPI slave

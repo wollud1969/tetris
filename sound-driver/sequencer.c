@@ -59,7 +59,7 @@ void sequencerExec(void *handle) {
           if (melody->tones[melody->idx].length == e_L_EndMark) {
             melody->idx = 0;
           }
-          psgPlayTone(melody->chip, channel, melody->amplitude, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
+          psgPlayTone(melodies->chip, channel, melody->amplitude, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
           melody->lengthCnt = (melody->tones[melody->idx].staccato) ? 
             (calcLength(melodies, melody->tones[melody->idx].length) / 2) : 
             calcLength(melodies, melody->tones[melody->idx].length);
@@ -78,7 +78,7 @@ void sequencerExec(void *handle) {
         }
         break;
       case e_StaccatoBreak:
-        psgPlayTone(melody->chip, channel, 0, e_O_Null, e_Pause);
+        psgPlayTone(melodies->chip, channel, 0, e_O_Null, e_Pause);
         melody->lengthCnt = calcLength(melodies, melody->tones[melody->idx].length) / 2;
         melody->state = e_HoldStaccatoBreak;
         break;
@@ -90,7 +90,7 @@ void sequencerExec(void *handle) {
         break;
       case e_SeparateTone:
         if (! (melody->tones[melody->idx].legato)) {
-          psgPlayTone(melody->chip, channel, 0, e_O_Null, e_Pause);
+          psgPlayTone(melodies->chip, channel, 0, e_O_Null, e_Pause);
         }
         melody->idx += 1;
         melody->state = e_PlayTone;
@@ -106,6 +106,8 @@ void sequencerExec(void *handle) {
 }
 
 void sequencerPlayMelodies(t_melodies *melodies) {
+  melodies->slotMask = (1 << melodies->chip);
+
   if ((slots & melodies->slotMask) != 0) {
     return;
   }
@@ -123,8 +125,11 @@ void sequencerPlayMelodies(t_melodies *melodies) {
 }
 
 void sequencerStopMelodies(t_melodies *melodies) {
-  slots &= ~(melodies->slotMask);
   schDel(melodies->taskId);
+  slots &= ~(melodies->slotMask);
+  for (uint8_t channel = 0; channel < melodies->numOfMelodies; channel++) {
+    psgPlayTone(melodies->chip, channel, 0, e_O_Null, e_Pause);
+  }
 }
 
 void sequencerChangePace(t_melodies *melodies) {

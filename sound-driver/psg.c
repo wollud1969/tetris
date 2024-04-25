@@ -81,19 +81,6 @@ inline static void BUS_OP_CS1_DISABLE() {
   BUS_CTRL_REG |= _CS1;
 }
 
-#if 0
-static void delay() {
-asm volatile (
-    "push r12\n"
-    "mov.w #5, r12\n"
-    "loop:\n"
-    "dec.w r12\n"
-    "jnz loop\n"
-    "pop r12\n"
-);
-}
-#endif
-
 static uint8_t psgReadShadow(uint8_t chip, uint8_t address) {
   return psgShadowRegisters[chip][address];
 }

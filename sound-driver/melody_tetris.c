@@ -922,15 +922,16 @@ const t_tone voice3[] = {
   { .octave = e_O_Null, .note = e_Null,  .length = e_L_EndMark, .legato = false, .staccato = false },
 };
 
+#define INITIAL_PACE 160
 t_melodies tetrisTheme = {
-  .melodies = { { .chip = 0, .amplitude = 8, .tones = voice1 }, { .chip = 0, .amplitude = 8, .tones = voice2 }, { .chip = 0, .amplitude = 8, .tones = voice3 } },
+  .melodies = { { .amplitude = 8, .tones = voice1 }, { .amplitude = 8, .tones = voice2 }, { .amplitude = 8, .tones = voice3 } },
   .numOfMelodies = 3,
-  .pace = 160,
-  .slotMask = 0x01
+  .pace = INITIAL_PACE,
+  .chip = 0
 };
 
 void playMelodyTetris() {
-  tetrisTheme.pace = 160; // reset to start value each time
+  tetrisTheme.pace = INITIAL_PACE; // reset to start value each time
   sequencerPlayMelodies(&tetrisTheme);
 }
 

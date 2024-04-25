@@ -52,16 +52,6 @@ uint16_t schAdd(void (*exec)(void *), void *handle, uint32_t delay, uint32_t per
   return taskId;
 }
 
-/*
-void schDel(void (*exec)(void *), void *handle) {
-  for (uint16_t i = 0; i < MAX_NUM_OF_TASKS; i++) {
-    if ((tasks[i].exec == exec) && (tasks[i].handle == handle)) {
-      tasks[i].exec = NULL;
-      break;
-    }
-  }
-}
-*/
 void schDel(uint16_t taskId) {
   tasks[taskId].exec = NULL;
 }
