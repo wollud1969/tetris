@@ -96,9 +96,11 @@ void sequencerExec(void *handle) {
         melody->state = e_PlayTone;
         break;
       case e_Hold:
+        psgPlayTone(melodies->chip, channel, 0, e_O_Null, e_Pause);
         break;
       case e_Terminate:
         schDel(melodies->taskId);
+        psgPlayTone(melodies->chip, channel, 0, e_O_Null, e_Pause);
         slots &= ~(melodies->slotMask);
         break;
     }

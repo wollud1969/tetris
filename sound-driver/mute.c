@@ -8,15 +8,15 @@ void muteInit() {
   P1DIR |= BIT6;
 
   // initially, mute
-  P1OUT |= BIT6;
+  P1OUT &= ~BIT6;
 }
 
 void mute() {
-  P1OUT |= BIT6;
+  P1OUT &= ~BIT6;
 }
 
 void unMute() {
-  P1OUT &= ~BIT6;
+  P1OUT |= BIT6;
 }
 
 
