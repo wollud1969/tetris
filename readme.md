@@ -2,7 +2,7 @@
 
 ![](./docs/IMG_4936.jpg)
 
-Update Amplifier:
+Update Amplifier (separate input circuitry per PSG, it appears, that a silent PSG has a DC level on its output which is summarized to the AC output of the working PSG, so two input circuits with individual couping capacitor):
 
 ![](./docs/IMG_4941.jpg)
 
