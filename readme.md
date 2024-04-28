@@ -6,6 +6,10 @@ Update Amplifier:
 
 ![](./docs/IMG_4941.jpg)
 
+Update of the power switch of the amplifier (at appears, that the small transistor couldn't deliver enough current):
+
+![](./docs/IMG_4958.jpeg)
+
 This Tetris implementation consists of a hardware and a software (running on that hardware).
 
 The hardware utilizes four MSP430 microcontrollers for 1.) the game play, 2.) the play ground canvas, 3.) the score display and 4.) the sound effects.
