@@ -5,6 +5,7 @@
 
 void shapesInit();
 void stoneCreate();
+void stoneLock();
 uint8_t stoneIsValid();
 uint8_t stoneDraw();
 uint8_t stoneMoveDown();

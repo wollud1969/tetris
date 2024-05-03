@@ -69,22 +69,24 @@ void gameExec(void *handle) {
       proceedDelay--;
       if (proceedDelay == 0) {
         rowIndex = 0;
-        state = e_ClearRows;
+        state = e_Down;
       }
       break;
 
-    case e_ClearRows:
-      state = e_Down;
-      break;
-      
     case e_Down:
       if (! stoneMoveDown()) {
         soundCtrl(SOUND_LOCK);
-        state = e_NewStone;
+        stoneLock();
+        state = e_ClearRows;
       } else {
         proceedDelay = delayFactor(level);
         state = e_DownDelay;
       }
+      break;
+
+    case e_ClearRows:
+      // clear filled lines
+      state = e_NewStone;
       break;
 
 // --- phase: game over ---------------------------------------------------

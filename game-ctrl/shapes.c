@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "shapes.h"
 #include "myrand.h"
@@ -19,6 +20,7 @@ typedef struct {
   orientation_t orientation;
   uint8_t x; // column
   uint8_t y; // row
+  bool locked;
 } stone_t;
 
 typedef struct {
@@ -363,6 +365,11 @@ void stoneCreate() {
   stone.orientation = e_0;
   stone.x = 4;
   stone.y = 0;
+  stone.locked = false;
+}
+
+void stoneLock() {
+  stone.locked = true;
 }
 
 uint8_t stoneIsValid() {
@@ -376,6 +383,12 @@ static uint8_t move(direction_t direction) {
   if (motions[stone.shape].nullRotation && (direction == e_RotateLeft || direction == e_RotateRight)) {
     return 1;
   }
+
+  // if the stone is already locked, do nothing
+  if (stone.locked) {
+    return 0;
+  }
+
   // check whether the pixels to move to are free
   if (canvasIsPixelFree(stone.x + motions[stone.shape].motion[direction][stone.orientation].set[0].x, 
                         stone.y + motions[stone.shape].motion[direction][stone.orientation].set[0].y) &&
