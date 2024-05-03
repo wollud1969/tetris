@@ -21,17 +21,12 @@ static uint8_t delayFactor(uint8_t level) {
   return MAX_LEVEL + 1 - level;
 }
 
-typedef enum {
-  e_Phase_Game, e_Phase_GameOver 
-} phase_t;
-
 typedef enum { 
   e_Start, e_NewStone, e_Down, e_DownDelay, e_ClearRows,
   e_GameOver, e_GameOverFill, e_GameOverWipe, e_GameOverDelay 
 } state_t;
 
 void gameExec(void *handle) {
-  static phase_t phase;
   static state_t state = e_Start;
   static uint8_t gameOverDelay;
   static uint8_t rowIndex;
@@ -40,6 +35,8 @@ void gameExec(void *handle) {
   static uint16_t filledLines;
   static uint16_t score;
   static bool newHighScoreAchieved;
+
+  bool wipedLines = false;
 
 // --- engine begin -------------------------------------------------------
   switch (state) {
@@ -51,7 +48,6 @@ void gameExec(void *handle) {
       filledLines = 0;
       score = 0;
       newHighScoreAchieved = false;
-      phase = e_Phase_Game;
       state = e_NewStone;
       break;
 
@@ -86,6 +82,32 @@ void gameExec(void *handle) {
 
     case e_ClearRows:
       // clear filled lines
+      for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
+        if (canvasIsRowFilled(r)) {
+          score += level;
+          if (score > eepromReadHighScore()) {
+            newHighScoreAchieved = true;
+            eepromWriteHighScore(score);
+          }
+          displaySetValue(score);
+          canvasWipeRow(r);
+          canvasShow();
+          wipedLines = true;
+          filledLines += 1;
+        }
+      }
+
+      if (wipedLines) {
+        soundCtrl(SOUND_PLING);
+      }
+
+      if (wipedLines && (filledLines > 0) && ((filledLines % 10) == 0)) {
+        if (level < MAX_LEVEL) {
+          level += 1;
+        }
+        soundCtrl(SOUND_FANFARE); 
+      }
+
       state = e_NewStone;
       break;
 
@@ -93,7 +115,6 @@ void gameExec(void *handle) {
     case e_GameOver:
       soundCtrl(SOUND_GAMEOVER);
       rowIndex = CANVAS_HEIGHT;
-      phase = e_Phase_GameOver;
       state = e_GameOverFill;
       break;
 
@@ -123,36 +144,7 @@ void gameExec(void *handle) {
   }
 // --- engine end ---------------------------------------------------------
 
-  bool wipedLines = false;
   canvasShow();
-  if (phase == e_Phase_Game) {
-    for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
-      if (canvasIsRowFilled(r)) {
-        score += level;
-        if (score > eepromReadHighScore()) {
-          newHighScoreAchieved = true;
-          eepromWriteHighScore(score);
-        }
-        displaySetValue(score);
-        canvasWipeRow(r);
-        canvasShow();
-        wipedLines = true;
-        filledLines += 1;
-      }
-    }
-  }
-
-  if (wipedLines) {
-    soundCtrl(SOUND_PLING);
-  }
-
-  if (wipedLines && (filledLines > 0) && ((filledLines % 10) == 0)) {
-    if (level < MAX_LEVEL) {
-      level += 1;
-    }
-    soundCtrl(SOUND_FANFARE); 
-  }
-
 
   if (isGameActive()) {
     displaySetValue(score);
