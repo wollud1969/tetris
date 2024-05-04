@@ -35,4 +35,6 @@ white:
   .byte   0xff>>DIMM_FACTOR, 0xff>>DIMM_FACTOR, 0xff>>DIMM_FACTOR, 0
 red:
   .byte   0xff>>DIMM_FACTOR, 0x00>>DIMM_FACTOR, 0x00>>DIMM_FACTOR, 0
+flash:
+  .byte   0xff, 0xff, 0xff, 0
 

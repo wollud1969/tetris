@@ -25,7 +25,7 @@ static uint16_t delayFactor(uint16_t level) {
 
 typedef enum { 
   e_Start, e_NewStone, e_Down, e_DownDelay, 
-  e_ClearRowInit, e_ClearRowNext, e_ClearRowCheck, e_ClearRowFlash, e_ClearRowWipe,
+  e_ClearRowInit, e_ClearRowNext, e_ClearRowCheck, e_ClearRowFlash, e_ClearRowFlashDelay, e_ClearRowWipe,
   e_GameOver, e_GameOverFill, e_GameOverWipe, e_GameOverDelay 
 } state_t;
 
@@ -114,7 +114,11 @@ void gameExec(void *handle) {
       break;
 
     case e_ClearRowFlash:
-      canvasFillRow(clearCheckCnt, _white);
+      canvasFillRow(clearCheckCnt, _flash);
+      state = e_ClearRowFlashDelay;
+      break;
+
+    case e_ClearRowFlashDelay:
       state = e_ClearRowWipe;
       break;
 
