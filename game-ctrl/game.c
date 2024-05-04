@@ -19,7 +19,7 @@
 #define MAX_LEVEL 100
 
 
-static uint8_t delayFactor(uint8_t level) {
+static uint16_t delayFactor(uint16_t level) {
   return MAX_LEVEL + 1 - level;
 }
 
