@@ -1,3 +1,5 @@
+// #define STATE_DEBUGGING
+
 #include "stddef.h"
 #include "stdint.h"
 
@@ -12,9 +14,9 @@
 #include "buttons.h"
 
 
-#define GAME_CYCLE_TIME 50
+#define GAME_CYCLE_TIME 10
 #define GAMEOVER_DELAY 10
-#define MAX_LEVEL 20
+#define MAX_LEVEL 100
 
 
 static uint8_t delayFactor(uint8_t level) {
@@ -22,7 +24,8 @@ static uint8_t delayFactor(uint8_t level) {
 }
 
 typedef enum { 
-  e_Start, e_NewStone, e_Down, e_DownDelay, e_ClearRows,
+  e_Start, e_NewStone, e_Down, e_DownDelay, 
+  e_ClearRowInit, e_ClearRowNext, e_ClearRowCheck, e_ClearRowFlash, e_ClearRowWipe,
   e_GameOver, e_GameOverFill, e_GameOverWipe, e_GameOverDelay 
 } state_t;
 
@@ -30,14 +33,17 @@ void gameExec(void *handle) {
   static state_t state = e_Start;
   static uint8_t gameOverDelay;
   static uint8_t rowIndex;
-  static uint8_t proceedDelay;
-  static uint8_t level;
+  static uint16_t proceedDelay;
+  static uint16_t level;
   static uint16_t filledLines;
   static uint16_t score;
   static bool newHighScoreAchieved;
 
-  bool wipedLines = false;
+  static uint8_t clearCheckCnt;
 
+#ifdef STATE_DEBUGGING
+  displaySetValue(state);
+#endif
 // --- engine begin -------------------------------------------------------
   switch (state) {
 // --- phase: game --------------------------------------------------------
@@ -64,7 +70,6 @@ void gameExec(void *handle) {
     case e_DownDelay:
       proceedDelay--;
       if (proceedDelay == 0) {
-        rowIndex = 0;
         state = e_Down;
       }
       break;
@@ -73,42 +78,59 @@ void gameExec(void *handle) {
       if (! stoneMoveDown()) {
         soundCtrl(SOUND_LOCK);
         stoneLock();
-        state = e_ClearRows;
+        state = e_ClearRowInit;
       } else {
         proceedDelay = delayFactor(level);
         state = e_DownDelay;
       }
       break;
 
-    case e_ClearRows:
-      // clear filled lines
-      for (uint8_t r = 0; r < CANVAS_HEIGHT; r++) {
-        if (canvasIsRowFilled(r)) {
-          score += level;
-          if (score > eepromReadHighScore()) {
-            newHighScoreAchieved = true;
-            eepromWriteHighScore(score);
-          }
-          displaySetValue(score);
-          canvasWipeRow(r);
-          canvasShow();
-          wipedLines = true;
-          filledLines += 1;
+// --- phase: clear rows --------------------------------------------------
+    case e_ClearRowInit:
+      clearCheckCnt = 0;
+      state = e_ClearRowCheck;
+      break;
+
+    case e_ClearRowNext:
+      if (clearCheckCnt >= CANVAS_HEIGHT) {
+        state = e_NewStone;
+      } else {
+        clearCheckCnt += 1;
+        state = e_ClearRowCheck;
+      }
+      break;
+
+    case e_ClearRowCheck:
+      if (canvasIsRowFilled(clearCheckCnt)) {
+        score += level;
+        if (score > eepromReadHighScore()) {
+          newHighScoreAchieved = true;
+          eepromWriteHighScore(score);
         }
+        state = e_ClearRowFlash;
+      } else {
+        state = e_ClearRowNext;
       }
+      break;
 
-      if (wipedLines) {
-        soundCtrl(SOUND_PLING);
-      }
+    case e_ClearRowFlash:
+      canvasFillRow(clearCheckCnt, _white);
+      state = e_ClearRowWipe;
+      break;
 
-      if (wipedLines && (filledLines > 0) && ((filledLines % 10) == 0)) {
+    case e_ClearRowWipe:
+      canvasWipeRow(clearCheckCnt);
+      filledLines += 1;
+
+      if ((filledLines > 0) && ((filledLines % 10) == 0)) {
         if (level < MAX_LEVEL) {
           level += 1;
         }
         soundCtrl(SOUND_FANFARE); 
+      } else {
+        soundCtrl(SOUND_PLING);
       }
-
-      state = e_NewStone;
+      state = e_ClearRowNext;
       break;
 
 // --- phase: game over ---------------------------------------------------
@@ -146,11 +168,13 @@ void gameExec(void *handle) {
 
   canvasShow();
 
+#ifndef STATE_DEBUGGING  
   if (isGameActive()) {
     displaySetValue(score);
   } else {
     displaySetValue(eepromReadHighScore());
   }
+#endif 
 }
 
 void gameInit() {
