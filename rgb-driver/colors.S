@@ -1,6 +1,6 @@
 #include "colors.h"
 
-#define DIMM_FACTOR 3
+#define DIMM_FACTOR 5
   .section ".rodata","a"
 ;; color definitions according to
 ;; https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
@@ -36,5 +36,6 @@ white:
 red:
   .byte   0xff>>DIMM_FACTOR, 0x00>>DIMM_FACTOR, 0x00>>DIMM_FACTOR, 0
 flash:
-  .byte   0xff, 0xff, 0xff, 0
+  ;; .byte   0xff, 0xff, 0xff, 0
+  .byte   0x00, 0x00, 0x00, 0
 
