@@ -6,7 +6,10 @@
 
 void eepromInit();
 uint16_t eepromReadHighScore();
-void eepromWriteHighScore(uint16_t v);
+void eepromSetHighScore(uint16_t v);
+uint8_t eepromReadFlashColor();
+void eepromSetFlashColor(uint8_t v);
+void eepromCommit();
 
 
 

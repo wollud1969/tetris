@@ -3,7 +3,7 @@
 #include "spi.h"
 
 
-#define MAGIC 0xaffe
+#define MAGIC 0xafff
 #define HIGHSCORE_ADDR 0x00
 #define DUMMY 0x00
 #define CMD_READ  0b00000011
@@ -12,12 +12,15 @@
 #define CMD_WREN  0b00000110
 
 
+typedef struct {
+  uint16_t magic;
+  uint16_t highScore;
+  uint8_t flashColor;
+} t_configBlock;
+
 typedef union {
-  uint8_t buffer[4];
-  struct {
-    uint16_t magic;
-    uint16_t highScore;
-  } v;
+  t_configBlock v;
+  uint8_t buffer[sizeof(t_configBlock)];
 } eepromBuf_t;
 
 eepromBuf_t buf;
@@ -30,10 +33,9 @@ static void writeBuf() {
   spiSendBegin(e_SPI_EEPROM);
   spiSendOctet(CMD_WRITE);
   spiSendOctet(HIGHSCORE_ADDR);
-  spiSendOctet(buf.buffer[0]);
-  spiSendOctet(buf.buffer[1]);
-  spiSendOctet(buf.buffer[2]);
-  spiSendOctet(buf.buffer[3]);
+  for (uint8_t i = 0; i < sizeof(t_configBlock); i++) {
+    spiSendOctet(buf.buffer[i]);
+  }
   spiSendEnd(e_SPI_EEPROM);
 }
 
@@ -43,14 +45,10 @@ static void readBuf() {
   spiReceiveOctet();
   spiSendOctet(HIGHSCORE_ADDR);
   spiReceiveOctet();
-  spiSendOctet(DUMMY);
-  buf.buffer[0] = spiReceiveOctet();
-  spiSendOctet(DUMMY);
-  buf.buffer[1] = spiReceiveOctet();
-  spiSendOctet(DUMMY);
-  buf.buffer[2] = spiReceiveOctet();
-  spiSendOctet(DUMMY);
-  buf.buffer[3] = spiReceiveOctet();
+  for (uint8_t i = 0; i < sizeof(t_configBlock); i++) {
+    spiSendOctet(DUMMY);
+    buf.buffer[i] = spiReceiveOctet();
+  }
   spiSendEnd(e_SPI_EEPROM);
 }
 
@@ -60,16 +58,29 @@ void eepromInit() {
   if (buf.v.magic != MAGIC) {
     buf.v.magic = MAGIC;
     buf.v.highScore = 0;
+    buf.v.flashColor = 0;
     writeBuf();
   }
+}
+
+void eepromCommit() {
+  writeBuf();
 }
 
 uint16_t eepromReadHighScore() {
   return buf.v.highScore;
 }
 
-void eepromWriteHighScore(uint16_t v) {
+void eepromSetHighScore(uint16_t v) {
   buf.v.highScore = v;
   writeBuf();
+}
+
+uint8_t eepromReadFlashColor() {
+  return buf.v.flashColor;
+}
+
+void eepromSetFlashColor(uint8_t v) {
+  buf.v.flashColor = v;
 }
 

@@ -105,7 +105,8 @@ void gameExec(void *handle) {
         score += level;
         if (score > eepromReadHighScore()) {
           newHighScoreAchieved = true;
-          eepromWriteHighScore(score);
+          eepromSetHighScore(score);
+          eepromCommit();
         }
         state = e_ClearRowFlash;
       } else {
@@ -114,7 +115,7 @@ void gameExec(void *handle) {
       break;
 
     case e_ClearRowFlash:
-      canvasFillRow(clearCheckCnt, _flash);
+      canvasFillRow(clearCheckCnt, eepromReadFlashColor());
       state = e_ClearRowFlashDelay;
       break;
 

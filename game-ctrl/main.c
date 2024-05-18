@@ -13,6 +13,7 @@
 #include "spi.h"
 #include "display.h"
 #include "eeprom.h"
+#include "config.h"
 
 
 int main() {
@@ -33,10 +34,15 @@ int main() {
     displayInit();
     myRandInit();
     canvasInit();
-
-    shapesInit();
-    gameInit();
     buttonsInit();
+
+    if (isConfigMode()) {
+      configInit();
+    } else {
+      shapesInit();
+      gameInit();
+      buttonsStart();
+    }
 
     __enable_interrupt();
 

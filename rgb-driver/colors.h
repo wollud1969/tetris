@@ -17,7 +17,7 @@
 #define _white 0x0c
 #define _red 0x0d
 #define _flash 0x0e
-
+#define _color_end 0x0f
 
 
 #endif

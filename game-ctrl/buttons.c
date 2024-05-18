@@ -20,12 +20,24 @@ static uint8_t buttonsMoveLeftPressed() {
   return res;
 }
 
+bool isConfigMode() {
+  return (P2IN & BIT4);
+}
+
+bool buttonsConfig1Pressed() {
+  return buttonsMoveLeftPressed();
+}
+
 static uint8_t buttonsMoveRightPressed() {
   static uint8_t last = 0;
   uint8_t current = (P2IN & BIT0);
   uint8_t res = (current != 0) && (current != last);
   last = current;
   return res;
+}
+
+bool buttonsConfig4Pressed() {
+  return buttonsMoveRightPressed();
 }
 
 static uint8_t buttonsRotateLeftPressed() {
@@ -36,6 +48,10 @@ static uint8_t buttonsRotateLeftPressed() {
   return res;
 }
 
+bool buttonsConfig2Pressed() {
+  return buttonsRotateLeftPressed();
+}
+
 static uint8_t buttonsRotateRightPressed() {
   static uint8_t last = 0;
   uint8_t current = (P2IN & BIT1);
@@ -43,6 +59,11 @@ static uint8_t buttonsRotateRightPressed() {
   last = current;
   return res;
 }
+
+bool buttonsConfig3Pressed() {
+  return buttonsRotateRightPressed();
+}
+
 
 static uint8_t buttonsMoveDownPressed() {
   return P2IN & BIT2;
@@ -104,7 +125,9 @@ void buttonsExec(void *handle) {
 
 void buttonsInit() {
   P2DIR &= ~(BIT0|BIT1|BIT2|BIT3|BIT4);
+}
 
+void buttonsStart() {
   schAdd(buttonsExec, NULL, 0, 25);
 }
 
