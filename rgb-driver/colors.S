@@ -1,6 +1,7 @@
 #include "colors.h"
 
 #define DF 5
+#define DF_M 3
   .section ".rodata","a"
 ;; color definitions according to
 ;; https://learn.sparkfun.com/tutorials/lilypad-protosnap-plus-activity-guide/3-custom-color-mixing
@@ -21,6 +22,19 @@ colors:
   .byte   0xff>>DF, 0xff>>DF, 0x00>>DF, 0   ;; yellow
   .byte   0xff>>DF, 0xff>>DF, 0xff>>DF, 0   ;; white
   .byte   0xff>>DF, 0x00>>DF, 0x00>>DF, 0   ;; red
+  .byte   0x00>>DF_M, 0x00>>DF_M, 0xff>>DF_M, 0   ;; blue
+  .byte   0x00>>DF_M, 0xff>>DF_M, 0x00>>DF_M, 0   ;; green
+  .byte   0xff>>DF_M, 0x80>>DF_M, 0x00>>DF_M, 0   ;; orange
+  .byte   0xff>>DF_M, 0x00>>DF_M, 0x80>>DF_M, 0   ;; rose
+  .byte   0xff>>DF_M, 0x00>>DF_M, 0xff>>DF_M, 0   ;; magenta
+  .byte   0x80>>DF_M, 0x00>>DF_M, 0xff>>DF_M, 0   ;; violet
+  .byte   0x00>>DF_M, 0x80>>DF_M, 0xff>>DF_M, 0   ;; azure
+  .byte   0x00>>DF_M, 0xff>>DF_M, 0xff>>DF_M, 0   ;; cyan
+  .byte   0x00>>DF_M, 0xff>>DF_M, 0x80>>DF_M, 0   ;; springgreen
+  .byte   0x80>>DF_M, 0xff>>DF_M, 0x00>>DF_M, 0   ;; chartreuse
+  .byte   0xff>>DF_M, 0xff>>DF_M, 0x00>>DF_M, 0   ;; yellow
+  .byte   0xff>>DF_M, 0xff>>DF_M, 0xff>>DF_M, 0   ;; white
+  .byte   0xff>>DF_M, 0x00>>DF_M, 0x00>>DF_M, 0   ;; red
   .byte   0x00, 0x00, 0xff, 0   ;; blue
   .byte   0x00, 0xff, 0x00, 0   ;; green
   .byte   0xff, 0x80, 0x00, 0   ;; orange

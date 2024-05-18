@@ -12,7 +12,7 @@ typedef enum { e_Config_Flash, e_Config_ResetHighscore, e_Config_End } t_ConfigS
 static bool configChanged = false;
 
 static void configHandleFlash() {
-  canvasSetPixel(0, 1, eepromReadFlashColor());
+  miniCanvasSetPixel(0, 1, eepromReadFlashColor());
 
   if (buttonsConfig2Pressed()) {
     configChanged = true;
@@ -38,21 +38,21 @@ void configExec(void *handle) {
     if (configState == e_Config_End) {
       configState = e_Config_Flash;
     }
-    canvasClear();
+    miniCanvasClear();
 
-    canvasSetPixel(configState, 0, _red);
+    miniCanvasSetPixel(configState, 0, _medium_red);
   }
 
   configHandler[configState]();
 
   if (configChanged) {
-    canvasSetPixel(0, 2, _red);
+    miniCanvasSetPixel(0, 2, _medium_red);
     if (buttonsConfig4Pressed()) {
       eepromCommit();
       configChanged = false;
     }
   } else {
-    canvasSetPixel(0, 2, _green);
+    miniCanvasSetPixel(0, 2, _medium_green);
   }
 
 
