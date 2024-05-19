@@ -38,6 +38,7 @@ static void configHandleResetHighScore() {
 
 static void configHandleBrightness() {
   displaySetValue(eepromReadBrightness());
+  stoneDrawConfigPattern();
 
   if (buttonsConfig2Pressed()) {
     configChanged = true;
@@ -46,8 +47,6 @@ static void configHandleBrightness() {
       brightness = 0;
     }
     eepromSetBrightness(brightness);
-
-    stoneDrawConfigPattern();
   }
 }
 
@@ -90,5 +89,5 @@ void configExec(void *handle) {
 
 
 void configInit() {
-  schAdd(configExec, NULL, 0, 25);
+  schAdd(configExec, NULL, 0, 100);
 }
