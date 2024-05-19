@@ -354,14 +354,18 @@ const orientation_t nextOrientation[5][4] = { // 5 = number of directions to mov
 stone_t stone;
 shape_t nextShape;
 
+static shape_t randomNextShape() {
+  return ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[myRandGet() % e_ShapeInvalid];
+}
+
 void shapesInit() {
   stone.shape = e_ShapeInvalid;
-  nextShape = e_Z;
+  nextShape = randomNextShape();
 }
 
 void stoneCreate() {
   stone.shape = nextShape;
-  nextShape = ((shape_t[]){ e_I, e_O, e_T, e_Z, e_S, e_L, e_J })[myRandGet() % e_ShapeInvalid];
+  nextShape = randomNextShape();
   stone.orientation = e_0;
   stone.x = 4;
   stone.y = 0;
