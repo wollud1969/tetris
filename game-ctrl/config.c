@@ -53,16 +53,21 @@ void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore,
 
 void configExec(void *handle) {
   static uint8_t configState = 0;
+  static uint8_t lastConfigState = 255;
+
+  if (configState != lastConfigState) {
+    lastConfigState = configState;
+
+    miniCanvasClear();
+    canvasClear();
+    miniCanvasSetPixel(configState, 0, _red);
+  }
 
   if (buttonsConfig1Pressed()) {
     configState += 1;
     if (configState >= sizeof(configHandler) / sizeof(configHandler[0])) {
       configState = 0;
     }
-    miniCanvasClear();
-    canvasClear();
-
-    miniCanvasSetPixel(configState, 0, _red);
   }
 
   configHandler[configState]();
@@ -76,7 +81,6 @@ void configExec(void *handle) {
   } else {
     miniCanvasSetPixel(0, 2, _green);
   }
-
 
   canvasShow();
 }

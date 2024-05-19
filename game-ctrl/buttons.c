@@ -20,10 +20,6 @@ static uint8_t buttonsMoveLeftPressed() {
   return res;
 }
 
-bool isConfigMode() {
-  return (P2IN & BIT4);
-}
-
 bool buttonsConfig1Pressed() {
   return buttonsMoveLeftPressed();
 }
@@ -68,6 +64,11 @@ bool buttonsConfig3Pressed() {
 static uint8_t buttonsMoveDownPressed() {
   return P2IN & BIT2;
 }
+
+bool isConfigMode() {
+  return (P2IN & BIT2);
+}
+
 
 void buttonsExec(void *handle) {
   static uint32_t unmuteTimestamp;
