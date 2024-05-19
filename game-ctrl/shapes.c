@@ -483,6 +483,31 @@ uint8_t stoneDraw() {
   return res;
 }
 
+static void stoneJustDraw(uint8_t x, uint8_t y, shape_t shape) {
+  canvasSetPixel(x + motions[shape].draw[0].x, 
+                 y + motions[shape].draw[0].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[1].x, 
+                 y + motions[shape].draw[1].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[2].x, 
+                 y + motions[shape].draw[2].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[3].x, 
+                 y + motions[shape].draw[3].y, 
+                 motions[shape].color);
+}
+
+void stoneDrawConfigPattern() {
+  stoneJustDraw(1, 0, e_I);
+  stoneJustDraw(3, 4, e_O);
+  stoneJustDraw(4, 7, e_T);
+  stoneJustDraw(5, 10, e_Z);
+  stoneJustDraw(1, 12, e_S);
+  stoneJustDraw(5, 15, e_L);
+  stoneJustDraw(1, 17, e_J);
+}
+
 uint8_t stoneMoveDown() {
   return move(e_MoveDown);
 }

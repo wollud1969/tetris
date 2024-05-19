@@ -14,5 +14,6 @@ uint8_t stoneMoveRight();
 uint8_t stoneRotateLeft();
 uint8_t stoneRotateRight();
 
+void stoneDrawConfigPattern();
 
 #endif // _SHAPES_H_

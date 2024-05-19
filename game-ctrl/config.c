@@ -6,9 +6,8 @@
 #include "buttons.h"
 #include "eeprom.h"
 #include "display.h"
+#include "shapes.h"
 
-
-typedef enum { e_Config_Flash, e_Config_ResetHighscore, e_Config_End } t_ConfigState;
 
 static bool configChanged = false;
 
@@ -16,7 +15,7 @@ static void configHandleFlash() {
   if (buttonsConfig2Pressed()) {
     configChanged = true;
     uint8_t color = eepromReadFlashColor() + 1;
-    if (color == _color_end) {
+    if (color > _color_end) {
       color = 0;
     }
     canvasFillRow(CANVAS_HEIGHT-1, color);
@@ -34,33 +33,48 @@ static void configHandleResetHighScore() {
   }
 }
 
-void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore };
+static void configHandleBrightness() {
+  displaySetValue(eepromReadBrightness());
+
+  if (buttonsConfig2Pressed()) {
+    configChanged = true;
+    uint8_t brightness = eepromReadBrightness() + 1;
+    if (brightness > _brightness_shifts) {
+      brightness = 0;
+    }
+    eepromSetBrightness(brightness);
+
+    stoneDrawConfigPattern();
+  }
+}
+
+void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore, configHandleBrightness };
 
 
 void configExec(void *handle) {
-  static t_ConfigState configState = e_Config_Flash;
+  static uint8_t configState = 0;
 
   if (buttonsConfig1Pressed()) {
     configState += 1;
-    if (configState == e_Config_End) {
-      configState = e_Config_Flash;
+    if (configState >= sizeof(configHandler) / sizeof(configHandler[0])) {
+      configState = 0;
     }
     miniCanvasClear();
     canvasClear();
 
-    miniCanvasSetPixel(configState, 0, _medium_red);
+    miniCanvasSetPixel(configState, 0, _red);
   }
 
   configHandler[configState]();
 
   if (configChanged) {
-    miniCanvasSetPixel(0, 2, _medium_red);
+    miniCanvasSetPixel(0, 2, _red);
     if (buttonsConfig4Pressed()) {
       eepromCommit();
       configChanged = false;
     }
   } else {
-    miniCanvasSetPixel(0, 2, _medium_green);
+    miniCanvasSetPixel(0, 2, _green);
   }
 
 

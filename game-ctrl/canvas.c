@@ -5,6 +5,8 @@
 
 #include "canvas.h"
 #include "spi.h"
+#include "eeprom.h"
+#include "../rgb-driver/colors.h"
 
 
 static uint8_t canvasStorage[CANVAS_WIDTH * CANVAS_HEIGHT];
@@ -22,6 +24,8 @@ const canvas_t miniCanvas = {
 };
 
 void canvasShow() {
+  uint8_t brightness_offset = _brightness_offset * eepromReadBrightness();
+
   // wait for signal waiting for data
   while (!(P1IN & BIT3));
 
@@ -31,14 +35,14 @@ void canvasShow() {
     if ((*((canvas.canvas)+i) & 0x80) != 0) {
       *((canvas.canvas)+i) &= ~0x80;
       spiSendOctet(i);
-      spiSendOctet(*((canvas.canvas)+i));
+      spiSendOctet((*((canvas.canvas)+i) == 0) ? 0 : (*((canvas.canvas)+i) + brightness_offset));
     }
   }
   for (uint8_t i = 0; i < (MINI_CANVAS_WIDTH*MINI_CANVAS_HEIGHT); i++) {
     if ((*((miniCanvas.canvas)+i) & 0x80) != 0) {
       *((miniCanvas.canvas)+i) &= ~0x80;
       spiSendOctet(i + (CANVAS_HEIGHT*CANVAS_WIDTH));
-      spiSendOctet(*((miniCanvas.canvas)+i));
+      spiSendOctet((*((miniCanvas.canvas)+i) == 0) ? 0 : (*((miniCanvas.canvas)+i) + brightness_offset));
     }
   }
   spiSendOctet(0xfe);

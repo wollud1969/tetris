@@ -3,7 +3,7 @@
 #include "spi.h"
 
 
-#define MAGIC 0xafff
+#define MAGIC 0xb000
 #define HIGHSCORE_ADDR 0x00
 #define DUMMY 0x00
 #define CMD_READ  0b00000011
@@ -16,6 +16,7 @@ typedef struct {
   uint16_t magic;
   uint16_t highScore;
   uint8_t flashColor;
+  uint8_t brightness;
 } t_configBlock;
 
 typedef union {
@@ -59,6 +60,7 @@ void eepromInit() {
     buf.v.magic = MAGIC;
     buf.v.highScore = 0;
     buf.v.flashColor = 0;
+    buf.v.brightness = 0;
     writeBuf();
   }
 }
@@ -82,5 +84,13 @@ uint8_t eepromReadFlashColor() {
 
 void eepromSetFlashColor(uint8_t v) {
   buf.v.flashColor = v;
+}
+
+uint8_t eepromReadBrightness() {
+  return buf.v.brightness;
+}
+
+void eepromSetBrightness(uint8_t v) {
+  buf.v.brightness = v;
 }
 
