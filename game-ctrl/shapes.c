@@ -456,6 +456,21 @@ void nextStoneDraw() {
                      motions[nextShape].color);
 }
 
+static void stoneJustDraw(uint8_t x, uint8_t y, shape_t shape) {
+  canvasSetPixel(x + motions[shape].draw[0].x, 
+                 y + motions[shape].draw[0].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[1].x, 
+                 y + motions[shape].draw[1].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[2].x, 
+                 y + motions[shape].draw[2].y, 
+                 motions[shape].color);
+  canvasSetPixel(x + motions[shape].draw[3].x, 
+                 y + motions[shape].draw[3].y, 
+                 motions[shape].color);
+}
+
 uint8_t stoneDraw() { 
   nextStoneDraw();
 
@@ -470,36 +485,10 @@ uint8_t stoneDraw() {
       canvasIsPixelFree(stone.x + motions[stone.shape].draw[3].x, 
                         stone.y + motions[stone.shape].draw[3].y)) {
     // if so, draw the shape
-    canvasSetPixel(stone.x + motions[stone.shape].draw[0].x, 
-                   stone.y + motions[stone.shape].draw[0].y, 
-                   motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[1].x, 
-                   stone.y + motions[stone.shape].draw[1].y, 
-                   motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[2].x, 
-                   stone.y + motions[stone.shape].draw[2].y, 
-                   motions[stone.shape].color);
-    canvasSetPixel(stone.x + motions[stone.shape].draw[3].x, 
-                   stone.y + motions[stone.shape].draw[3].y, 
-                   motions[stone.shape].color);
+    stoneJustDraw(stone.x, stone.y, stone.shape);
     res = 1;
   }
   return res;
-}
-
-static void stoneJustDraw(uint8_t x, uint8_t y, shape_t shape) {
-  canvasSetPixel(x + motions[shape].draw[0].x, 
-                 y + motions[shape].draw[0].y, 
-                 motions[shape].color);
-  canvasSetPixel(x + motions[shape].draw[1].x, 
-                 y + motions[shape].draw[1].y, 
-                 motions[shape].color);
-  canvasSetPixel(x + motions[shape].draw[2].x, 
-                 y + motions[shape].draw[2].y, 
-                 motions[shape].color);
-  canvasSetPixel(x + motions[shape].draw[3].x, 
-                 y + motions[shape].draw[3].y, 
-                 motions[shape].color);
 }
 
 void stoneDrawConfigPattern() {
