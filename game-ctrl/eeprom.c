@@ -3,7 +3,7 @@
 #include "spi.h"
 
 
-#define MAGIC 0xb000
+#define MAGIC 0xb001
 #define HIGHSCORE_ADDR 0x00
 #define DUMMY 0x00
 #define CMD_READ  0b00000011
@@ -57,10 +57,8 @@ void eepromInit() {
   readBuf();
 
   if (buf.v.magic != MAGIC) {
+    memset(buf.buffer, 0, sizeof(t_configBlock));
     buf.v.magic = MAGIC;
-    buf.v.highScore = 0;
-    buf.v.flashColor = 0;
-    buf.v.brightness = 0;
     writeBuf();
   }
 }
