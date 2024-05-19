@@ -12,14 +12,17 @@
 static bool configChanged = false;
 
 static void configHandleFlash() {
+  uint8_t color = eepromReadFlashColor();
+
+  canvasFillRow(CANVAS_HEIGHT-1, color);
+  displaySetValue(color);
+
   if (buttonsConfig2Pressed()) {
     configChanged = true;
-    uint8_t color = eepromReadFlashColor() + 1;
+    color += 1;
     if (color > _color_end) {
       color = 0;
     }
-    canvasFillRow(CANVAS_HEIGHT-1, color);
-    displaySetValue(color);
     eepromSetFlashColor(color);
   }
 }
@@ -73,13 +76,13 @@ void configExec(void *handle) {
   configHandler[configState]();
 
   if (configChanged) {
-    miniCanvasSetPixel(0, 2, _red);
+    miniCanvasSetPixel(0, 3, _red);
     if (buttonsConfig4Pressed()) {
       eepromCommit();
       configChanged = false;
     }
   } else {
-    miniCanvasSetPixel(0, 2, _green);
+    miniCanvasSetPixel(0, 3, _green);
   }
 
   canvasShow();
