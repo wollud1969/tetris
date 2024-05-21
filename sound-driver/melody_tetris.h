@@ -5,5 +5,6 @@
 void playMelodyTetris();
 void stopMelodyTetris();
 void playMelodyTetrisFaster();
+void playMelodyTetrisAmplitude(uint8_t a);
 
 #endif // _MELODY_TETRIS_H_

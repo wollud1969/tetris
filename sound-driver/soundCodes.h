@@ -8,7 +8,9 @@
 #define SOUND_GAMEOVER 0x08
 #define SOUND_FANFARE 0x10
 #define SOUND_LOCK 0x20
-#define SOUND_MOTION 0x40
-#define SOUND_PLING 0x80
+#define SOUND_PLING 0x40
+#define SOUND_COMMAND 0x80
+
+#define SOUND_SUBCMD_AMPLITUDE 0x40
 
 #endif // _SOUND_CODES_H_

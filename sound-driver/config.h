@@ -1,0 +1,11 @@
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+
+#include <stdint.h>
+
+void configSetAmplitude(uint8_t v);
+uint8_t configGetAmplitude();
+
+
+#endif // _CONFIG_H_

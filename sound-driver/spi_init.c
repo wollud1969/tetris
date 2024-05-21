@@ -4,9 +4,10 @@
 #include "scheduler.h"
 #include "spi.h"
 #include "soundCodes.h"
+#include "config.h"
 
 
-uint8_t cmd;
+volatile uint8_t cmd;
 
 void spiInit() {
   // SPI slave
@@ -25,7 +26,14 @@ void spiInit() {
   UC0IE |= UCB0RXIE;
 
   cmd = SOUND_IDLE;
-  schAdd(spiCmdHandler, NULL, 0, 100);
+  schAdd(spiCmdHandler, NULL, 0, 5);
 }
 
+void spiCommandDispatcher() {
+  cmd &= ~SOUND_COMMAND;
 
+  if (cmd & SOUND_SUBCMD_AMPLITUDE) {
+    cmd &= ~SOUND_SUBCMD_AMPLITUDE;
+    configSetAmplitude(cmd);
+  }
+}

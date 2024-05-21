@@ -1,8 +1,11 @@
 #include <stdbool.h>
+#include <sys/param.h>
 #include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
 #include "scheduler.h"
+#include "config.h"
+
 
 const t_tone plingVoice1[] = {
   { .octave = e_O_5,    .note = e_C,     .length = e_L_1_16,    .legato = false, .staccato = false },
@@ -18,13 +21,15 @@ const t_tone plingVoice1[] = {
 };
 
 t_melodies pling = {
-  .melodies = { { .amplitude = 12, .tones = plingVoice1 } },
+  .melodies = { { .tones = plingVoice1 } },
+  .amplitude = 12,
   .numOfMelodies = 1,
   .pace = 200,
   .chip = 1
 };
 
 void playPling() {
+  pling.amplitude = MIN((configGetAmplitude() + 4), 15);
   sequencerPlayMelodies(&pling);
 }
 

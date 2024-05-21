@@ -1,9 +1,10 @@
 #include <stdbool.h>
+#include <sys/param.h>
 #include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
 #include "scheduler.h"
-#include "melody_tetris.h"
+#include "config.h"
 
 const t_tone tusch1voice1[] = {
   { .octave = e_O_5,    .note = e_C,     .length = e_L_1_4,     .legato = false, .staccato = true  },
@@ -72,15 +73,16 @@ const t_tone tusch1voice3[] = {
 };
 
 t_melodies tusch1 = {
-  .melodies = { { .amplitude = 12, .tones = tusch1voice1 }, { .amplitude = 12, .tones = tusch1voice2 }, { .amplitude = 12, .tones = tusch1voice3 } },
+  .melodies = { { .tones = tusch1voice1 }, { .tones = tusch1voice2 }, { .tones = tusch1voice3 } },
+  .amplitude = 12,
   .numOfMelodies = 3,
   .pace = 200,
   .chip = 1
 };
 
 void playTusch1() {
+  tusch1.amplitude = MIN((configGetAmplitude() + 4), 15);
   sequencerPlayMelodies(&tusch1);
-//  playMelodyTetrisFaster();
 }
 
 

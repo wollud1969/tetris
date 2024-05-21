@@ -44,7 +44,6 @@ typedef struct {
   uint16_t idx;
   uint16_t lengthCnt;
   t_sequencerState state;
-  uint8_t amplitude;
   const t_tone *tones;
 } t_melody;
 
@@ -53,6 +52,7 @@ typedef struct {
 typedef struct {
   uint8_t slotMask;
   uint8_t chip;
+  uint8_t amplitude;
   uint8_t taskId;
   uint16_t quarterLength;
   uint8_t numOfMelodies;

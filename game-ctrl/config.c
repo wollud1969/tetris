@@ -7,9 +7,11 @@
 #include "eeprom.h"
 #include "display.h"
 #include "shapes.h"
+#include "sound.h"
 
 
 static bool configChanged = false;
+static bool muted = false;
 
 static void configHandleFlash() {
   uint8_t color = eepromReadFlashColor();
@@ -50,7 +52,26 @@ static void configHandleBrightness() {
   }
 }
 
-void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore, configHandleBrightness };
+static void configHandleAmplitude() {
+  displaySetValue(eepromReadAmplitude());
+  if (muted) {
+    muted = false;
+    soundCtrl(SOUND_START);
+    soundCtrl(SOUND_UNMUTE);
+  }
+
+  if (buttonsConfig2Pressed()) {
+    configChanged = true;
+    uint8_t amplitude = eepromReadAmplitude() + 1;
+    if (amplitude > 15) {
+      amplitude = 0;
+    }
+    eepromSetAmplitude(amplitude);
+    soundCtrl(SOUND_COMMAND + SOUND_SUBCMD_AMPLITUDE + amplitude);
+  }
+}
+
+void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore, configHandleBrightness,configHandleAmplitude };
 
 
 void configExec(void *handle) {
@@ -62,7 +83,14 @@ void configExec(void *handle) {
 
     miniCanvasClear();
     canvasClear();
-    miniCanvasSetPixel(configState, 0, _red);
+    if (! muted) {
+      muted = true;
+      soundCtrl(SOUND_MUTE);
+    }
+
+    uint8_t row = configState / 3;
+    uint8_t column = configState % 3;
+    miniCanvasSetPixel(column, row, _red);
   }
 
   if (buttonsConfig1Pressed()) {

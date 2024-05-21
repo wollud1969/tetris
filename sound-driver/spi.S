@@ -6,12 +6,21 @@
 receive_isr:
   bit     #UCB0RXIFG, &UC0IFG
   jz      receive_isr_no_data
+  bit     #SOUND_COMMAND, &cmd
+  jnz     receive_isr_no_data
   bis     UCB0RXBUF, &cmd
 receive_isr_no_data:
   reti
 
   .global spiCmdHandler
 spiCmdHandler:
+spiCmdHandler_0:
+  bit     #SOUND_COMMAND, &cmd
+  jz      spiCmdHandler_1
+  ;; insert a call here
+  call    #spiCommandDispatcher
+  mov.b   #0, &cmd
+  ret
 spiCmdHandler_1:
   bit     #SOUND_MUTE, &cmd
   jz      spiCmdHandler_2
@@ -44,11 +53,6 @@ spiCmdHandler_6:
   ;; insert a call here
   bic     #SOUND_LOCK, &cmd
 spiCmdHandler_7:
-  bit     #SOUND_MOTION, &cmd
-  jz      spiCmdHandler_8
-  ;; insert a call here
-  bic     #SOUND_MOTION, &cmd
-spiCmdHandler_8:
   bit     #SOUND_PLING, &cmd
   jz      spiCmdHandler_end
   call    #playPling

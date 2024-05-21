@@ -84,27 +84,22 @@ void buttonsExec(void *handle) {
 
   if (buttonsMoveLeftPressed()) {
     stoneMoveLeft();
-    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsMoveRightPressed()) {
     stoneMoveRight();
-    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsRotateLeftPressed()) {
     stoneRotateLeft();
-    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsRotateRightPressed()) {
     stoneRotateRight();
-    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
   if (buttonsMoveDownPressed()) {
     stoneMoveDown();
-    soundCtrl(SOUND_MOTION);
     buttonPressed = 1;
   }
 

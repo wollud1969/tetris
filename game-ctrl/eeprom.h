@@ -5,13 +5,15 @@
 
 
 void eepromInit();
+void eepromCommit();
 uint16_t eepromReadHighScore();
 void eepromSetHighScore(uint16_t v);
 uint8_t eepromReadFlashColor();
 void eepromSetFlashColor(uint8_t v);
 uint8_t eepromReadBrightness();
 void eepromSetBrightness(uint8_t v);
-void eepromCommit();
+uint8_t eepromReadAmplitude();
+void eepromSetAmplitude(uint8_t v);
 
 
 

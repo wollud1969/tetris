@@ -14,6 +14,7 @@
 #include "display.h"
 #include "eeprom.h"
 #include "config.h"
+#include "sound.h"
 
 
 int main() {
@@ -34,6 +35,7 @@ int main() {
     displayInit();
     myRandInit();
     canvasInit();
+    soundInit();
     buttonsInit();
 
     if (isConfigMode()) {

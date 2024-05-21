@@ -12,7 +12,7 @@ ASFLAGS=$(COMMONFLAGS) -D__ASSEMBLER__
 
 LDFLAGS=-mmcu=$(MCU) -L $(TOOLCHAIN_PREFIX)/include
 
-$(ARTIFACT).elf:	main.o scheduler.o spi.o spi_init.o sequencer.o melody_tetris.o melody_tusch1.o psg.o mute.o melody_pling.o
+$(ARTIFACT).elf:	main.o scheduler.o spi.o spi_init.o sequencer.o melody_tetris.o melody_tusch1.o psg.o mute.o melody_pling.o config.o
 	$(CC) -o $@ $(LDFLAGS) $^
 	$(OBJDUMP) -D $(ARTIFACT).elf > $(ARTIFACT).txt
 

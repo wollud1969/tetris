@@ -24,13 +24,15 @@ static uint16_t delayFactor(uint16_t level) {
 }
 
 typedef enum { 
+  e_BootWait,
   e_Start, e_NewStone, e_Down, e_DownDelay, 
   e_ClearRowInit, e_ClearRowNext, e_ClearRowCheck, e_ClearRowFlash, e_ClearRowFlashDelay, e_ClearRowWipe,
   e_GameOver, e_GameOverFill, e_GameOverWipe, e_GameOverDelay 
 } state_t;
 
 void gameExec(void *handle) {
-  static state_t state = e_Start;
+  static state_t state = e_BootWait;
+  static uint16_t bootWaitTime = 2500 / GAME_CYCLE_TIME;
   static uint8_t gameOverDelay;
   static uint8_t rowIndex;
   static uint16_t proceedDelay;
@@ -46,6 +48,12 @@ void gameExec(void *handle) {
 #endif
 // --- engine begin -------------------------------------------------------
   switch (state) {
+    case e_BootWait:
+      bootWaitTime -= 1;
+      if (bootWaitTime == 0) {
+        state = e_Start;
+      }
+      break;
 // --- phase: game --------------------------------------------------------
     case e_Start:
       canvasClear();
