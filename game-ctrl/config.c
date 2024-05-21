@@ -71,7 +71,7 @@ static void configHandleAmplitude() {
   }
 }
 
-void (*configHandler[])(void) = { configHandleFlash, configHandleResetHighScore, configHandleBrightness,configHandleAmplitude };
+void (*configHandler[])(void) = { configHandleResetHighScore, configHandleFlash, configHandleBrightness, configHandleAmplitude };
 
 
 void configExec(void *handle) {

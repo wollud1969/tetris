@@ -5,7 +5,8 @@
 #include <stdint.h>
 
 void configSetAmplitude(uint8_t v);
-uint8_t configGetAmplitude();
+uint8_t *configGetMelodyAmplitudePtr();
+uint8_t *configGetEffectsAmplitudePtr();
 
 
 #endif // _CONFIG_H_

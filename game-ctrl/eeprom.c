@@ -1,10 +1,15 @@
 #include <stdint.h>
 #include <string.h>
+#include <sys/param.h>
 #include "eeprom.h"
 #include "spi.h"
+#include "scheduler.h"
+#include "display.h"
+#include "canvas.h"
+#include "../rgb-driver/colors.h"
 
 
-#define MAGIC 0xb002
+#define MAGIC 0xb003
 #define HIGHSCORE_ADDR 0x00
 #define DUMMY 0x00
 #define CMD_READ  0b00000011
@@ -16,6 +21,7 @@
 typedef struct {
   uint16_t magic;
   uint16_t highScore;
+  uint16_t gameCounter;
   uint8_t flashColor;
   uint8_t brightness;
   uint8_t amplitude;
@@ -69,6 +75,35 @@ void eepromCommit() {
   writeBuf();
 }
 
+
+void eepromShowValues() {
+  canvasClear();
+  canvasFillRow(0, _green);
+  canvasShow();
+  displaySetValue(buf.v.highScore);
+  wait(2);
+  canvasClear();
+  canvasFillRow(1, _green);
+  canvasShow();
+  displaySetValue(MIN(buf.v.gameCounter, 9999));
+  wait(2);
+  canvasClear();
+  canvasFillRow(2, _green);
+  canvasShow();
+  displaySetValue(buf.v.flashColor);
+  wait(2);
+  canvasClear();
+  canvasFillRow(3, _green);
+  canvasShow();
+  displaySetValue(buf.v.brightness);
+  wait(2);
+  canvasClear();
+  canvasFillRow(4, _green);
+  canvasShow();
+  displaySetValue(buf.v.amplitude);
+  wait(2);
+}
+
 uint16_t eepromReadHighScore() {
   return buf.v.highScore;
 }
@@ -101,4 +136,10 @@ uint8_t eepromReadAmplitude() {
 void eepromSetAmplitude(uint8_t v) {
   buf.v.amplitude = v;
 }
+
+void eepromIncGameCounter() {
+  buf.v.gameCounter += 1;
+  writeBuf();
+}
+
 

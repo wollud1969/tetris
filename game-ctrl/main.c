@@ -38,6 +38,8 @@ int main() {
     soundInit();
     buttonsInit();
 
+    eepromShowValues();
+
     if (isConfigMode()) {
       configInit();
     } else {

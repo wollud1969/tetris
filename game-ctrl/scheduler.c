@@ -109,3 +109,9 @@ uint32_t getSeconds() {
   return s;
 }
 
+void wait(uint8_t t) {
+  uint8_t startTime = getSeconds();
+
+  while (getSeconds() < (startTime + t));
+}
+

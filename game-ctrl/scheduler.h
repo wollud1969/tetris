@@ -32,6 +32,6 @@ void schExec();
 void schUpdate();
 uint8_t schTaskCnt();
 uint32_t getSeconds();
-
+void wait(uint8_t t);
 
 #endif /* PONTCOOPSCHEDULER_H_ */

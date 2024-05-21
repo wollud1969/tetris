@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <sys/param.h>
 #include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
@@ -927,7 +926,6 @@ const t_tone voice3[] = {
 #define INITIAL_PACE 160
 t_melodies tetrisTheme = {
   .melodies = { { .tones = voice1 }, { .tones = voice2 }, { .tones = voice3 } },
-  .amplitude = 8,
   .numOfMelodies = 3,
   .pace = INITIAL_PACE,
   .chip = 0
@@ -935,7 +933,7 @@ t_melodies tetrisTheme = {
 
 void playMelodyTetris() {
   tetrisTheme.pace = INITIAL_PACE; // reset to start value each time
-  tetrisTheme.amplitude = MIN((configGetAmplitude() + 4), 15);
+  tetrisTheme.amplitude = configGetMelodyAmplitudePtr();
   sequencerPlayMelodies(&tetrisTheme);
 }
 

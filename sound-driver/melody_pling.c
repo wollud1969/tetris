@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <sys/param.h>
 #include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
@@ -22,14 +21,13 @@ const t_tone plingVoice1[] = {
 
 t_melodies pling = {
   .melodies = { { .tones = plingVoice1 } },
-  .amplitude = 12,
   .numOfMelodies = 1,
   .pace = 200,
   .chip = 1
 };
 
 void playPling() {
-  pling.amplitude = MIN((configGetAmplitude() + 4), 15);
+  pling.amplitude = configGetEffectsAmplitudePtr();
   sequencerPlayMelodies(&pling);
 }
 

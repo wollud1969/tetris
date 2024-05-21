@@ -59,7 +59,7 @@ void sequencerExec(void *handle) {
           if (melody->tones[melody->idx].length == e_L_EndMark) {
             melody->idx = 0;
           }
-          psgPlayTone(melodies->chip, channel, melodies->amplitude, melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
+          psgPlayTone(melodies->chip, channel, *(melodies->amplitude), melody->tones[melody->idx].octave, melody->tones[melody->idx].note);
           melody->lengthCnt = (melody->tones[melody->idx].staccato) ? 
             (calcLength(melodies, melody->tones[melody->idx].length) / 2) : 
             calcLength(melodies, melody->tones[melody->idx].length);

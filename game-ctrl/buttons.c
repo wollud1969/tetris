@@ -8,6 +8,7 @@
 #include "shapes.h"
 #include "canvas.h"
 #include "sound.h"
+#include "eeprom.h"
 
 
 bool mutedFlag = true;
@@ -107,6 +108,7 @@ void buttonsExec(void *handle) {
     canvasShow();
 
     if (mutedFlag) {
+      eepromIncGameCounter();
       soundCtrl(SOUND_UNMUTE);
       mutedFlag = false;
     }

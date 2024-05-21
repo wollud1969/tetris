@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <sys/param.h>
 #include <stddef.h>
 #include "psg.h"
 #include "sequencer.h"
@@ -74,14 +73,13 @@ const t_tone tusch1voice3[] = {
 
 t_melodies tusch1 = {
   .melodies = { { .tones = tusch1voice1 }, { .tones = tusch1voice2 }, { .tones = tusch1voice3 } },
-  .amplitude = 12,
   .numOfMelodies = 3,
   .pace = 200,
   .chip = 1
 };
 
 void playTusch1() {
-  tusch1.amplitude = MIN((configGetAmplitude() + 4), 15);
+  tusch1.amplitude = configGetEffectsAmplitudePtr();
   sequencerPlayMelodies(&tusch1);
 }
 
