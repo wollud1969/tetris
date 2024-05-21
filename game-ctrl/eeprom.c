@@ -137,9 +137,17 @@ void eepromSetAmplitude(uint8_t v) {
   buf.v.amplitude = v;
 }
 
+uint16_t eepromReadGameCounter() {
+  return buf.v.gameCounter;
+}
+
 void eepromIncGameCounter() {
   buf.v.gameCounter += 1;
   writeBuf();
+}
+
+void eepromClearGameCounter() {
+  buf.v.gameCounter = 0;
 }
 
 

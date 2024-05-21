@@ -16,6 +16,8 @@ void eepromSetBrightness(uint8_t v);
 uint8_t eepromReadAmplitude();
 void eepromSetAmplitude(uint8_t v);
 void eepromIncGameCounter();
+uint16_t eepromReadGameCounter();
+void eepromClearGameCounter();
 
 
 

@@ -38,6 +38,15 @@ static void configHandleResetHighScore() {
   }
 }
 
+static void configHandleResetGameCounter() {
+  displaySetValue(eepromReadGameCounter());
+
+  if (buttonsConfig2Pressed()) {
+    configChanged = true;
+    eepromClearGameCounter(0);
+  }
+}
+
 static void configHandleBrightness() {
   displaySetValue(eepromReadBrightness());
   stoneDrawConfigPattern();
@@ -71,8 +80,13 @@ static void configHandleAmplitude() {
   }
 }
 
-void (*configHandler[])(void) = { configHandleResetHighScore, configHandleFlash, configHandleBrightness, configHandleAmplitude };
-
+void (*configHandler[])(void) = { 
+  configHandleResetHighScore, 
+  configHandleResetGameCounter, 
+  configHandleFlash, 
+  configHandleBrightness, 
+  configHandleAmplitude 
+};
 
 void configExec(void *handle) {
   static uint8_t configState = 0;
