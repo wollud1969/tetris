@@ -79,7 +79,7 @@ t_melodies tusch1 = {
 };
 
 void playTusch1() {
-  tusch1.amplitude = configGetEffectsAmplitudePtr();
+  tusch1.p_amplitude = configGetEffectsAmplitudePtr();
   sequencerPlayMelodies(&tusch1);
 }
 

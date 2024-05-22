@@ -52,7 +52,7 @@ typedef struct {
 typedef struct {
   uint8_t slotMask;
   uint8_t chip;
-  uint8_t *amplitude;
+  uint8_t *p_amplitude;
   uint8_t taskId;
   uint16_t quarterLength;
   uint8_t numOfMelodies;

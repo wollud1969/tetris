@@ -933,7 +933,7 @@ t_melodies tetrisTheme = {
 
 void playMelodyTetris() {
   tetrisTheme.pace = INITIAL_PACE; // reset to start value each time
-  tetrisTheme.amplitude = configGetMelodyAmplitudePtr();
+  tetrisTheme.p_amplitude = configGetMelodyAmplitudePtr();
   sequencerPlayMelodies(&tetrisTheme);
 }
 

@@ -27,7 +27,7 @@ t_melodies pling = {
 };
 
 void playPling() {
-  pling.amplitude = configGetEffectsAmplitudePtr();
+  pling.p_amplitude = configGetEffectsAmplitudePtr();
   sequencerPlayMelodies(&pling);
 }
 
