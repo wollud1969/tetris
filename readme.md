@@ -39,6 +39,8 @@ The communcation with the game play controller is implemented as a sequences of 
 
 ![](./docs/rgb-driver.jpg)
 
+Details are here https://gitea.hottis.de/wn/tetris/src/branch/main/rgb-driver/readme.md
+
 
 ## Score Display
 
